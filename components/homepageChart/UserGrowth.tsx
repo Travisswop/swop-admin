@@ -70,7 +70,7 @@ const UserGrowthWithDropdown = () => {
   };
 
   return (
-    <div className="bg-white p-4 pl-0 rounded-xl">
+    <div className="bg-white p-4 pl-0 rounded-xl flex-[2]">
       <div
         style={{
           display: "flex",
@@ -78,7 +78,7 @@ const UserGrowthWithDropdown = () => {
           alignItems: "center",
         }}
       >
-        <h3>User Growth</h3>
+        <h3 className="translate-x-6 text-lg font-bold mb-2">User Growth</h3>
         <select value={filter} onChange={handleFilterChange}>
           <option value="Monthly">Monthly</option>
           <option value="Yearly">Yearly</option>
