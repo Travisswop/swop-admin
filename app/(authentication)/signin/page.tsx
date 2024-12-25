@@ -165,7 +165,10 @@ const SignUpPage = () => {
                     </p>
                   )} */}
                   {/* <SignUpButton loading={loading} /> */}
-                  <PrimaryButton className="flex items-center gap-1 w-max mx-auto px-10 !py-1.5">
+                  <PrimaryButton
+                    type="button"
+                    className="flex items-center gap-1 w-max mx-auto px-10 !py-1.5"
+                  >
                     <p>Log In</p>
                     <FaLongArrowAltRight />
                   </PrimaryButton>
