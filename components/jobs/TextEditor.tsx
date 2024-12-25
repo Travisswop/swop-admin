@@ -1,19 +1,24 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { Editor } from "@tinymce/tinymce-react";
 
 const TextEditor = () => {
+  const [value, setValue] = useState(""); // State to hold the editor's content
+
   return (
-    <div>
+    <div className="w-full ">
       <Editor
-        apiKey="njethe5lk1z21je67jjdi9v3wimfducwhl6jnnuip46yxwxh"
-        value={value} // Bind the state to the editor
-        onEditorChange={(content) => setValue(content)} // Update state on change
+        apiKey="njethe5lk1z21je67jjdi9v3wimfducwhl6jnnuip46yxwxh" // Replace with your TinyMCE API key
+        value={value}
+        onEditorChange={(content) => setValue(content)}
         init={{
-          height: 300,
+          height: 400,
+          menubar: false, // Disable the menu bar for a cleaner UI
           plugins: [
             "autolink",
             "lists",
             "link",
-            // "image",
             "charmap",
             "preview",
             "anchor",
@@ -22,15 +27,15 @@ const TextEditor = () => {
             "code",
             "fullscreen",
             "insertdatetime",
-            // "media",
             "table",
             "help",
           ],
           toolbar:
-            "undo redo | bold italic underline | link image | alignleft aligncenter alignright alignjustify | bullist numlist | code",
+            "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link code",
+          content_style:
+            "body { font-family: Arial, sans-serif; font-size: 14px }", // Apply consistent styles
         }}
       />
-      ;
     </div>
   );
 };

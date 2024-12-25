@@ -3,13 +3,15 @@ import React from "react";
 import { FaXmark } from "react-icons/fa6";
 import { GrLocation } from "react-icons/gr";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import TextEditor from "./TextEditor";
+import { IoIosSearch } from "react-icons/io";
 
 const EditJobPost = () => {
   return (
     <div className="p-10 bg-white min-h-fit h-full overflow-hidden">
       <div>
         {/* Details */}
-        <div className="flex items-end justify-between pb-6 border-b">
+        <div className="flex  items-center justify-between pb-6 border-b gap-8">
           <div className="w-full">
             <h6 className="text-xl font-medium mb-2 text-black">Details</h6>
             <p className="text-base text-[#838383]">
@@ -32,6 +34,31 @@ const EditJobPost = () => {
             </Link>
           </div>
         </div>
+        {/* Office Location */}
+        <div className="inline-flex w-full items-start  py-6 border-b gap-8  overflow-hidden">
+          <div className="w-1/3 shrink-0 ">
+            <h6 className="text-xl font-medium mb-2 text-black">Job Title* </h6>
+            <p className="text-base text-[#838383]">
+              Job titles must describe one position.s
+            </p>
+          </div>
+          <div className="w-max gap-5 shrink-0 ">
+            <div className=" flex flex-col gap-4">
+              <form className="w-[400px] 2xl:[w-600px]">
+                <input
+                  type="search"
+                  id="default-search"
+                  className="block py-3 px-4 text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900  w-full mb-2 "
+                  placeholder="Job title write here"
+                  required
+                />
+                <label className="text-base text-[#838383] ">
+                  26 character
+                </label>
+              </form>
+            </div>
+          </div>
+        </div>
         {/* Job Title */}
         <div className="flex items-start  py-6 border-b gap-8">
           <div className="w-1/3 shrink-0 ">
@@ -40,7 +67,7 @@ const EditJobPost = () => {
               Job titles must describe one position.
             </p>
           </div>
-          <div className="w-full gap-5 shrink-0 ">
+          <div className="w-max gap-5 shrink-0 ">
             <ul className="">
               <li className="w-full">
                 <div className="flex items-center ps-3 gap-1">
@@ -101,7 +128,7 @@ const EditJobPost = () => {
           </div>
         </div>
         {/* Office Location */}
-        <div className="flex items-start  py-6 border-b gap-8">
+        <div className="inline-flex w-full items-start  py-6 border-b gap-8  overflow-hidden">
           <div className="w-1/3 shrink-0 ">
             <h6 className="text-xl font-medium mb-2 text-black">
               Office Location*
@@ -110,9 +137,9 @@ const EditJobPost = () => {
               Company address goes to this section.
             </p>
           </div>
-          <div className="w-full gap-5 shrink-0 ">
+          <div className="w-max gap-5 shrink-0 ">
             <div className=" flex flex-col gap-4">
-              <form className=" max-w-screen-sm">
+              <form className="w-[400px] 2xl:[w-600px]">
                 <div className="relative">
                   <div className="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
                     <GrLocation className="text-black text-2xl" />
@@ -120,7 +147,7 @@ const EditJobPost = () => {
                   <input
                     type="search"
                     id="default-search"
-                    className="block w-full py-3 px-4 ps-12 text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900"
+                    className="block py-3 px-4 ps-12 text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900  w-full"
                     placeholder="Address..."
                     required
                   />
@@ -158,8 +185,8 @@ const EditJobPost = () => {
               technologies or experience.
             </p>
           </div>
-          <div className="w-full gap-5 shrink-0 ">
-            <div className=" flex flex-col gap-4">
+          <div className="w-max gap-5 shrink-0 ">
+            <div className=" flex flex-col gap-4 w-[400px] 2xl:[w-600px]">
               <div className="flex gap-3 items-center">
                 <div className=" inline-flex items-center gap-2 bg-black rounded text-white py-2 px-3">
                   <span>
@@ -183,13 +210,13 @@ const EditJobPost = () => {
               <form className=" max-w-screen-sm">
                 <div className="relative">
                   <div className="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
-                    <GrLocation className="text-black text-2xl" />
+                    <IoIosSearch className="text-black text-2xl" />
                   </div>
                   <input
                     type="search"
                     id="default-search"
                     className="block w-full  py-3 px-4 ps-12 text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900"
-                    placeholder="Address..."
+                    placeholder="Press enter to add another skills"
                     required
                   />
                 </div>
@@ -205,93 +232,89 @@ const EditJobPost = () => {
               Select your salary range which you prefer for the job.
             </p>
           </div>
-          <div className="w-full gap-5 shrink-0 ">
-            <div className=" flex flex-col gap-4">
-              <form className=" flex gap-3 items-center">
-                <div>
-                  <input
-                    type="search"
-                    id="default-search"
-                    className="block   py-3.5 px-4  text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900  max-w-60 w-full text-center"
-                    placeholder="Salary Amount"
-                    required
-                  />
-                </div>
-                <div className="relative max-w-60 w-full">
-                  <select
-                    id="salaryType"
-                    defaultValue=""
-                    className="bg-[#F2F2F2] border border-[#EBEBEB] text-gray-900 text-lg rounded-lg focus:ring-transparent focus:border-transparent block w-full py-3 px-4 appearance-none"
-                  >
-                    <option value="" disabled>
-                      Select salary type
-                    </option>
-                    <option value="hourly">Hourly</option>
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="annually">Annually</option>
-                    <option value="negotiable">Negotiable</option>
-                    <option value="commission">Commission-based</option>
-                  </select>
-                  <MdOutlineKeyboardArrowDown
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none"
-                    size={24}
-                  />
-                </div>
-                <div className="relative max-w-60 w-full">
-                  <select
-                    id="currency"
-                    defaultValue=""
-                    className="bg-[#F2F2F2] border border-[#EBEBEB] text-gray-900 text-lg rounded-lg focus:ring-transparent focus:border-transparent block w-full py-3 px-4 appearance-none"
-                  >
-                    <option value="" disabled>
-                      Select currency
-                    </option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="JPY">JPY</option>
-                    <option value="CAD">CAD</option>
-                    <option value="AUD">AUD</option>
-                    <option value="INR">INR</option>
-                    <option value="CNY">CNY</option>
-                    <option value="SGD">SGD</option>
-                    <option value="ZAR">ZAR</option>
-                  </select>
-                  <MdOutlineKeyboardArrowDown
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none"
-                    size={24}
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        {/* Deadline */}
-        <div className="flex items-start  py-6 border-b gap-8">
-          <div className="w-1/3 shrink-0 ">
-            <h6 className="text-xl font-medium mb-2 text-black">Deadline*</h6>
-            <p className="text-base text-[#838383]">
-              Here you create a deadline for who are want to drop the CV.
-            </p>
-          </div>
-          <div className="w-full gap-5 shrink-0 ">
-            <form className="max-w-60 w-full">
-              <div className="">
+          <div className="w-max gap-5 shrink-0 ">
+            <form className=" flex flex-col 2xl:flex-row gap-4 items-center">
+              <div>
                 <input
-                  type="date"
-                  id="date-picker"
-                  className="block w-full py-3 px-4  text-base border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-black focus:ring-1 focus:outline-none text-slate-900"
-                  placeholder="Select a date..."
+                  type="search"
+                  id="default-search"
+                  className="block   py-3.5 px-4  text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900  w-60  text-center"
+                  placeholder="Salary Amount"
                   required
+                />
+              </div>
+              <div className="relative w-60 ">
+                <select
+                  id="salaryType"
+                  defaultValue=""
+                  className="bg-[#F2F2F2] border border-[#EBEBEB] text-gray-900 text-lg rounded-lg focus:ring-transparent focus:border-transparent block w-full py-3 px-4 appearance-none"
+                >
+                  <option value="" disabled>
+                    Select salary type
+                  </option>
+                  <option value="hourly">Hourly</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="annually">Annually</option>
+                  <option value="negotiable">Negotiable</option>
+                  <option value="commission">Commission-based</option>
+                </select>
+                <MdOutlineKeyboardArrowDown
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none"
+                  size={24}
+                />
+              </div>
+              <div className="relative w-60 ">
+                <select
+                  id="currency"
+                  defaultValue=""
+                  className="bg-[#F2F2F2] border border-[#EBEBEB] text-gray-900 text-lg rounded-lg focus:ring-transparent focus:border-transparent block w-full py-3 px-4 appearance-none"
+                >
+                  <option value="" disabled>
+                    Select currency
+                  </option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                  <option value="JPY">JPY</option>
+                  <option value="CAD">CAD</option>
+                  <option value="AUD">AUD</option>
+                  <option value="INR">INR</option>
+                  <option value="CNY">CNY</option>
+                  <option value="SGD">SGD</option>
+                  <option value="ZAR">ZAR</option>
+                </select>
+                <MdOutlineKeyboardArrowDown
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none"
+                  size={24}
                 />
               </div>
             </form>
           </div>
         </div>
         {/* Deadline */}
-        <div className="flex flex-col items-start  py-6  gap-8">
+        <div className="flex items-start py-6 border-b gap-8">
+          <div className="w-1/3 shrink-0 ">
+            <h6 className="text-xl font-medium mb-2 text-black">Deadline*</h6>
+            <p className="text-base text-[#838383]">
+              Here you create a deadline for who are want to drop the CV.
+            </p>
+          </div>
+          <div className="w-max gap-5 shrink-0 ">
+            <form className="w-60">
+              <input
+                type="date"
+                id="date-picker"
+                className="block w-full py-3 px-4  text-base border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-black focus:ring-1 focus:outline-none text-slate-900"
+                placeholder="Select a date..."
+                required
+              />
+            </form>
+          </div>
+        </div>
+        {/* Description */}
+        <div className="flex flex-col items-start  py-6  gap-6">
           <div className="w-1/3 shrink-0 ">
             <h6 className="text-xl font-medium mb-2 text-black">
               Description*
@@ -302,7 +325,9 @@ const EditJobPost = () => {
           </div>
           <div className="w-full gap-5 shrink-0 ">
             <form className=" w-full">
-              <div className=""></div>
+              <div className="">
+                <TextEditor />
+              </div>
             </form>
           </div>
         </div>
