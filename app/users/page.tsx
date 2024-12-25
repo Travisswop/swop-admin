@@ -1,5 +1,6 @@
+"use client";
 import CustomTable from "@/components/CustomTable";
-import Path from "@/components/subscribe/Path";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 function createData(
@@ -59,13 +60,20 @@ for (let i = 0; i < 20; i++) {
   );
 }
 
-const page = () => {
+const Page = () => {
+  const path = usePathname();
   return (
     <section className="w-full h-full flex flex-col justify-start items-center text-[#737791]">
-      <Path />
-      <CustomTable sideText="" dynamicData={data} showSearch={true} />
+      <CustomTable
+        sideText=""
+        dynamicData={data}
+        showSearch={false}
+        clickAble={true}
+        clickPath={path}
+        user={true}
+      />
     </section>
   );
 };
 
-export default page;
+export default Page;
