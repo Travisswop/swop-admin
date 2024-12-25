@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { Avatar, Button, Popover, Typography } from "@mui/material";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoMdCheckmark } from "react-icons/io";
+// import swopLogo from "@/public/images/swop-logo.png";
 
 type Row = {
   id: number;
@@ -31,6 +32,9 @@ type Row = {
   phone?: string;
   bookingTime?: string;
   referralState?: boolean;
+  address: string;
+  profession: string;
+  swopId: string;
 };
 
 export default function CustomTable({
@@ -41,6 +45,7 @@ export default function CustomTable({
   clickPath,
   user,
   referrals,
+  swopId,
 }: {
   sideText: string;
   dynamicData: Row[];
@@ -50,6 +55,7 @@ export default function CustomTable({
   user?: boolean;
   referralState?: boolean;
   referrals?: boolean;
+  swopId?: boolean;
 }) {
   const router = useRouter();
 
@@ -161,31 +167,44 @@ export default function CustomTable({
             <TableRow className="sticky top-0 z-20 bg-white">
               {user ? (
                 <TableCell align="center">Date</TableCell>
+              ) : swopId ? (
+                <TableCell>User ID</TableCell>
               ) : (
                 <TableCell>ID</TableCell>
               )}
+
               <TableCell align="center" style={{ maxWidth: 200 }}>
                 <span className="w-1/3 -translate-x-5">Name</span>
               </TableCell>
+
               {referrals ? (
                 <TableCell align="center">Referrals</TableCell>
+              ) : swopId ? (
+                <TableCell align="center">Profession</TableCell>
               ) : (
                 <TableCell align="center">Email</TableCell>
               )}
+
               {referrals ? (
                 <TableCell align="center">{`Earned Amount ($)`}</TableCell>
               ) : user ? (
                 <TableCell align="center">Reference</TableCell>
+              ) : swopId ? (
+                <TableCell align="center">Address</TableCell>
               ) : (
                 <TableCell align="center">Phone Number</TableCell>
               )}
+
               {referrals ? (
                 <TableCell align="center">Status</TableCell>
               ) : user ? (
                 <TableCell align="center">Edit</TableCell>
+              ) : swopId ? (
+                <TableCell align="center">Swop ID</TableCell>
               ) : (
                 <TableCell align="center">Booking Time</TableCell>
               )}
+
               {referrals && <TableCell align="center">Action</TableCell>}
             </TableRow>
           </TableHead>
@@ -219,6 +238,8 @@ export default function CustomTable({
                   </TableCell>
                   {referrals ? (
                     <TableCell align="center">{row.referrals}</TableCell>
+                  ) : swopId ? (
+                    <TableCell align="center">{row.profession}</TableCell>
                   ) : (
                     <TableCell align="center">{row.email}</TableCell>
                   )}
@@ -226,6 +247,8 @@ export default function CustomTable({
                     <TableCell align="center">{row.earned}</TableCell>
                   ) : user ? (
                     <TableCell align="center">{row.reference}</TableCell>
+                  ) : swopId ? (
+                    <TableCell align="center">{row.address}</TableCell>
                   ) : (
                     <TableCell align="center">{row.phone}</TableCell>
                   )}
@@ -241,6 +264,8 @@ export default function CustomTable({
                     <TableCell align="center">
                       <FaRegEdit className="h-5 w-5 m-auto" />
                     </TableCell>
+                  ) : swopId ? (
+                    <TableCell align="center">{row.swopId}</TableCell>
                   ) : (
                     <TableCell align="center">{row.bookingTime}</TableCell>
                   )}
@@ -373,9 +398,7 @@ export default function CustomTable({
                             <button
                               className={cn(
                                 "p-2 flex justify-start items-center",
-                                row.referralState === false
-                                  ? "text-red-500"
-                                  : ""
+                                referralState === false ? "text-red-500" : ""
                               )}
                               onClick={() => {
                                 setReferralState(false);

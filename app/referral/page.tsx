@@ -5,66 +5,8 @@ import ReferralPath from "@/components/referral/ReferralPath";
 // import { usePathname } from "next/navigation";
 import React from "react";
 
-function createData(
-  id: number,
-  date: string,
-  name: string,
-  email: string,
-  payStatus: boolean,
-  referrals: string,
-  earned: number,
-  reference: string,
-  phone: string,
-  bookingTime: string,
-  referralState?: boolean
-) {
-  return {
-    id,
-    date,
-    name,
-    reference,
-    email,
-    payStatus,
-    referrals,
-    earned,
-    phone,
-    bookingTime,
-    referralState,
-  };
-}
-type Row = {
-  id: number;
-  date: string;
-  name: string;
-  email: string;
-  payStatus: boolean;
-  referrals: string;
-  earned: number;
-  reference: string;
-  phone: string;
-  bookingTime: string;
-  referralState?: boolean;
-};
-
-const data = [] as Array<Row>;
-
-for (let i = 0; i < 20; i++) {
-  data.push(
-    createData(
-      i,
-      "2016-05-24",
-      "Frozen yoghurt",
-      "ref@gmail",
-      true,
-      "referrals",
-      4.0,
-      "ref",
-      "1234567890",
-      "10:00",
-      false
-    )
-  );
-}
+//imported data for table
+import data from "@/lib/placeholderData";
 
 const Page = () => {
   //   const path = usePathname();
