@@ -8,12 +8,12 @@ const JobsPost = () => {
         <div className="flex items-end justify-between pb-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-3xl font-semibold text-[#2D3032]">
+              <h4 className="text-2xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base font-medium">(Published)</span>
+              <span className="text-sm font-medium">(Published)</span>
             </div>
-            <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
+            <p className="text-base text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
             </p>
             <div className="flex gap-3 items-center font-medium ">
@@ -23,7 +23,7 @@ const JobsPost = () => {
           </div>
           <div className="flex gap-5 shrink-0 ">
             <Link
-              href="#"
+              href="/jobs/view-cv/user-id"
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
@@ -32,7 +32,7 @@ const JobsPost = () => {
               </span>
             </Link>
             <Link
-              href="#"
+              href="/jobs/edit"
               className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
             >
               Edit
@@ -42,12 +42,12 @@ const JobsPost = () => {
         <div className="flex items-end justify-between py-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-3xl font-semibold text-[#2D3032]">
+              <h4 className="text-2xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base font-medium">(Draft)</span>
+              <span className="text-sm font-medium">(Draft)</span>
             </div>
-            <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
+            <p className="text-base text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
             </p>
             <div className="flex gap-3 items-center font-medium ">
@@ -57,7 +57,7 @@ const JobsPost = () => {
           </div>
           <div className="flex gap-5 shrink-0 ">
             <Link
-              href="#"
+              href="/jobs/view-cv/user-id"
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
@@ -66,7 +66,7 @@ const JobsPost = () => {
               </span>
             </Link>
             <Link
-              href="#"
+              href="/jobs/edit"
               className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
             >
               Edit
@@ -76,12 +76,12 @@ const JobsPost = () => {
         <div className="flex items-end justify-between py-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-3xl font-semibold text-[#2D3032]">
+              <h4 className="text-2xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base font-medium">(Expire)</span>
+              <span className="text-sm font-medium">(Expire)</span>
             </div>
-            <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
+            <p className="text-base text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
             </p>
             <div className="flex gap-3 items-center font-medium ">
@@ -91,7 +91,7 @@ const JobsPost = () => {
           </div>
           <div className="flex gap-5 shrink-0 ">
             <Link
-              href="#"
+              href="/jobs/view-cv/user-id"
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
@@ -100,7 +100,7 @@ const JobsPost = () => {
               </span>
             </Link>
             <Link
-              href="#"
+              href="/jobs/edit"
               className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
             >
               Edit
@@ -110,12 +110,12 @@ const JobsPost = () => {
         <div className="flex items-end justify-between py-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-3xl font-semibold text-[#2D3032]">
+              <h4 className="text-2xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base font-medium">(Published)</span>
+              <span className="text-sm font-medium">(Published)</span>
             </div>
-            <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
+            <p className="text-base text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
             </p>
             <div className="flex gap-3 items-center font-medium ">
@@ -125,7 +125,7 @@ const JobsPost = () => {
           </div>
           <div className="flex gap-5 shrink-0 ">
             <Link
-              href="#"
+              href="/jobs/view-cv/user-id"
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
@@ -134,7 +134,7 @@ const JobsPost = () => {
               </span>
             </Link>
             <Link
-              href="#"
+              href="/jobs/edit"
               className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
             >
               Edit
@@ -144,12 +144,12 @@ const JobsPost = () => {
         <div className="flex items-end justify-between py-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-3xl font-semibold text-[#2D3032]">
+              <h4 className="text-2xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base font-medium">(Draft)</span>
+              <span className="text-sm font-medium">(Draft)</span>
             </div>
-            <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
+            <p className="text-base text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
             </p>
             <div className="flex gap-3 items-center font-medium ">
@@ -159,7 +159,7 @@ const JobsPost = () => {
           </div>
           <div className="flex gap-5 shrink-0 ">
             <Link
-              href="#"
+              href="/jobs/view-cv/user-id"
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
@@ -168,7 +168,7 @@ const JobsPost = () => {
               </span>
             </Link>
             <Link
-              href="#"
+              href="/jobs/edit"
               className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
             >
               Edit
@@ -178,12 +178,12 @@ const JobsPost = () => {
         <div className="flex items-end justify-between pt-6 ">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-3xl font-semibold text-[#2D3032]">
+              <h4 className="text-2xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base font-medium">(Published)</span>
+              <span className="text-sm font-medium">(Published)</span>
             </div>
-            <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
+            <p className="text-base text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
             </p>
             <div className="flex gap-3 items-center font-medium ">
@@ -193,7 +193,7 @@ const JobsPost = () => {
           </div>
           <div className="flex gap-5 shrink-0 ">
             <Link
-              href="#"
+              href="/jobs/view-cv/user-id"
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
@@ -202,7 +202,7 @@ const JobsPost = () => {
               </span>
             </Link>
             <Link
-              href="#"
+              href="/jobs/edit"
               className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
             >
               Edit
@@ -212,7 +212,7 @@ const JobsPost = () => {
       </div>
       <div className=" text-center mt-10">
         <Link
-          href="#"
+          href="/jobs/create-job"
           className="text-base font-medium py-2.5 inline-flex justify-center items-center px-8 max-w-64 w-full  text-center border border-black rounded bg-black text-white"
         >
           Add Job Post

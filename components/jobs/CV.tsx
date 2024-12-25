@@ -6,46 +6,46 @@ const cvData = [
   {
     name: "Tasnim Borsha",
     date: "2023-08-05",
-    cvLink: "/cvs/tasnim-borsha-cv.pdf",
+    cvLink: "",
   },
   {
     name: "Nasim Reza",
     date: "2023-08-05",
-    cvLink: "/cvs/nasim-reza-cv.pdf",
+    cvLink: "",
   },
   {
     name: "Abdullah Isha",
     date: "2023-08-05",
-    cvLink: "/cvs/abdullah-isha-cv.pdf",
+    cvLink: "",
   },
   {
     name: "Sadit Ahsan",
     date: "2023-08-05",
-    cvLink: "/cvs/sadit-ahsan-cv.pdf",
+    cvLink: "",
   },
 ];
 
 const CV = () => {
   return (
-    <div className="p-10 bg-white min-h-fit h-full">
+    <div className="p-10 bg-white min-h-svh h-full">
       {cvData.map((cv, index) => (
         <div
           key={index}
-          className="flex gap-4 justify-between items-end py-6 border-b"
+          className="flex gap-4 justify-between items-center py-6 border-b"
         >
           <div className="flex items-start gap-3">
-            <TbFileCv className="text-4xl text-[#2B2B2B]" />
+            <TbFileCv className="text-2xl text-[#2B2B2B]" />
             <div>
-              <h4 className="text-3xl font-medium mb-1 text-[#2B2B2B]">
+              <h4 className="text-xl font-medium mb-1 text-[#2B2B2B]">
                 {cv.name}
               </h4>
-              <p className="text-xl font-normal text-[#838383]">{cv.date}</p>
+              <p className="text-base font-normal text-[#838383]">{cv.date}</p>
             </div>
           </div>
           <div>
             <Link
               href={cv.cvLink}
-              download=""
+              download={cv.cvLink}
               className="flex items-center justify-center w-48 py-2 text-base font-medium text-white bg-black border border-black rounded text-center"
             >
               Download CV
