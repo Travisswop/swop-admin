@@ -8,10 +8,10 @@ const JobsPost = () => {
         <div className="flex items-end justify-between pb-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-4xl font-semibold text-[#2D3032]">
+              <h4 className="text-3xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base">(Published)</span>
+              <span className="text-base font-medium">(Published)</span>
             </div>
             <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
@@ -27,7 +27,7 @@ const JobsPost = () => {
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
-              <span className=" w-8 h-8 bg-[#FF6060] text-white text-base font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
+              <span className=" w-7 h-7 bg-[#FF6060] text-white text-sm font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
                 15
               </span>
             </Link>
@@ -42,10 +42,10 @@ const JobsPost = () => {
         <div className="flex items-end justify-between py-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-4xl font-semibold text-[#2D3032]">
+              <h4 className="text-3xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base">(Published)</span>
+              <span className="text-base font-medium">(Draft)</span>
             </div>
             <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
@@ -61,7 +61,7 @@ const JobsPost = () => {
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
-              <span className=" w-8 h-8 bg-[#FF6060] text-white text-base font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
+              <span className=" w-7 h-7 bg-[#FF6060] text-white text-sm font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
                 15
               </span>
             </Link>
@@ -76,10 +76,10 @@ const JobsPost = () => {
         <div className="flex items-end justify-between py-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-4xl font-semibold text-[#2D3032]">
+              <h4 className="text-3xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base">(Published)</span>
+              <span className="text-base font-medium">(Expire)</span>
             </div>
             <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
@@ -95,7 +95,7 @@ const JobsPost = () => {
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
-              <span className=" w-8 h-8 bg-[#FF6060] text-white text-base font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
+              <span className=" w-7 h-7 bg-[#FF6060] text-white text-sm font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
                 15
               </span>
             </Link>
@@ -110,10 +110,10 @@ const JobsPost = () => {
         <div className="flex items-end justify-between py-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-4xl font-semibold text-[#2D3032]">
+              <h4 className="text-3xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base">(Published)</span>
+              <span className="text-base font-medium">(Published)</span>
             </div>
             <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
@@ -129,7 +129,7 @@ const JobsPost = () => {
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
-              <span className=" w-8 h-8 bg-[#FF6060] text-white text-base font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
+              <span className=" w-7 h-7 bg-[#FF6060] text-white text-sm font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
                 15
               </span>
             </Link>
@@ -144,10 +144,10 @@ const JobsPost = () => {
         <div className="flex items-end justify-between py-6 border-b">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-4xl font-semibold text-[#2D3032]">
+              <h4 className="text-3xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base">(Published)</span>
+              <span className="text-base font-medium">(Draft)</span>
             </div>
             <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
@@ -163,7 +163,7 @@ const JobsPost = () => {
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
-              <span className=" w-8 h-8 bg-[#FF6060] text-white text-base font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
+              <span className=" w-7 h-7 bg-[#FF6060] text-white text-sm font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
                 15
               </span>
             </Link>
@@ -178,10 +178,10 @@ const JobsPost = () => {
         <div className="flex items-end justify-between pt-6 ">
           <div className="w-full">
             <div className=" flex items-center gap-3 ">
-              <h4 className="text-4xl font-semibold text-[#2D3032]">
+              <h4 className="text-3xl font-semibold text-[#2D3032]">
                 Senior Developer
               </h4>
-              <span className="text-base">(Published)</span>
+              <span className="text-base font-medium">(Published)</span>
             </div>
             <p className="text-lg text-[#737791] font-normal mt-2 mb-1">
               Deadline: 5 - 8 - 2023
@@ -197,7 +197,7 @@ const JobsPost = () => {
               className=" text-base font-medium py-2 flex justify-center items-center w-32   text-center border border-black rounded relative"
             >
               View CV
-              <span className=" w-8 h-8 bg-[#FF6060] text-white text-base font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
+              <span className=" w-7 h-7 bg-[#FF6060] text-white text-sm font-medium rounded-full flex items-center justify-center absolute -top-2.5 -right-2.5">
                 15
               </span>
             </Link>
@@ -210,8 +210,13 @@ const JobsPost = () => {
           </div>
         </div>
       </div>
-      <div>
-        <Link href="#">Add Job Post</Link>
+      <div className=" text-center mt-10">
+        <Link
+          href="#"
+          className="text-base font-medium py-2.5 inline-flex justify-center items-center px-8 max-w-64 w-full  text-center border border-black rounded bg-black text-white"
+        >
+          Add Job Post
+        </Link>
       </div>
     </div>
   );
