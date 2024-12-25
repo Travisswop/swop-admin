@@ -43,7 +43,7 @@ export default function RootLayout({
             style={{ height: `calc(100vh - 80px)` }}
             className="pl-64 overflow-y-auto overflow-x-hidden"
           >
-            <section className="container mx-auto px-6 py-6 max-w-7xl 2xl:max-w-full bg-[#F2F2F2] h-full">
+            <section className="container mx-auto px-6 py-6 max-w-7xl 2xl:max-w-full bg-[#F2F2F2] min-h-full">
               {children}
             </section>
           </section>

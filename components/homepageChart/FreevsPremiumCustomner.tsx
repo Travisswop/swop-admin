@@ -22,7 +22,7 @@ const data = [
 const FreeVsPremiumChart = () => {
   return (
     <div
-      className="bg-white rounded-lg shadow-md p-6"
+      className="bg-white rounded-lg shadow-md p-6 flex-[2]"
       // style={{
       //   maxWidth: "600px",
       //   margin: "auto",
@@ -34,7 +34,7 @@ const FreeVsPremiumChart = () => {
         style={{
           fontSize: "18px",
           fontWeight: "bold",
-          textAlign: "center",
+          textAlign: "left",
           marginBottom: "20px",
         }}
       >

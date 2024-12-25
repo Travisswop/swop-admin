@@ -24,7 +24,7 @@ const data = [
 
 const SwopIDGrowthChart: React.FC = () => {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 max-w-lg mx-auto">
+    <div className="bg-white rounded-xl shadow-lg p-6 w-full mx-auto">
       <h2 className="text-lg font-bold mb-4">Swop.ID Growth</h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart

@@ -5,15 +5,22 @@ import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { scaleOrdinal } from "d3-scale";
 
 // Valid GeoJSON URL for world map
-const geoUrl = "https://unpkg.com/world-atlas@2.0.2/countries-50m.json";
+// const geoUrl = "https://unpkg.com/world-atlas@2.0.2/countries-50m.json";
 
 // Data with download counts for specific countries
+// const data = [
+//   { id: "076", name: "Brazil", value: 800 },
+//   { id: "840", name: "United States", value: 1000 },
+//   { id: "050", name: "Bangladesh", value: 600 },
+//   { id: "356", name: "India", value: 1200 },
+//   { id: "360", name: "Indonesia", value: 900 },
+// ];
 const data = [
-  { id: "076", name: "Brazil", value: 800 },
-  { id: "840", name: "United States", value: 1000 },
-  { id: "050", name: "Bangladesh", value: 600 },
-  { id: "356", name: "India", value: 1200 },
-  { id: "360", name: "Indonesia", value: 900 },
+  { id: "USA", name: "United States", value: 1000 },
+  { id: "BGD", name: "Bangladesh", value: 600 },
+  { id: "BRA", name: "Brazil", value: 800 },
+  { id: "IND", name: "India", value: 1200 },
+  { id: "IDN", name: "Indonesia", value: 900 },
 ];
 
 // Create a categorical color scale to assign unique colors to countries
@@ -49,13 +56,15 @@ const DownloadsByCountryMap: React.FC = () => {
   };
 
   return (
-    <div className="relative bg-white rounded-xl shadow-lg p-6 max-w-lg mx-auto">
+    <div className="relative bg-white rounded-xl shadow-lg p-6 w-full mx-auto">
       <h2 className="text-lg font-bold mb-4">Downloads By Country</h2>
       <div className="relative">
-        <ComposableMap projection="geoMercator" width={800} height={400}>
-          <Geographies geography={geoUrl}>
+        <ComposableMap>
+          <Geographies geography={"/features.json"}>
             {({ geographies }) =>
               geographies.map((geo) => {
+                console.log("geo", geo);
+
                 const countryData = data.find((d) => d.id === geo.id);
                 // Assign a color for countries with data; default gray for others
                 const fillColor = countryData

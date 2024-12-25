@@ -16,7 +16,7 @@ const data = [
 
 const SubsidyWalletChart: React.FC = () => {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm">
+    <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm flex-[2] xl:flex-[1.5] 2xl:flex-1">
       <h2 className="text-lg font-bold mb-4">Subsidy Wallet</h2>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data}>
