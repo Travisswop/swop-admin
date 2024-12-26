@@ -8,7 +8,12 @@ const page = () => {
   return (
     <section className="w-full h-full flex flex-col justify-start items-center text-[#737791]">
       <Path />
-      <CustomTable sideText="" dynamicData={data} showSearch={true} />
+      <CustomTable
+        sideText=""
+        dynamicData={data}
+        showSearch={true}
+        subscribers={true}
+      />
     </section>
   );
 };

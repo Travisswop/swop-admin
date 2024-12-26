@@ -9,6 +9,7 @@ import React from "react";
 import data from "@/lib/placeholderData";
 
 const Page = () => {
+  //console.log(data);
   //   const path = usePathname();
   return (
     <section className="w-full h-full flex flex-col justify-start items-center text-[#737791]">
