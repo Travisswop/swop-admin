@@ -11,7 +11,7 @@ import { HiOutlineLogout, HiUsers } from "react-icons/hi";
 import { GrAnnounce } from "react-icons/gr";
 import { RiSendToBack } from "react-icons/ri";
 import { LiaIdCard } from "react-icons/lia";
-import { IoBagHandleOutline } from "react-icons/io5";
+import { IoBagHandleOutline, IoSettingsOutline } from "react-icons/io5";
 import { FaUsers } from "react-icons/fa";
 import { MdOutlineQrCodeScanner } from "react-icons/md";
 
@@ -24,6 +24,7 @@ const navItems = [
   { href: "/swop-id", label: "Swop.ID", icon: <LiaIdCard /> },
   { href: "/jobs", label: "Jobs", icon: <IoBagHandleOutline /> },
   { href: "/subscribers", label: "Subscribers", icon: <FaUsers /> },
+  { href: "/support", label: "Support", icon: <IoSettingsOutline /> },
   {
     href: "/qr-management",
     label: "QR management",
