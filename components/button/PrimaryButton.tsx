@@ -17,7 +17,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 }) => {
   // Define default styles for the button
   const defaultClasses =
-    "px-6 py-2 bg-black text-white rounded-lg shadow-md hover:bg-gray-600 transition duration-200";
+    "px-6 py-2 bg-black text-white rounded-lg shadow-md hover:bg-gray-600 transition duration-200 flex items-center gap-1 w-max";
 
   return (
     <button
