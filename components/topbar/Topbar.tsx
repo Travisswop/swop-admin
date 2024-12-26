@@ -7,7 +7,7 @@ import LanguageMenu from "./TopbarLanguageDropdown";
 import { JSX } from "react";
 
 /**
- * Formats the route name based on the current pathname.
+ * Extracts and formats the first segment of the route name.
  * @param pathname - The current route pathname.
  * @returns A formatted string for the route name.
  */
@@ -15,16 +15,11 @@ function formatRouteName(pathname: string): string {
   // Split the pathname into segments
   const segments = pathname.split("/").filter(Boolean);
 
-  // Determine the route name based on the segments
+  // Return "Dashboard" for the root route
   if (segments.length === 0) return "Dashboard";
-  if (segments[0] === "products") return "Product";
 
-  // Capitalize and join segments for other cases
-  return segments
-    .map((segment) =>
-      segment.replace(/-/g, " ").replace(/^\w/, (c) => c.toUpperCase())
-    )
-    .join(" > ");
+  // Capitalize the first segment and format it
+  return segments[0].replace(/-/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 }
 
 export default function Topbar(): JSX.Element {
@@ -33,9 +28,7 @@ export default function Topbar(): JSX.Element {
 
   return (
     <header className="sticky top-0 z-30 h-20 border-b bg-white px-4 pl-64 flex items-center justify-between w-full">
-      <p className="text-2xl font-bold text-black pl-6 w-60 capitalize">
-        {routeName}
-      </p>
+      <p className="text-2xl font-bold text-black pl-6">{routeName}</p>
       <div className="flex items-center gap-6">
         <div className="w-96 relative">
           <input

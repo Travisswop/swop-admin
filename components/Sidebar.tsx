@@ -67,7 +67,7 @@ export default function Sidebar() {
       <div className="flex h-full flex-col">
         <div className="flex h-[89px] items-center justify-center px-4 mt-4">
           <Link href="/" className="h-full flex justify-center items-center">
-            <div className="w-[6.5rem] h-auto">
+            <div className="w-[7rem] h-auto">
               <Image src={swopLogo} quality={100} alt="SWOP" />
             </div>
           </Link>
