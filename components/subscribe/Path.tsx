@@ -29,7 +29,7 @@ const Path = () => {
 
   const handleChange = (checked: boolean) => {
     if (checked) {
-      route.push("/enterprise-leads");
+      route.push("/subscribers/enterprise-leads");
     } else {
       route.push("/subscribers");
     }
@@ -51,7 +51,7 @@ const Path = () => {
         <FormControlLabel
           control={
             <Switch
-              defaultChecked={path === "/enterprise-leads"}
+              defaultChecked={path === "/subscribers/enterprise-leads"}
               onChange={(e) => {
                 handleChange(e.target.checked);
               }}
@@ -73,10 +73,10 @@ const Path = () => {
         />
 
         <Link
-          href={"/enterprise-leads"}
+          href={"/subscribers/enterprise-leads"}
           className={cn(
             "text-black z-20 -translate-x-7",
-            path === "/enterprise-leads" ? "font-medium " : ""
+            path === "/subscribers/enterprise-leads" ? "font-medium " : ""
           )}
         >
           Enterprise leads
