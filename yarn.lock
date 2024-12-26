@@ -633,6 +633,11 @@
   dependencies:
     tslib "^2.8.0"
 
+"@types/chance@^1.1.32":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@types/chance/-/chance-1.1.6.tgz#2fe3de58742629602c3fbab468093b27207f04ad"
+  integrity sha512-V+pm3stv1Mvz8fSKJJod6CglNGVqEQ6OyuqitoDkWywEODM/eJd1eSuIp9xt6DrX8BWZ2eDSIzbw1tPCUTvGbQ==
+
 "@types/d3-array@^3.0.3":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-3.2.1.tgz#1f6658e3d2006c4fceac53fde464166859f8b8c5"

@@ -15,23 +15,25 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { Avatar, Button, Popover, Typography } from "@mui/material";
+import { Avatar, Button, Popover } from "@mui/material";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoMdCheckmark } from "react-icons/io";
 // import swopLogo from "@/public/images/swop-logo.png";
+// import Image from "next/image";
 
 type Row = {
   id: number;
   name: string;
   email: string;
+  image: string;
   date: string;
   reference?: string;
   referrals?: string;
   earned?: number;
-  status?: boolean;
+  payStatus?: boolean;
   phone?: string;
   bookingTime?: string;
-  referralState?: boolean;
+  userReferralState?: boolean;
   address: string;
   profession: string;
   swopId: string;
@@ -46,6 +48,7 @@ export default function CustomTable({
   user,
   referrals,
   swopId,
+  subscribers,
 }: {
   sideText: string;
   dynamicData: Row[];
@@ -53,15 +56,17 @@ export default function CustomTable({
   clickAble?: boolean;
   clickPath?: string;
   user?: boolean;
-  referralState?: boolean;
+  userReferralState?: boolean;
   referrals?: boolean;
   swopId?: boolean;
+  subscribers?: boolean;
 }) {
   const router = useRouter();
+  // console.log(dynamicData[0].userReferralState);
 
   const [date, setDate] = React.useState("");
   const [name, setName] = React.useState("");
-
+  const [referralState, setReferralState] = React.useState(true);
   const handleChangeName = (event: SelectChangeEvent) => {
     setName(event.target.value as string);
   };
@@ -69,7 +74,7 @@ export default function CustomTable({
     setDate(event.target.value as string);
   };
   //FLOATING BUTTON
-  const [referralState, setReferralState] = React.useState(true);
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -89,9 +94,12 @@ export default function CustomTable({
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   //FLOATING BUTTON
+
+  //React.useEffect(() => {}, [dynamicData]);
+
   return (
     <section className="w-full max-h-[90%] text-black overflow-scroll-y bg-white p-4 flex flex-col gap-5 rounded-lg">
-      <div className="flex justify-between items-center w-full">
+      <article className="flex justify-between items-center w-full">
         {sideText && (
           <h2 className="text-4xl font-semibold pl-5">{sideText}</h2>
         )}
@@ -151,7 +159,7 @@ export default function CustomTable({
             <MdOutlineFileDownload className="h-5 w-5" />
           </button>
         </div>
-      </div>
+      </article>
       <TableContainer
         component={Paper}
         //fix shadow
@@ -181,8 +189,12 @@ export default function CustomTable({
                 <TableCell align="center">Referrals</TableCell>
               ) : swopId ? (
                 <TableCell align="center">Profession</TableCell>
-              ) : (
+              ) : subscribers ? (
+                <TableCell align="center">Subscribers Email</TableCell>
+              ) : user ? (
                 <TableCell align="center">Email</TableCell>
+              ) : (
+                <TableCell align="center">Profession</TableCell>
               )}
 
               {referrals ? (
@@ -191,8 +203,12 @@ export default function CustomTable({
                 <TableCell align="center">Reference</TableCell>
               ) : swopId ? (
                 <TableCell align="center">Address</TableCell>
-              ) : (
+              ) : subscribers ? (
+                <TableCell align="center"></TableCell>
+              ) : user ? (
                 <TableCell align="center">Phone Number</TableCell>
+              ) : (
+                <TableCell align="center">Address</TableCell>
               )}
 
               {referrals ? (
@@ -201,8 +217,10 @@ export default function CustomTable({
                 <TableCell align="center">Edit</TableCell>
               ) : swopId ? (
                 <TableCell align="center">Swop ID</TableCell>
+              ) : subscribers ? (
+                <TableCell align="center"></TableCell>
               ) : (
-                <TableCell align="center">Booking Time</TableCell>
+                <TableCell align="center"></TableCell>
               )}
 
               {referrals && <TableCell align="center">Action</TableCell>}
@@ -228,11 +246,9 @@ export default function CustomTable({
                   )}
                   <TableCell align="left">
                     <div className="flex items-center gap-2 relative left-1/3">
-                      {/* <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                      /> */}
-                      <Avatar>R</Avatar>
+                      <Avatar alt={row.image.split("/")[-1]} src={row.image} />
+
+                      {/* <Avatar>R</Avatar> */}
                       <h6>{row.name}</h6>
                     </div>
                   </TableCell>
@@ -254,7 +270,7 @@ export default function CustomTable({
                   )}
                   {referrals ? (
                     <TableCell align="center">
-                      {row.status ? (
+                      {row.payStatus ? (
                         <span className="text-green-500">Paid</span>
                       ) : (
                         <span className="text-red-500">Pending</span>
@@ -275,7 +291,7 @@ export default function CustomTable({
                         aria-describedby={id}
                         variant="contained"
                         onClick={(event) =>
-                          handleClick(event, row.referralState || true)
+                          handleClick(event, row.userReferralState || true)
                         }
                       >
                         <CiMenuKebab className="h-6 w-6 m-auto " />
@@ -309,28 +325,49 @@ export default function CustomTable({
                   <TableCell component="th" scope="row">
                     {row.id}
                   </TableCell>
+
                   <TableCell align="left">
                     <div className="flex items-center gap-2 relative left-1/3">
-                      {/* <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                      /> */}
-                      <Avatar>R</Avatar>
+                      <Avatar alt={row.image.split("/")[-1]} src={row.image} />
+                      {/* <Avatar>R</Avatar> */}
                       <h6>{row.name}</h6>
                     </div>
                   </TableCell>
-                  <TableCell align="center">{row.email}</TableCell>
-                  <TableCell align="center">{row.phone}</TableCell>
+
+                  {user ? (
+                    <TableCell align="center">{row.email}</TableCell>
+                  ) : referrals ? (
+                    <TableCell align="center">{row.referrals}</TableCell>
+                  ) : (
+                    <TableCell align="center">{row.profession}</TableCell>
+                  )}
+
+                  {referrals ? (
+                    <TableCell align="center">{`$ ${row.earned}`}</TableCell>
+                  ) : user ? (
+                    <TableCell align="center">{row.reference}</TableCell>
+                  ) : swopId ? (
+                    <TableCell align="center">{row.address}</TableCell>
+                  ) : subscribers ? (
+                    <TableCell align="center"></TableCell>
+                  ) : user ? (
+                    <TableCell align="center">{row.phone}</TableCell>
+                  ) : (
+                    <TableCell align="center">{row.address}</TableCell>
+                  )}
+
                   {referrals ? (
                     <TableCell align="center">
-                      {row.status ? (
+                      {row.payStatus === true ? (
                         <span className="text-green-500">Paid</span>
                       ) : (
-                        <span className="text-red-500">Pending</span>
+                        <span className="text-[#e0a64e]">Pending</span>
                       )}
                     </TableCell>
+                  ) : subscribers ? (
+                    <TableCell align="center"></TableCell>
                   ) : (
-                    <TableCell align="center">{row.bookingTime}</TableCell>
+                    <TableCell align="center"></TableCell>
                   )}
                   {referrals && (
                     <TableCell align="center" className="hover:text-blue-500">
@@ -338,7 +375,7 @@ export default function CustomTable({
                         aria-describedby={id}
                         variant="contained"
                         onClick={(event) =>
-                          handleClick(event, row.referralState || true)
+                          handleClick(event, row.userReferralState || true)
                         }
                         sx={{
                           bgcolor: "transparent",
@@ -379,14 +416,17 @@ export default function CustomTable({
                           },
                         }}
                       >
-                        <Typography sx={{ p: 2 }}>
-                          <div className="flex flex-col justify-start items-center divide-y bg-white">
+                        <div className="p-2">
+                          <div className="flex flex-col justify-start items-center divide-y bg-white w-28">
                             <button
                               className={cn(
                                 "p-2 flex justify-start items-center",
                                 referralState === true ? "text-green-500" : ""
                               )}
                               onClick={() => {
+                                // e.preventDefault();
+                                // dynamicData[row.id].userReferralState = true;
+
                                 setReferralState(true);
                               }}
                             >
@@ -401,6 +441,9 @@ export default function CustomTable({
                                 referralState === false ? "text-red-500" : ""
                               )}
                               onClick={() => {
+                                // e.preventDefault();
+                                // console.log(row.id);
+                                // dynamicData[row.id].userReferralState = false;
                                 setReferralState(false);
                               }}
                             >
@@ -410,7 +453,7 @@ export default function CustomTable({
                               Deactivate
                             </button>
                           </div>
-                        </Typography>
+                        </div>
                       </Popover>
                     </TableCell>
                   )}
