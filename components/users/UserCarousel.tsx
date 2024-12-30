@@ -4,11 +4,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { MdOutlineFileDownload } from "react-icons/md";
 import { Avatar } from "@mui/material";
 import { FaUsers } from "react-icons/fa";
 import Link from "next/link";

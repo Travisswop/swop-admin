@@ -3,24 +3,15 @@ import React from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import data from "@/lib/placeholderData";
-import { Avatar, Button } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { MdOutlineFileDownload } from "react-icons/md";
-import {
-  FaCheck,
-  FaCheckCircle,
-  FaRegCheckCircle,
-  FaUsers,
-} from "react-icons/fa";
-import Link from "next/link";
-import UserCarousel from "@/components/users/UserCarousel";
+import { FaCheck, FaUsers } from "react-icons/fa";
 import PersonalInfo from "@/components/users/PersonalInfo";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import OrderHistory from "@/components/users/OrderHistory";
@@ -83,9 +74,12 @@ const Page = () => {
           )}
           <div className="flex flex-col justify-center items-center">
             <h2 className="text-2xl text-black">{user?.name}</h2>
-            <Link href={`www.swopme.com/${user?.name.trim().split(" ")[0]}`}>
+            <a
+              target="_blank"
+              href={`http://www.swopme.com/${user?.name.trim().split(" ")[0]}`}
+            >
               {`www.swopme.com/${user?.name.trim().split(" ")[0]}`}
-            </Link>
+            </a>
           </div>
         </section>
         <section className="w-full h-full  flex justify-start items-center">
