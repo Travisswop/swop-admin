@@ -9,7 +9,7 @@ import data from "@/lib/placeholderData";
 const Page = () => {
   const path = usePathname();
   return (
-    <section className="w-full h-full flex flex-col justify-start items-center text-[#737791]">
+    <section className="w-full h-full flex flex-col justify-start items-center text-[#737791] no-scrollbar">
       <CustomTable
         sideText=""
         dynamicData={data}

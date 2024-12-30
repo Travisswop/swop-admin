@@ -2,56 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* remove water mark from tinymice editor  */
-.tox .tox-statusbar {
-  align-items: center;
-  background-color: #fff;
-  border-top: 1px solid #e3e3e3;
-  color: rgba(34, 47, 62, 0.7);
-  display: none !important;
-  flex: 0 0 auto;
-  font-size: 14px;
-  font-weight: 400;
-  height: 25px;
-  overflow: hidden;
-  padding: 0 8px;
-  position: relative;
-  text-transform: none;
-}
-
-/* hide scrollbar */
-
-@layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-}
-
-
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
