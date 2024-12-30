@@ -18,7 +18,9 @@ const AnnouncementsPage = () => {
             </p>
           </div>
         </div>
-        <PrimaryButton>Send everyone</PrimaryButton>
+        <PrimaryButton className="w-[11rem] flex items-center justify-center">
+          Send everyone
+        </PrimaryButton>
       </div>
       <div className="flex justify-between items-center py-3 border-b">
         <div className="flex items-center gap-3">
@@ -31,7 +33,9 @@ const AnnouncementsPage = () => {
             </p>
           </div>
         </div>
-        <PrimaryButton>Send everyone</PrimaryButton>
+        <PrimaryButton className="w-[11rem] flex items-center justify-center">
+          Send everyone
+        </PrimaryButton>
       </div>
       <div className="flex justify-between items-center py-3 border-b">
         <div className="flex items-center gap-3">
@@ -44,7 +48,9 @@ const AnnouncementsPage = () => {
             </p>
           </div>
         </div>
-        <PrimaryButton>Send everyone</PrimaryButton>
+        <PrimaryButton className="w-[11rem] flex items-center justify-center">
+          Send everyone
+        </PrimaryButton>
       </div>
       <div className="flex justify-between items-end py-3 border-b">
         <div className="flex gap-3">

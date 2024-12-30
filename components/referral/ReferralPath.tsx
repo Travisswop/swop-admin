@@ -49,7 +49,7 @@ const ReferralPath = () => {
             &nbsp;&nbsp;&nbsp;<span>Go Back</span>
           </button>
         )}
-        <div className=" flex justify-start items-center gap-8 w-fit ">
+        <div className="flex justify-start items-center gap-4 2xl:gap-6 w-fit">
           {slug.map((item) => (
             <Link
               key={item.slug}

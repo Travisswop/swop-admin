@@ -70,7 +70,7 @@ const UserGrowthWithDropdown = () => {
   };
 
   return (
-    <div className="bg-white p-4 pl-0 rounded-xl flex-[2]">
+    <div className="bg-white p-4 pl-0 rounded-xl flex-[2] shadow-lg">
       <div
         style={{
           display: "flex",

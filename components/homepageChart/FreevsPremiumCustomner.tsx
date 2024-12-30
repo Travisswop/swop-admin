@@ -38,7 +38,7 @@ const FreeVsPremiumChart = () => {
           marginBottom: "20px",
         }}
       >
-        Free Vs Premium Customrs
+        Free Vs Premium Customers
       </h3>
 
       {/* Chart */}

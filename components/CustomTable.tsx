@@ -99,9 +99,11 @@ export default function CustomTable({
 
   return (
     <section className="w-full max-h-[90%] text-black overflow-scroll-y bg-white p-4 flex flex-col gap-5 rounded-lg">
-      <article className="flex justify-between items-center w-full">
+      <article className="flex justify-between items-center w-full gap-4">
         {sideText && (
-          <h2 className="text-4xl font-semibold pl-5">{sideText}</h2>
+          <h2 className="text-xl 2xl:text-4xl font-semibold pl-5">
+            {sideText}
+          </h2>
         )}
         {showSearch && (
           <div className="w-96 relative">
@@ -115,7 +117,7 @@ export default function CustomTable({
         )}
         <div
           className={cn(
-            "flex flex-row gap-4 w-fit justify-center items-center ",
+            "flex flex-row gap-2 2xl:gap-4 w-fit justify-center items-center ",
             showSearch ? "" : "ml-auto"
           )}
         >
