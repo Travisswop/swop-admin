@@ -18,7 +18,7 @@ const PersonalInfo = ({
   return (
     <div className="w-full h-full grid grid-cols-2 gap-5">
       <section>
-        <Card className="shadow-lg h-full p-5 ">
+        <Card className=" drop-shadow-[0px_5px_5px_rgba(0,0,0,0.20)]  h-full p-5 border-0 rounded-2xl ">
           <CardHeader className="p-2 text-black text-2xl float-left w-full border-b">
             Personal Information
           </CardHeader>
@@ -31,7 +31,7 @@ const PersonalInfo = ({
               </span>
             </h4>
             <h4>Phone:</h4>
-            <h4 className="text-black">{selectedSite?.phone}</h4>
+            <h4 className="text-black">+ {selectedSite?.phone}</h4>
             <h4>Referral Code:</h4>
             <h4 className="text-black text-nowrap">
               {selectedSite?.referrals}
@@ -46,17 +46,19 @@ const PersonalInfo = ({
             <Switch />
             <h4>Public Solana Address:</h4>
             <h4 className="text-black">{selectedSite?.solana}</h4>
+            <h4>Public EVM Address:</h4>
+            <h4 className="text-black">{selectedSite?.solana.slice(8, -1)}</h4>
             <h4>Associated NFC Serial No:</h4>
             <h4 className="text-black">{selectedSite?.nfc}</h4>
             <h4>Swop.ID:</h4>
             <h4 className="text-black">{selectedSite?.swopId}</h4>
             <h4>Balance:</h4>
-            <h4 className="text-black">{selectedSite?.balance}</h4>
+            <h4 className="text-black">$ {selectedSite?.balance}</h4>
           </CardContent>
         </Card>
       </section>
       <section>
-        <Card className=" shadow-lg h-full p-5 ">
+        <Card className=" drop-shadow-[0px_5px_5px_rgba(0,0,0,0.20)] border-0 h-full p-5 rounded-2xl">
           <CardHeader className="p-2 text-black text-2xl float-left w-full border-b">
             Shipping
           </CardHeader>

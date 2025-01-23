@@ -1,6 +1,8 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 import React from "react";
 import Image from "next/image";
+import { MdVerified } from "react-icons/md";
 import { useParams } from "next/navigation";
 import data from "@/lib/placeholderData";
 import { Avatar } from "@mui/material";
@@ -9,6 +11,17 @@ import { FaUsers } from "react-icons/fa";
 import PersonalInfo from "@/components/users/PersonalInfo";
 import OrderHistory from "@/components/users/OrderHistory";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 const Page = () => {
   const [selectedSwopId, setSelectedSwopId] = React.useState("");
@@ -17,6 +30,7 @@ const Page = () => {
   if (user && selectedSwopId === "") {
     setSelectedSwopId(user?.site[0].id);
   }
+  const [verified, setVerified] = React.useState(false);
   return (
     <section className="w-full min-h-svh no-scrollbar flex flex-col justify-start items-center text-[#737791] bg-white overflow-hidden">
       {user?.image ? (
@@ -58,8 +72,60 @@ const Page = () => {
             </Avatar>
           )}
           <div className="flex flex-col w-full justify-start items-center -translate-y-2">
-            <h2 className="text-2xl text-black w-full text-left">
+            <h2 className="text-2xl text-black w-full text-left flex items-center justify-start gap-4">
               {user?.name}
+              {verified ? (
+                <MdVerified className="text-blue-600" />
+              ) : (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Badge
+                      variant="outline"
+                      className="cursor-pointer hover:text-blue-600 transition-all duration-200 ease-in-out"
+                    >
+                      Verify
+                    </Badge>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px] bg-white text-black">
+                    <DialogHeader>
+                      <DialogTitle>Verify profile</DialogTitle>
+                      {/* <DialogDescription> */}
+                      {/*   Make changes to your profile here. Click save when */}
+                      {/*   you're done. */}
+                      {/* </DialogDescription> */}
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="username" className="text-right">
+                          Username
+                        </Label>
+                        <Input id="username" className="col-span-3" />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="password" className="text-right">
+                          Password
+                        </Label>
+                        <Input
+                          id="password"
+                          name="password"
+                          className="col-span-3"
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        type="submit"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setVerified(!verified);
+                        }}
+                      >
+                        Submit
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              )}
             </h2>
             <Link
               target="_blank"
