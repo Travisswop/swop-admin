@@ -37,18 +37,18 @@ const Page = () => {
         <article className="w-full h-[200px] relative">
           <Image
             // src={user?.image}
-            src="/images/bgimage.png"
+            src="/images/user/cover-8.png"
             // src="/images/bg.jpg"
             alt={user?.name}
             height={1200}
             width={1000}
-            className="absolute top-0 w-full h-[200px] object-start object-cover"
+            className="absolute top-0 w-full h-[200px] object-center"
           />
         </article>
       ) : (
         <article className="w-full h-[200px] relative">
           <Image
-            src="/images/bgimage.png"
+            src="/images/user/cover-6.png"
             alt="loading..."
             height={1000}
             width={1000}
