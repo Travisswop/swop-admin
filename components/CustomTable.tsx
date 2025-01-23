@@ -76,12 +76,12 @@ export default function CustomTable({
   //FLOATING BUTTON
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
-    null
+    null,
   );
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement>,
-    state: boolean
+    state: boolean,
   ) => {
     setReferralState(state);
     setAnchorEl(event.currentTarget);
@@ -118,7 +118,7 @@ export default function CustomTable({
         <div
           className={cn(
             "flex flex-row gap-2 2xl:gap-4 w-fit justify-center items-center ",
-            showSearch ? "" : "ml-auto"
+            showSearch ? "" : "ml-auto",
           )}
         >
           <h2>Filter</h2>
@@ -188,21 +188,21 @@ export default function CustomTable({
               </TableCell>
 
               {referrals ? (
-                <TableCell align="center">Referrals</TableCell>
+                <TableCell align="left">Referrals</TableCell>
               ) : swopId ? (
                 <TableCell align="center">Profession</TableCell>
               ) : subscribers ? (
                 <TableCell align="center">Subscribers Email</TableCell>
               ) : user ? (
-                <TableCell align="center">Email</TableCell>
+                <TableCell align="left">Email</TableCell>
               ) : (
                 <TableCell align="center">Profession</TableCell>
               )}
 
               {referrals ? (
-                <TableCell align="center">{`Earned Amount ($)`}</TableCell>
+                <TableCell align="left">{`Earned Amount ($)`}</TableCell>
               ) : user ? (
-                <TableCell align="center">Reference</TableCell>
+                <TableCell align="left">Reference</TableCell>
               ) : swopId ? (
                 <TableCell align="center">Address</TableCell>
               ) : subscribers ? (
@@ -259,12 +259,12 @@ export default function CustomTable({
                   ) : swopId ? (
                     <TableCell align="center">{row.profession}</TableCell>
                   ) : (
-                    <TableCell align="center">{row.email}</TableCell>
+                    <TableCell align="left">{row.email}</TableCell>
                   )}
                   {referrals ? (
                     <TableCell align="center">{row.earned}</TableCell>
                   ) : user ? (
-                    <TableCell align="center">{row.reference}</TableCell>
+                    <TableCell align="left">{row.reference}</TableCell>
                   ) : swopId ? (
                     <TableCell align="center">{row.address}</TableCell>
                   ) : (
@@ -339,13 +339,15 @@ export default function CustomTable({
                   {user ? (
                     <TableCell align="center">{row.email}</TableCell>
                   ) : referrals ? (
-                    <TableCell align="center">{row.referrals}</TableCell>
+                    <TableCell align="left">{row.referrals}</TableCell>
+                  ) : subscribers ? (
+                    <TableCell align="center">{row.email}</TableCell>
                   ) : (
                     <TableCell align="center">{row.profession}</TableCell>
                   )}
 
                   {referrals ? (
-                    <TableCell align="center">{`$ ${row.earned}`}</TableCell>
+                    <TableCell align="left">{`$ ${row.earned}`}</TableCell>
                   ) : user ? (
                     <TableCell align="center">{row.reference}</TableCell>
                   ) : swopId ? (
@@ -423,7 +425,7 @@ export default function CustomTable({
                             <button
                               className={cn(
                                 "p-2 flex justify-start items-center",
-                                referralState === true ? "text-green-500" : ""
+                                referralState === true ? "text-green-500" : "",
                               )}
                               onClick={() => {
                                 // e.preventDefault();
@@ -440,7 +442,7 @@ export default function CustomTable({
                             <button
                               className={cn(
                                 "p-2 flex justify-start items-center",
-                                referralState === false ? "text-red-500" : ""
+                                referralState === false ? "text-red-500" : "",
                               )}
                               onClick={() => {
                                 // e.preventDefault();
@@ -460,7 +462,7 @@ export default function CustomTable({
                     </TableCell>
                   )}
                 </TableRow>
-              )
+              ),
             )}
           </TableBody>
         </Table>

@@ -6,6 +6,7 @@ import { Avatar, Button } from "@mui/material";
 import { CiMenuKebab } from "react-icons/ci";
 import Link from "next/link";
 import { IoMdCheckboxOutline } from "react-icons/io";
+import { cn } from "@/lib/utils";
 
 type Message = {
   id: number;
@@ -20,6 +21,7 @@ type Message = {
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState("liveSupport");
+  const [selectedChat, setSelectedChat] = useState(0);
 
   return (
     <section className="w-full h-full flex flex-col justify-start items-center">
@@ -72,19 +74,36 @@ const Page = () => {
           <section className="w-[30%] flex justify-center items-center flex-col gap-5 ">
             {messageData.map((message: Message) => (
               <div
-                className="w-full h-[80px] flex justify-start gap-2 items-center bg-white rounded-xl p-4 text-black font-medium cursor-pointer hover:shadow-lg hover:bg-gray-100 transition-all duration-300 ease-in-out"
+                className={cn(
+                  "w-full h-[80px] flex justify-start gap-2 items-center bg-white rounded-xl p-4 text-black font-medium cursor-pointer hover:shadow-lg hover:bg-gray-100 transition-all duration-300 ease-in-out",
+                  selectedChat === message.id &&
+                    "bg-[#4B93FF] shadow-lg text-white hover:bg-[#4B93FF] ",
+                )}
                 key={message.id}
+                onClick={() => setSelectedChat(message.id)}
               >
                 <Avatar alt="Remy Sharp" src={message.image} />
                 <section className="flex justify-between items-start ">
                   <div>
                     <h2>{message.name}</h2>
-                    <p className="text-xs line-clamp-1 w-1/2 text-gray-400">
+                    <p
+                      className={cn(
+                        "text-xs line-clamp-1 w-1/2 text-gray-400",
+                        selectedChat === message.id && "text-white",
+                      )}
+                    >
                       {message.message}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs  text-gray-500">{message.time}</p>
+                    <p
+                      className={cn(
+                        "text-xs  text-gray-500",
+                        selectedChat === message.id && "text-white",
+                      )}
+                    >
+                      {message.time}
+                    </p>
                   </div>
                 </section>
               </div>
@@ -114,13 +133,13 @@ const Page = () => {
                     <p className="flex justify-start gap-2 items-start ">
                       {message.messageLeft}
                     </p>
-                    <p className="float-right text-sx text-gray-300">
+                    <p className="float-right text-sx pt-2 text-gray-300">
                       {message.time}
                     </p>
                   </div>
                 ))}
               </section>
-              <section className=" flex justify-center items-start flex-col gap-5 pt-3">
+              <section className=" flex justify-center items-end flex-col gap-5 pt-3">
                 {messageData.map((message: Message) => (
                   <div
                     key={message.id}
@@ -129,7 +148,7 @@ const Page = () => {
                     <p className="flex justify-start gap-2 items-start ">
                       {message.messageRight}
                     </p>
-                    <p className="float-right text-sx text-gray-400">
+                    <p className="float-right text-sx pt-2 text-gray-400">
                       {message.time}
                     </p>
                   </div>

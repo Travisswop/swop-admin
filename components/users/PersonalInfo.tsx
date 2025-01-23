@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent, CardHeader } from "../ui/card";
 
 import { Row } from "@/lib/placeholderData";
 import { Switch } from "../ui/switch";
@@ -17,12 +17,12 @@ const PersonalInfo = ({
 
   return (
     <div className="w-full h-full grid grid-cols-2 gap-5">
-      <h2 className="col-span-2 text-black text-2xl float-left w-full">
-        Personal Information
-      </h2>
       <section>
-        <Card className="bg-[#f7f7f7] h-fit p-5">
-          <CardContent className="pr-72 py-4  w-full grid grid-cols-2 gap-5">
+        <Card className="shadow-lg h-full p-5 ">
+          <CardHeader className="p-2 text-black text-2xl float-left w-full border-b">
+            Personal Information
+          </CardHeader>
+          <CardContent className=" py-4  w-fit grid grid-cols-2 gap-5 ">
             <h4>Email:</h4>
             <h4 className="text-black flex justify-between items-center">
               {selectedSite?.email}
@@ -33,21 +33,17 @@ const PersonalInfo = ({
             <h4>Phone:</h4>
             <h4 className="text-black">{selectedSite?.phone}</h4>
             <h4>Referral Code:</h4>
-            <h4 className="text-black">{selectedSite?.referrals}</h4>
+            <h4 className="text-black text-nowrap">
+              {selectedSite?.referrals}
+            </h4>
             <h4>Sign Up Date:</h4>
             <h4 className="text-black">{selectedSite?.signUpDate}</h4>
             <h4>Date Of Birth:</h4>
             <h4 className="text-black">{user.dateOfBirth}</h4>
-          </CardContent>
-        </Card>
-      </section>
-      <section>
-        <Card className="bg-[#f7f7f7]  h-fit p-5 ">
-          <CardContent className="pr-44 py-4 w-full grid grid-cols-2 gap-5">
             <h4>Premium Subscriber?</h4>
 
-            <Switch checked={selectedSite?.premiumMembership} />
-
+            {/* <Switch checked={selectedSite?.premiumMembership} /> */}
+            <Switch />
             <h4>Public Solana Address:</h4>
             <h4 className="text-black">{selectedSite?.solana}</h4>
             <h4>Associated NFC Serial No:</h4>
@@ -56,6 +52,27 @@ const PersonalInfo = ({
             <h4 className="text-black">{selectedSite?.swopId}</h4>
             <h4>Balance:</h4>
             <h4 className="text-black">{selectedSite?.balance}</h4>
+          </CardContent>
+        </Card>
+      </section>
+      <section>
+        <Card className=" shadow-lg h-full p-5 ">
+          <CardHeader className="p-2 text-black text-2xl float-left w-full border-b">
+            Shipping
+          </CardHeader>
+          <CardContent className=" py-4 w-fit grid grid-cols-2 gap-5">
+            <h4>Address 1:</h4>
+            <h4 className="text-black">{selectedSite?.address1}</h4>
+            <h4>Address 2:</h4>
+            <h4 className="text-black">{selectedSite?.address2}</h4>
+            <h4>City:</h4>
+            <h4 className="text-black">{selectedSite?.city}</h4>
+            <h4>Zipcode:</h4>
+            <h4 className="text-black">{selectedSite?.zip}</h4>
+            <h4>State/Providence:</h4>
+            <h4 className="text-black">{selectedSite?.state}</h4>
+            <h4>Country:</h4>
+            <h4 className="text-black">{selectedSite?.country}</h4>
           </CardContent>
         </Card>
       </section>
