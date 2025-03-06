@@ -7,49 +7,25 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { FaRegEdit, FaSearch } from "react-icons/fa";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { MdOutlineFileDownload } from "react-icons/md";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { FaSearch } from "react-icons/fa";
+
 import { Avatar, Button, Popover } from "@mui/material";
-import { CiMenuKebab } from "react-icons/ci";
-import { IoMdCheckmark } from "react-icons/io";
 
 //imported data for table
 import data from "@/lib/placeholderData";
 
 import { Row } from "@/lib/placeholderData";
+import { useRouter } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   // console.log(dynamicData[0].userReferralState);
 
-  const [date, setDate] = React.useState("");
-  const [name, setName] = React.useState("");
-  const [referralState, setReferralState] = React.useState(true);
-  const handleChangeName = (event: SelectChangeEvent) => {
-    setName(event.target.value as string);
-  };
-  const handleChangeAge = (event: SelectChangeEvent) => {
-    setDate(event.target.value as string);
-  };
   //FLOATING BUTTON
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-
-  const handleClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    state: boolean
-  ) => {
-    setReferralState(state);
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -195,4 +171,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

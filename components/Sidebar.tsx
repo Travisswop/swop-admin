@@ -7,11 +7,11 @@ import { usePathname } from "next/navigation";
 import swopLogo from "@/public/images/swop-logo.png";
 // import { useState } from "react";
 import { LuLayoutGrid, LuMapPinned } from "react-icons/lu";
-import { HiOutlineLogout, HiUsers } from "react-icons/hi";
+import { HiOutlineLogout } from "react-icons/hi";
 import { GrAnnounce } from "react-icons/gr";
-import { RiSendToBack } from "react-icons/ri";
+
 import { LiaIdCard } from "react-icons/lia";
-import { IoBagHandleOutline, IoSettingsOutline } from "react-icons/io5";
+import { IoBagHandleOutline } from "react-icons/io5";
 import { FaUsers } from "react-icons/fa";
 import { MdOutlineQrCodeScanner } from "react-icons/md";
 import { FaStar } from "react-icons/fa6";
