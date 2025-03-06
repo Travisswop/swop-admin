@@ -18,6 +18,8 @@ export type Row = {
   swopId: string;
   dateOfBirth: string;
   site: Site[];
+  earnings_points: number;
+  country: string;
 };
 
 export type Site = {
@@ -58,7 +60,10 @@ function createData(id: number): Row {
     date: chance.date({ string: true, american: false }).toString(),
     name: chance.name(),
     email: chance.email(),
-    image: `https://picsum.photos/id/${chance.integer({ min: 1, max: 200 })}/200`,
+    image: `https://picsum.photos/id/${chance.integer({
+      min: 1,
+      max: 200,
+    })}/200`,
     payStatus: chance.bool(),
     referrals: chance.string({ length: 20 }),
     userReferralState: chance.bool({ likelihood: 20 }),
@@ -71,6 +76,8 @@ function createData(id: number): Row {
     swopId: chance.name().split(" ")[0] + ".Swop.Id",
     site: Array.from({ length: 10 }, () => createData2()),
     dateOfBirth: chance.date({ string: true, american: false }).toString(),
+    earnings_points: chance.integer({ min: 0, max: 1000000 }),
+    country: chance.country({ full: true }),
   };
 }
 
@@ -90,7 +97,7 @@ function createData2(): Site {
     phone: chance.phone(),
     swopId: chance.name().split(" ")[0] + ".Swop.Id",
     order: Array.from({ length: chance.integer({ min: 1, max: 10 }) }, () =>
-      createData3(),
+      createData3()
     ),
     address1: chance.address(),
     address2: chance.address(),
@@ -115,4 +122,3 @@ const data: Row[] = Array.from({ length: 30 }, (_, index) => createData(index));
 //console.log(data[0].site);
 
 export default data;
-

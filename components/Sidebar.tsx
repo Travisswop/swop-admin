@@ -14,22 +14,26 @@ import { LiaIdCard } from "react-icons/lia";
 import { IoBagHandleOutline, IoSettingsOutline } from "react-icons/io5";
 import { FaUsers } from "react-icons/fa";
 import { MdOutlineQrCodeScanner } from "react-icons/md";
+import { FaStar } from "react-icons/fa6";
+import { GoChecklist } from "react-icons/go";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: <LuLayoutGrid /> },
-  { href: "/users", label: "Users", icon: <HiUsers /> },
-  { href: "/announcements", label: "Announcements", icon: <GrAnnounce /> },
-  { href: "/referral", label: "Referral", icon: <RiSendToBack /> },
-  { href: "/connections-map", label: "Connections Map", icon: <LuMapPinned /> },
   { href: "/swop-id", label: "Swop.ID", icon: <LiaIdCard /> },
-  { href: "/jobs", label: "Jobs", icon: <IoBagHandleOutline /> },
-  { href: "/subscribers", label: "Subscribers", icon: <FaUsers /> },
-  { href: "/support", label: "Support", icon: <IoSettingsOutline /> },
+  { href: "/points", label: "Points", icon: <FaStar /> },
   {
     href: "/qr-management",
     label: "QR management",
     icon: <MdOutlineQrCodeScanner />,
   },
+  { href: "/connections-map", label: "Connections Map", icon: <LuMapPinned /> },
+  { href: "/subscribers", label: "Subscribers", icon: <FaUsers /> },
+  { href: "/jobs", label: "Jobs", icon: <IoBagHandleOutline /> },
+  { href: "/announcements", label: "Announcements", icon: <GrAnnounce /> },
+  { href: "/order", label: "Order", icon: <GoChecklist /> },
+  // { href: "/referral", label: "Referral", icon: <RiSendToBack /> },
+
+  // { href: "/support", label: "Support", icon: <IoSettingsOutline /> },
 ];
 
 export default function Sidebar() {
