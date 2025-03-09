@@ -1,15 +1,15 @@
 "use client";
-import React, { useState } from "react";
 import swopLogo from "@/public/images/swop-logo.png";
 import Image from "next/image";
+import { useState } from "react";
 // import LoginPasswordInput from "@/components/LoginPasswordInput";
 // import googleIcon from "../../../public/images/login-form/google-icon.svg";
 // import appleIcon from "../../../public/images/login-form/apple-icon.svg";
 // import { checkIsUserExist, doSignInWithGoogle } from "@/actions/auth";
 // import { useRouter } from "next/navigation";
+import PrimaryButton from "@/components/button/PrimaryButton";
 import LoginPasswordInput from "@/components/LoginPasswordInput";
 import { FaLongArrowAltRight } from "react-icons/fa";
-import PrimaryButton from "@/components/button/PrimaryButton";
 // import { z } from "zod";
 // import ConfirmPasswordInput from "@/components/ConfirmPasswordInput";
 // import SignUpButton from "@/components/Button/SignUpButton";

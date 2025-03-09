@@ -15,6 +15,7 @@ import { scaleOrdinal } from "d3-scale";
 //   { id: "356", name: "India", value: 1200 },
 //   { id: "360", name: "Indonesia", value: 900 },
 // ];
+
 const data = [
   { id: "USA", name: "United States", value: 1000 },
   { id: "BGD", name: "Bangladesh", value: 600 },
