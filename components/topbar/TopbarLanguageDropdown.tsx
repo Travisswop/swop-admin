@@ -1,60 +1,60 @@
-import * as React from "react";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Image from "next/image";
+"use client";
+
 import americanFlag from "@/public/images/american_flag.webp";
 import bangladeshFlag from "@/public/images/bangladesh_flag.png";
+import Image from "next/image";
+import { useState } from "react";
 import { FaAngleDown } from "react-icons/fa";
 
 export default function LanguageMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [language, setLanguage] = React.useState<string>("eng");
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = (langProp: string) => {
-    setAnchorEl(null);
-    setLanguage(langProp);
+  const [isOpen, setIsOpen] = useState(false);
+  const [language, setLanguage] = useState("eng");
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
+  const handleSelect = (lang: string) => {
+    setLanguage(lang);
+    setIsOpen(false);
   };
 
   return (
-    <div className="">
+    <div className="relative">
       <button
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-        className="flex items-center gap-1.5"
+        onClick={toggleDropdown}
+        className="flex items-center gap-2 bg-white px-3 py-2 transition-all"
       >
         <Image
-          alt="user image"
+          alt="flag"
           src={language === "eng" ? americanFlag : bangladeshFlag}
-          className="w-[22px] h-[22px] rounded-full"
+          className="w-6 h-6 rounded-full"
         />
-        <p className="text-[#2D3032] font-medium text-lg ml-1">
+        <p className="text-gray-800 font-medium">
           {language === "eng" ? "Eng (US)" : "Bangla"}
         </p>
         <FaAngleDown
-          color="gray"
-          className={`${
-            open ? "rotate-180" : "rotate-0"
-          } transition-transform duration-500`}
+          className={`text-gray-500 transition-transform ${
+            isOpen ? "rotate-180" : "rotate-0"
+          }`}
         />
       </button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={() => handleClose("eng")}>Eng (US)</MenuItem>
-        <MenuItem onClick={() => handleClose("bangla")}>Bangla</MenuItem>
-      </Menu>
+
+      {isOpen && (
+        <div className="absolute left-0 mt-2 w-36 bg-white rounded-md shadow-lg z-10">
+          <ul className="py-1 text-gray-800">
+            <li
+              onClick={() => handleSelect("eng")}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              Eng (US)
+            </li>
+            {/* <li
+              onClick={() => handleSelect("bangla")}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              Bangla
+            </li> */}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

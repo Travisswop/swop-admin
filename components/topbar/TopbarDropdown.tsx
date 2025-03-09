@@ -1,49 +1,55 @@
-import * as React from "react";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Image from "next/image";
+"use client";
+
 import userImage from "@/public/images/user_image.jpg";
+import Image from "next/image";
+import { useState } from "react";
 
 export default function UserMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
+  const handleClose = () => setIsOpen(false);
 
   return (
-    <div className="">
+    <div className="relative">
+      {/* User Button */}
       <button
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-        className="border border-[#57B5FF] flex items-center gap-1 px-4 py-1.5 rounded-xl shadow-lg"
+        onClick={toggleDropdown}
+        className="flex items-center gap-2 px-4 py-1.5 border border-[#57b6ffa7] rounded-xl  transition-all"
       >
         <Image
           alt="user image"
           src={userImage}
-          className="w-7 h-7 border-2 border-gray-300 shadow-md rounded-full"
+          className="w-8 h-8 rounded-full border-2 border-gray-300 shadow-md"
         />
-        <p className="text-[#2D3032] font-medium">Travis Herron</p>
+        <p className="text-gray-800 font-medium">Travis Herron</p>
       </button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
-      </Menu>
+
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
+          <ul className="py-1 text-gray-800">
+            <li
+              onClick={handleClose}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              Profile
+            </li>
+            <li
+              onClick={handleClose}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              My Account
+            </li>
+            <li
+              onClick={handleClose}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              Logout
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
