@@ -31,6 +31,10 @@ export async function login(payload: ILoginPayload) {
         secure: true,
         httpOnly: true,
       });
+      cookieStore.set("userInfo", JSON.stringify(data.user), {
+        secure: true,
+        httpOnly: true,
+      });
     }
     return data;
   } catch (error) {

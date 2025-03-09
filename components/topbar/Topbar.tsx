@@ -26,6 +26,12 @@ export default function Topbar(): JSX.Element {
   const pathname = usePathname();
   const routeName = formatRouteName(pathname);
 
+  // const userInfo = cookieStore.get("userInfo")?.value;
+
+  // if (userInfo) {
+  //   return JSON.parse(userInfo); // Deserialize the user details
+  // }
+
   return (
     <header className="sticky top-0 z-30 h-20 border-b bg-white px-4 pl-64 flex items-center justify-between w-full">
       <p className="text-2xl font-bold text-black pl-6">{routeName}</p>
