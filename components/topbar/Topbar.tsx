@@ -29,18 +29,20 @@ export default function Topbar(): JSX.Element {
   return (
     <header className="sticky top-0 z-30 h-20 border-b bg-white px-4 pl-64 flex items-center justify-between w-full">
       <p className="text-2xl font-bold text-black pl-6">{routeName}</p>
-      <div className="flex items-center gap-6">
-        <div className="w-96 relative">
-          <input
-            type="text"
-            className="px-3 py-2 bg-slate-200 rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
-            placeholder="Search here..."
-          />
-          <FaSearch className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400" />
+      <div className="flex items-center gap-20">
+        <div className="flex items-center gap-6">
+          <div className="w-96 relative">
+            <input
+              type="text"
+              className="px-3 py-2 bg-[#F1F8FF] rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
+              placeholder="Search here..."
+            />
+            <FaSearch className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400" />
+          </div>
+          <LanguageMenu />
         </div>
-        <LanguageMenu />
+        <UserMenu />
       </div>
-      <UserMenu />
     </header>
   );
 }
