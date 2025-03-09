@@ -53,7 +53,8 @@ export default function LanguageMenu() {
         }}
       >
         <MenuItem onClick={() => handleClose("eng")}>Eng (US)</MenuItem>
-        <MenuItem onClick={() => handleClose("bangla")}>Bangla</MenuItem>
+        <MenuItem>Bangla</MenuItem>
+        {/* onClick={() => handleClose("bangla")} */}
       </Menu>
     </div>
   );
