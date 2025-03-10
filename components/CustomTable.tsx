@@ -471,10 +471,9 @@
 //   );
 // }
 
-"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { FaDownload } from "react-icons/fa6";
 import { TbEdit } from "react-icons/tb";
 
@@ -527,8 +526,6 @@ const demoTableData = [
 ];
 
 const CustomTable = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
-
   return (
     <div className="w-full max-h-[90%] text-black overflow-scroll-y bg-white p-4 flex flex-col gap-5 rounded-lg py-10">
       <article className="flex justify-end items-end w-full gap-4 px-4">
@@ -603,11 +600,7 @@ const CustomTable = () => {
               className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center"
             >
               <td className="px-6 py-4 ">
-                <Link
-                  className="flex items-center gap-2 space-x-2"
-                  href=""
-                  // onClick={() => setSelectedUser()}
-                >
+                <Link className="flex items-center gap-2 space-x-2" href="">
                   <Image
                     src={el.image}
                     alt="User Picture"
@@ -638,24 +631,6 @@ const CustomTable = () => {
           ))}
         </tbody>
       </table>
-      {/* Modal */}
-      {selectedUser && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg w-96 shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4"></h2>
-            <p className="text-gray-600">Username: </p>
-            <p className="text-gray-600">Email: </p>
-            <p className="text-gray-600">Wallet: </p>
-            <p className="text-gray-600">Address: </p>
-            <button
-              onClick={() => setSelectedUser(null)}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
