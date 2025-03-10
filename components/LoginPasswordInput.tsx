@@ -13,7 +13,7 @@ const LoginPasswordInput = () => {
         <Image
           src={lock}
           alt=""
-          className="absolute top-1/2 -translate-y-1/2 left-3 w-[18px] h-auto"
+          className="absolute top-1/2 -translate-y-1/2 left-3 w-4 h-auto"
         />
         <input
           type={show ? "text" : "password"}

@@ -62,10 +62,11 @@ const SignInPage = () => {
         <section className="">
           <div className="flex justify-center">
             <div className="relative lg:w-auto w-[90%] sm:w-[70%] md:w-[60%]">
-              <div className="bg-gradient-to-br from-purple-200 to-blue-300 w-52 h-52 rounded-full absolute -bottom-32 -left-16 z-0 opacity-80"></div>
+              <div className="bg-gradient-to-br from-purple-200 to-blue-300 w-52 h-52 rounded-full absolute -bottom-16 -left-16 z-0 opacity-80"></div>
               <div className="bg-gradient-to-br from-purple-200 to-blue-300 w-52 h-52 rounded-full absolute top-0 -right-16 z-0 opacity-80"></div>
-              <div className="bg-gradient-to-r from-purple-500 to-blue-500 w-20 h-20 rounded-full absolute top-32 left-28 z-0"></div>
-              <div className="bg-gradient-to-r from-purple-500 to-blue-500 w-20 h-20 rounded-full absolute -bottom-10 right-14 z-0"></div>
+              <div className="bg-gradient-to-r from-purple-500 to-blue-500 w-20 h-20 rounded-full absolute top-20 left-12 z-0"></div>
+              <div className="bg-gradient-to-r from-purple-500 to-blue-500 w-20 h-20 rounded-full absolute bottom-4 right-20 z-0"></div>
+              <div className="bg-gradient-to-r from-purple-500 to-blue-500 w-20 h-20 rounded-full absolute bottom-10 right-60 z-0"></div>
               <div className="bg-[#af87fd] w-12 h-12 rounded-full absolute top-40 left-10 z-0"></div>
               <div className="flex flex-col gap-4 justify-center mt-16 w-full lg:w-[32rem] h-[22rem] relative px-4 lg:px-12 pt-4 lg:pt-12 pb-4 backdrop-blur-[50px] bg-white bg-opacity-25 border shadow-md rounded-xl">
                 {
@@ -80,7 +81,7 @@ const SignInPage = () => {
                       <Image
                         src={email}
                         alt=""
-                        className="absolute top-1/2 -translate-y-1/2 left-3"
+                        className="absolute top-1/2 -translate-y-1/2 left-3 w-4 h-auto"
                       />
                       <input
                         type="email"
