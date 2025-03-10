@@ -33,7 +33,6 @@ export async function login(payload: ILoginPayload) {
       });
       cookieStore.set("userInfo", JSON.stringify(data.user), {
         secure: true,
-        httpOnly: true,
       });
     }
     return data;

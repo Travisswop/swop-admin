@@ -5,6 +5,7 @@ import { FaSearch } from "react-icons/fa";
 import UserMenu from "./TopbarDropdown";
 import LanguageMenu from "./TopbarLanguageDropdown";
 import { JSX } from "react";
+import Cookies from "js-cookie";
 
 /**
  * Extracts and formats the first segment of the route name.
@@ -23,14 +24,15 @@ function formatRouteName(pathname: string): string {
 }
 
 export default function Topbar(): JSX.Element {
+  // const [user, setUser] =
   const pathname = usePathname();
   const routeName = formatRouteName(pathname);
 
-  // const userInfo = cookieStore.get("userInfo")?.value;
+  const user = Cookies.get("userInfo");
 
-  // if (userInfo) {
-  //   return JSON.parse(userInfo); // Deserialize the user details
-  // }
+  const userInfo = JSON.parse(user || "");
+
+  console.log("userInfo", userInfo);
 
   return (
     <header className="sticky top-0 z-30 h-20 border-b bg-white px-4 pl-64 flex items-center justify-between w-full">
@@ -47,7 +49,7 @@ export default function Topbar(): JSX.Element {
           </div>
           <LanguageMenu />
         </div>
-        <UserMenu />
+        <UserMenu userInfo={userInfo} />
       </div>
     </header>
   );
