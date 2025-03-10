@@ -4,8 +4,9 @@ import { usePathname } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 import UserMenu from "./TopbarDropdown";
 import LanguageMenu from "./TopbarLanguageDropdown";
-import { JSX } from "react";
+import { JSX, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { IUser } from "@/types/user";
 
 /**
  * Extracts and formats the first segment of the route name.
@@ -24,15 +25,23 @@ function formatRouteName(pathname: string): string {
 }
 
 export default function Topbar(): JSX.Element {
-  // const [user, setUser] =
+  const [user, setUser] = useState<IUser>({
+    email: "",
+    name: "",
+  });
   const pathname = usePathname();
   const routeName = formatRouteName(pathname);
 
-  const user = Cookies.get("userInfo");
+  useEffect(() => {
+    const user = Cookies.get("userInfo");
 
-  const userInfo = JSON.parse(user || "");
+    const userInfo = JSON.parse(user || "");
+    setUser(userInfo);
 
-  console.log("userInfo", userInfo);
+    console.log("userInfo", userInfo);
+  }, []);
+
+  console.log("user", user);
 
   return (
     <header className="sticky top-0 z-30 h-20 border-b bg-white px-4 pl-64 flex items-center justify-between w-full">
@@ -49,7 +58,7 @@ export default function Topbar(): JSX.Element {
           </div>
           <LanguageMenu />
         </div>
-        <UserMenu userInfo={userInfo} />
+        <UserMenu userInfo={user} />
       </div>
     </header>
   );
