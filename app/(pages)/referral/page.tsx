@@ -6,7 +6,7 @@ import ReferralPath from "@/components/referral/ReferralPath";
 import React from "react";
 
 //imported data for table
-import data from "@/lib/placeholderData";
+// import data from "@/lib/placeholderData";
 
 const Page = () => {
   //console.log(data);
@@ -15,11 +15,11 @@ const Page = () => {
     <section className="w-full h-full flex flex-col justify-start items-center text-[#737791]">
       <ReferralPath />
       <CustomTable
-        sideText="Referrals"
-        dynamicData={data}
-        showSearch={true}
-        // clickPath={path}
-        referrals={true}
+      // sideText="Referrals"
+      // dynamicData={data}
+      // showSearch={true}
+      // // clickPath={path}
+      // referrals={true}
       />
     </section>
   );

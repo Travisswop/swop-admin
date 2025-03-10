@@ -1,9 +1,10 @@
+"use client";
 import Link from "next/link";
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
 import { GrLocation } from "react-icons/gr";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import TextEditor from "./TextEditor";
+// import TextEditor from "./TextEditor";
 import { IoIosSearch } from "react-icons/io";
 
 const AddJobPost = () => {
@@ -325,9 +326,7 @@ const AddJobPost = () => {
           </div>
           <div className="w-full gap-5 shrink-0 ">
             <form className=" w-full">
-              <div className="">
-                <TextEditor />
-              </div>
+              <div className="">{/* <TextEditor /> */}</div>
             </form>
           </div>
         </div>

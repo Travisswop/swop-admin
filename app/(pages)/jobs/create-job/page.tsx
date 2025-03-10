@@ -1,12 +1,9 @@
-import AddJobPost from "@/components/jobs/AddJobPost";
+"use client";
 import React from "react";
+import AddJobPost from "@/components/jobs/AddJobPost";
 
-const page = () => {
-  return (
-    <div>
-      <AddJobPost />
-    </div>
-  );
+const CreateJobPage = () => {
+  return <AddJobPost />;
 };
 
-export default page;
+export default CreateJobPage;
