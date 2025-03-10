@@ -470,7 +470,8 @@
 //     </section>
 //   );
 // }
-
+"use client";
+import { Box, Modal } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -526,6 +527,25 @@ const demoTableData = [
 ];
 
 const CustomTable = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    position: "absolute",
+    color: "black",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "auto", // Allow width to adjust based on content
+    maxWidth: "90%", // Optional: Limits the width to 90% of the viewport width
+    bgcolor: "background.paper",
+    // border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    borderRadius: "16px",
+  };
+
   return (
     <div className="w-full max-h-[90%] text-black overflow-scroll-y bg-white p-4 flex flex-col gap-5 rounded-lg py-10">
       <article className="flex justify-end items-end w-full gap-4 px-4">
@@ -600,7 +620,10 @@ const CustomTable = () => {
               className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center"
             >
               <td className="px-6 py-4 ">
-                <Link className="flex items-center gap-2 space-x-2" href="">
+                <div
+                  className="flex items-center gap-2 space-x-2 cursor-pointer"
+                  onClick={handleOpen}
+                >
                   <Image
                     src={el.image}
                     alt="User Picture"
@@ -614,7 +637,7 @@ const CustomTable = () => {
                       {el.username}
                     </span>
                   </div>
-                </Link>
+                </div>
               </td>
               <td>
                 <Link href="">{el.address}</Link>
@@ -630,6 +653,17 @@ const CustomTable = () => {
             </tr>
           ))}
         </tbody>
+        {/* Modal */}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <div>Modal</div>
+          </Box>
+        </Modal>
       </table>
     </div>
   );
