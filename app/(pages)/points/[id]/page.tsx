@@ -49,14 +49,14 @@ const page = () => {
   const secondHalf = pointsData.slice(middleIndex);
 
   return (
-    <div className="p-8 text-black bg-white rounded-2xl">
+    <div className="p-8 xl:p-10 text-black bg-white rounded-2xl">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-xl font-semibold">Reward earnings rate</h2>
         <Link href={`/points/edit/${pointsData[0].id}`}>
           <Button variant={"default"}>Edit Points</Button>
         </Link>
       </div>
-      <div className="flex justify-between items-start gap-10">
+      <div className="flex justify-between items-start gap-10 xl:gap-20">
         {/* First Half */}
         <div className="w-1/2">
           <div className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200">
