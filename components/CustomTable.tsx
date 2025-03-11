@@ -470,13 +470,16 @@
 //     </section>
 //   );
 // }
-
 "use client";
+// import { Box, Modal } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { FaDownload } from "react-icons/fa6";
 import { TbEdit } from "react-icons/tb";
+// import IndividualUserInformation from "./swopId/IndividualUserInformation";
+// import TransactionHistory from "./swopId/TransactionHistory";
+// import SmartSites from "./swopId/SmartSites";
 
 const demoTableData = [
   {
@@ -527,7 +530,24 @@ const demoTableData = [
 ];
 
 const CustomTable = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
+  // const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
+
+  // const style = {
+  //   position: "absolute",
+  //   color: "black",
+  //   top: "50%",
+  //   left: "50%",
+  //   transform: "translate(-50%, -50%)",
+  //   width: "auto", // Allow width to adjust based on content
+  //   maxWidth: "90%", // Optional: Limits the width to 90% of the viewport width
+  //   bgcolor: "background.paper",
+  //   // border: "2px solid #000",
+  //   boxShadow: 24,
+  //   p: 4,
+  //   borderRadius: "16px",
+  // };
 
   return (
     <div className="w-full max-h-[90%] text-black overflow-scroll-y bg-white p-4 flex flex-col gap-5 rounded-lg py-10">
@@ -535,7 +555,7 @@ const CustomTable = () => {
         <div className="flex items-center gap-4">
           <h4 className="">Filter</h4>
 
-          <form className="max-w-sm mx-auto">
+          {/* <form className="max-w-sm mx-auto">
             <div className="relative">
               <select
                 id="countries"
@@ -551,7 +571,7 @@ const CustomTable = () => {
                 ▼
               </div>
             </div>
-          </form>
+          </form> */}
 
           <form className="max-w-sm mx-auto">
             <div className="relative">
@@ -604,9 +624,8 @@ const CustomTable = () => {
             >
               <td className="px-6 py-4 ">
                 <Link
-                  className="flex items-center gap-2 space-x-2"
-                  href=""
-                  // onClick={() => setSelectedUser()}
+                  className="flex items-center gap-2 space-x-2 cursor-pointer"
+                  href={`/swop-id/${el.id}`}
                 >
                   <Image
                     src={el.image}
@@ -637,25 +656,39 @@ const CustomTable = () => {
             </tr>
           ))}
         </tbody>
+        {/* Modal */}
+        {/* <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <div className="p-4 bg-white  text-black h-[80vh] overflow-y-scroll">
+              <div className="grid grid-cols-2  gap-8 w-full mb-10 ">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-black mb-4">
+                    User Information
+                  </h3>
+                  <IndividualUserInformation />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-black mb-4">
+                    Transaction History
+                  </h3>
+                  <TransactionHistory />
+                </div>
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-black mb-4">
+                  Smartsites
+                </h3>
+                <SmartSites />
+              </div>
+            </div>
+          </Box>
+        </Modal> */}
       </table>
-      {/* Modal */}
-      {selectedUser && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg w-96 shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4"></h2>
-            <p className="text-gray-600">Username: </p>
-            <p className="text-gray-600">Email: </p>
-            <p className="text-gray-600">Wallet: </p>
-            <p className="text-gray-600">Address: </p>
-            <button
-              onClick={() => setSelectedUser(null)}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
