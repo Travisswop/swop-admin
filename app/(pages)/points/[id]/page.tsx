@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import * as React from "react";
 
 const pointsData = [
@@ -51,7 +52,9 @@ const page = () => {
     <div className="p-8 text-black bg-white rounded-2xl">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-xl font-semibold">Reward earnings rate</h2>
-        <Button variant={"default"}>Edit Points</Button>
+        <Link href={`/points/edit/${pointsData[0].id}`}>
+          <Button variant={"default"}>Edit Points</Button>
+        </Link>
       </div>
       <div className="flex justify-between items-start gap-10">
         {/* First Half */}

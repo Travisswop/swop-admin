@@ -7,37 +7,32 @@ const pointsData = [
     point_type: "Followers",
     min_point: 1,
     max_point: 1,
-    color: "#0095FF",
   },
-  { id: 2, point_type: "Leads", min_point: 1, max_point: 1, color: "#00C39A" },
-  { id: 3, point_type: "Posts", min_point: 1, max_point: 1, color: "#A259FF" },
+  { id: 2, point_type: "Leads", min_point: 1, max_point: 1 },
+  { id: 3, point_type: "Posts", min_point: 1, max_point: 1 },
   {
     id: 4,
     point_type: "Reposts",
     min_point: 1,
     max_point: 1,
-    color: "#FF9800",
   },
   {
     id: 5,
     point_type: "Signing up",
     min_point: 1,
     max_point: 1,
-    color: "#0095FF",
   },
   {
     id: 6,
     point_type: "Premium Subscription",
     min_point: 1,
     max_point: 1,
-    color: "#00C39A",
   },
   {
     id: 7,
     point_type: "Programming NFC",
     min_point: 1,
     max_point: 1,
-    color: "#A259FF",
   },
 ];
 
@@ -49,8 +44,7 @@ const page = () => {
   return (
     <div className="p-8 text-black bg-white rounded-2xl">
       <div className="flex justify-between items-center mb-10">
-        <h2 className="text-xl font-semibold">Reward earnings rate</h2>
-        <Button variant={"default"}>Edit Points</Button>
+        <h2 className="text-xl font-semibold">Max Points Limits</h2>
       </div>
       <div className="flex justify-between items-start gap-10">
         {/* First Half */}
@@ -79,8 +73,6 @@ const page = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder:text-center text-center"
                       placeholder={point.min_point.toString()}
                       required
-                      style={{ borderColor: point.color }}
-                      disabled
                     />
                   </div>
                   <div>
@@ -96,8 +88,6 @@ const page = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder:text-center text-center"
                       placeholder={point.max_point.toString()}
                       required
-                      style={{ borderColor: point.color }}
-                      disabled
                     />
                   </div>
                 </div>
@@ -132,8 +122,6 @@ const page = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder:text-center text-center"
                       placeholder={point.min_point.toString()}
                       required
-                      style={{ borderColor: point.color }}
-                      disabled
                     />
                   </div>
                   <div>
@@ -149,8 +137,6 @@ const page = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder:text-center text-center"
                       placeholder={point.max_point.toString()}
                       required
-                      style={{ borderColor: point.color }}
-                      disabled
                     />
                   </div>
                 </div>
@@ -158,6 +144,17 @@ const page = () => {
             ))}
           </div>
         </div>
+      </div>
+      <div className="flex items-center gap-5 mt-10">
+        <Button
+          variant={"default"}
+          className="max-w-32 w-full  text-black bg-white border border-black"
+        >
+          Cancel
+        </Button>
+        <Button variant={"default"} className="max-w-32 w-full">
+          Save
+        </Button>
       </div>
     </div>
   );
