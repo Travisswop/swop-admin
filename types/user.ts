@@ -11,6 +11,13 @@ export interface IUser {
 export interface UserDataResponse {
   success: boolean;
   data: User[];
+  pagination: IPagination;
+}
+export interface IPagination {
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  itemsPerPage: number;
 }
 
 export interface User {

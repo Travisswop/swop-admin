@@ -6,6 +6,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Pagination,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
@@ -18,18 +19,24 @@ import isUrl from "../util/isUrl";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const UserLists = ({ userLists }: { userLists: UserDataResponse }) => {
+  const searchParams = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
   const [name, setName] = useState("");
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
 
   const handleChangeName = (event: SelectChangeEvent) => {
     setName(event.target.value as string);
   };
 
-  const handlePageChange = (newPage: number) => {
-    router.push(`/swop-id?page=${newPage}&limit=${limit}`);
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    router.push(`/swop-id?page=${value}&limit=${limit}`);
+    setCurrentPage(value);
   };
 
   return (
@@ -127,22 +134,20 @@ const UserLists = ({ userLists }: { userLists: UserDataResponse }) => {
           ))}
         </tbody>
       </table>
-      <div className="flex justify-center items-center gap-4">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span>Page {currentPage}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={userLists.data.length < limit}
-          className="px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50"
-        >
-          Next
-        </button>
+      <div className="flex justify-center items-center mt-4">
+        <Pagination
+          count={userLists.pagination.totalPages} // Total number of pages
+          page={currentPage} // Current active page
+          onChange={handlePageChange} // Handler for page change
+          color="primary" // You can change the color (e.g., "secondary")
+          shape="rounded" // Rounded pagination buttons
+          sx={{
+            "& .MuiPaginationItem-root": {
+              fontSize: "1rem", // Customize font size
+              fontWeight: "bold", // Customize font weight
+            },
+          }}
+        />
       </div>
     </div>
   );
