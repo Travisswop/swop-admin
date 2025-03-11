@@ -105,7 +105,7 @@ const page = () => {
           </div>
         </div>
 
-        {/* Second Half   */}
+        {/* Last Half */}
         <div className="w-1/2">
           <div className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200">
             <p>Name</p> <p className="max-w-60 w-full text-center">Points</p>
