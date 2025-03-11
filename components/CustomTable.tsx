@@ -476,7 +476,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaDownload } from "react-icons/fa6";
-import { TbEdit } from "react-icons/tb";
+import { LuEye } from "react-icons/lu";
 // import IndividualUserInformation from "./swopId/IndividualUserInformation";
 // import TransactionHistory from "./swopId/TransactionHistory";
 // import SmartSites from "./swopId/SmartSites";
@@ -602,7 +602,7 @@ const CustomTable = () => {
       <table className="w-full text-left rtl:text-right text-gray-500 ">
         <thead className="  text-center border-b">
           <tr>
-            {["User", "Wallet Address", "Reference", "Edit "].map(
+            {["User", "Wallet Address", "Reference", "View Details"].map(
               (header, idx) => (
                 <th
                   key={idx}
@@ -623,10 +623,7 @@ const CustomTable = () => {
               className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center"
             >
               <td className="px-6 py-4 ">
-                <Link
-                  className="flex items-center gap-2 space-x-2 cursor-pointer"
-                  href={`/swop-id/${el.id}`}
-                >
+                <div className="flex items-center gap-2 space-x-2 ">
                   <Image
                     src={el.image}
                     alt="User Picture"
@@ -640,17 +637,20 @@ const CustomTable = () => {
                       {el.username}
                     </span>
                   </div>
-                </Link>
+                </div>
               </td>
               <td>
-                <Link href="">{el.address}</Link>
+                <p>{el.address}</p>
               </td>
               <td>
-                <Link href="">{el.code}</Link>
+                <p>{el.code}</p>
               </td>
               <td>
-                <Link href="" className="text-2xl text-gray-500">
-                  <TbEdit className="mx-auto" />
+                <Link
+                  href={`/swop-id/${el.id}`}
+                  className="text-2xl text-gray-500"
+                >
+                  <LuEye className="mx-auto" />
                 </Link>
               </td>
             </tr>

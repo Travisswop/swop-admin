@@ -1,6 +1,5 @@
-"use client";
 import { Button } from "@/components/ui/button";
-import * as React from "react";
+import React from "react";
 
 const pointsData = [
   {
