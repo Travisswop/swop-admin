@@ -56,7 +56,7 @@ const page = () => {
           <Button variant={"default"}>Edit Points</Button>
         </Link>
       </div>
-      <div className="flex justify-between items-start gap-10 xl:gap-20">
+      <div className="flex justify-between items-start gap-10 xl:gap-14">
         {/* First Half */}
         <div className="w-1/2">
           <div className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200">
