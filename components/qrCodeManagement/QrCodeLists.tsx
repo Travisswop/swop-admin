@@ -131,7 +131,7 @@ const QrCodeLists = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "auto", // Allow width to adjust based on content
+    width: "40vw", // Allow width to adjust based on content
     maxWidth: "90%", // Optional: Limits the width to 90% of the viewport width
     bgcolor: "background.paper",
     // border: "2px solid #000",
@@ -256,17 +256,17 @@ const QrCodeLists = () => {
           </Typography> */}
           <div>
             <p className="mb-3 font-semibold text-lg">Tv Commercial QR</p>
-            <div className="flex gap-4">
-              <div className="flex flex-col gap-3">
+            <div className="flex gap-8 w-full items-center">
+              <div className="flex flex-1 flex-col gap-3">
                 <div>
                   <p className="text-sm ">Link</p>
                   <input
                     type="text"
-                    className="px-4 py-2 outline-none focus:outline-none rounded border w-60"
+                    className="px-4 py-2 outline-none focus:outline-none rounded border w-full"
                     placeholder="Enter Link"
                   />
                 </div>
-                <div>
+                <div className="pb-8">
                   <p className="text-sm ">New Link</p>
                   <input
                     type="text"
@@ -274,12 +274,12 @@ const QrCodeLists = () => {
                     placeholder="Enter New Link"
                   />
                 </div>
-                <PrimaryButton className="!px-6">
+                <PrimaryButton className="!px-6 ">
                   <MdQrCodeScanner />
                   Update QR
                 </PrimaryButton>
               </div>
-              <div className="bg-[#EAEAEA] p-6 w-52 h-auto rounded-xl">
+              <div className="bg-[#EAEAEA] p-6  w-56 h-auto rounded-xl">
                 <Image src={qrCodeImg} alt="qr image" />
                 <div className="flex items-center gap-2 justify-center mt-4">
                   <PrimaryButton className="!p-2">
