@@ -33,12 +33,11 @@ export default function Topbar(): JSX.Element {
   const routeName = formatRouteName(pathname);
 
   useEffect(() => {
-    const user = Cookies.get("userInfo");
-
-    const userInfo = JSON.parse(user || "");
-    setUser(userInfo);
-
-    console.log("userInfo", userInfo);
+    if (typeof window !== undefined) {
+      const user = Cookies.get("userInfo");
+      const userInfo = JSON.parse(user || "");
+      setUser(userInfo);
+    }
   }, []);
 
   console.log("user", user);
