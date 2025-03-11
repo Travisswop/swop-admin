@@ -53,18 +53,19 @@ const demoTableData = [
 ];
 
 //imported data for table
+// import data from "@/lib/placeholderData";
 const page = () => {
   console.log("check this data", dynamicData);
 
   return (
     <section className="w-full h-full flex flex-col justify-start items-center text-[#737791]">
       {/* <CustomTable
-        sideText=""
-        dynamicData={data}
-        showSearch={true}
-        swopId={true}
-        clickPath="/swop-id"
-        clickAble={true}
+      // sideText=""
+      // dynamicData={data}
+      // showSearch={true}
+      // swopId={true}
+      // clickPath="/swop-id"
+      // clickAble={true}
       /> */}
 
       <table className="w-full text-left rtl:text-right text-gray-500 ">

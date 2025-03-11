@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import swopLogo from "@/public/images/swop-logo.png";
-// import { useState } from "react";
 import { LuLayoutGrid, LuMapPinned } from "react-icons/lu";
 import { HiOutlineLogout } from "react-icons/hi";
 import { GrAnnounce } from "react-icons/gr";
@@ -16,6 +15,7 @@ import { FaUsers } from "react-icons/fa";
 import { MdOutlineQrCodeScanner } from "react-icons/md";
 import { FaStar } from "react-icons/fa6";
 import { GoChecklist } from "react-icons/go";
+import { logout } from "@/action/logout";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: <LuLayoutGrid /> },
@@ -31,41 +31,14 @@ const navItems = [
   { href: "/jobs", label: "Jobs", icon: <IoBagHandleOutline /> },
   { href: "/announcements", label: "Announcements", icon: <GrAnnounce /> },
   { href: "/order", label: "Order", icon: <GoChecklist /> },
-  // { href: "/referral", label: "Referral", icon: <RiSendToBack /> },
-
-  // { href: "/support", label: "Support", icon: <IoSettingsOutline /> },
 ];
 
 export default function Sidebar() {
-  //   const [hideUpgradePlan, setHideUpgradePlan] = useState(true);
-  //   const [isLoggingOut, setIsLoggingOut] = useState(false);
-
   const pathname = usePathname();
-  //   const router = useRouter();
 
-  //   const handleLogout = async () => {
-  //     // Prevent multiple logout attempts
-  //     if (isLoggingOut) {
-  //       console.log("Logout already in progress");
-  //       return;
-  //     }
-
-  //     setIsLoggingOut(true);
-  //     try {
-  //       // Clear user data first to prevent any state inconsistencies
-  //       clearCache();
-
-  //       // Perform logout and navigation in parallel for better performance
-  //       await Promise.all([logout(), router.replace("/login")]);
-  //     } catch (error) {
-  //       console.error("Logout failed:", error);
-  //       // Revert loading state on error
-  //       setIsLoggingOut(false);
-  //       throw error; // Re-throw to allow error handling by parent components
-  //     }
-  //     // Only clear loading state on success to prevent UI flicker
-  //     setIsLoggingOut(false);
-  //   };
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-white overflow-x-hidden">
@@ -81,8 +54,6 @@ export default function Sidebar() {
           <nav className={`pb-10 space-y-1 px-2`}>
             <ul className="flex-1 px-2 pb-2 space-y-2 font-normal">
               {navItems.map((item) => {
-                // const Icon = item.icon;
-
                 // Check if pathname starts with item's href
                 const isActive =
                   pathname === item.href ||
@@ -110,7 +81,7 @@ export default function Sidebar() {
           </nav>
           <div className="p-4 text-[#737791] pb-20">
             <button
-              //   onClick={handleLogout}
+              onClick={handleLogout}
               className="flex items-center gap-2 mt-3 pl-2 font-medium"
             >
               <HiOutlineLogout size={18} /> Sign Out

@@ -64,7 +64,7 @@ const DownloadsByCountryMap: React.FC = () => {
           <Geographies geography={"/features.json"}>
             {({ geographies }) =>
               geographies.map((geo) => {
-                console.log("geo", geo);
+                // console.log("geo", geo);
 
                 const countryData = data.find((d) => d.id === geo.id);
                 // Assign a color for countries with data; default gray for others
