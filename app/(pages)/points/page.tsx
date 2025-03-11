@@ -279,7 +279,10 @@ const CustomTable = () => {
               className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center"
             >
               <td className="px-6 py-4">
-                <Link className="flex items-center gap-4" href="">
+                <Link
+                  className="flex items-center gap-4"
+                  href={`/points/${el.id}`}
+                >
                   <Image
                     src={el.image}
                     alt={el.name}

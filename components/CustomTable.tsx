@@ -555,7 +555,7 @@ const CustomTable = () => {
         <div className="flex items-center gap-4">
           <h4 className="">Filter</h4>
 
-          <form className="max-w-sm mx-auto">
+          {/* <form className="max-w-sm mx-auto">
             <div className="relative">
               <select
                 id="countries"
@@ -571,7 +571,7 @@ const CustomTable = () => {
                 ▼
               </div>
             </div>
-          </form>
+          </form> */}
 
           <form className="max-w-sm mx-auto">
             <div className="relative">
