@@ -1,12 +1,16 @@
 import { getUserLists } from "@/action/swopId";
 import UserLists from "@/components/swopId/UserLists";
-import { SearchParams } from "@/types/user";
+// import { SearchParams } from "@/types/user";
 import { cookies } from "next/headers";
 
-const SwopId = async ({ searchParams }: { searchParams: SearchParams }) => {
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+const SwopId = async ({ searchParams }: PageProps) => {
   const token = (await cookies()).get("authToken")?.value;
-  const page = Number(searchParams.page) || 1;
-  const limit = Number(searchParams.limit) || 10;
+  const page = Number((await searchParams).page) || 1;
+  const limit = Number((await searchParams).limit) || 10;
   const userLists = await getUserLists(token || "", page, limit);
   console.log("user lists", userLists);
 
