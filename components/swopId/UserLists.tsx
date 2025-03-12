@@ -1,10 +1,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { UserDataResponse } from "@/types/user";
 import {
   FormControl,
   InputLabel,
   MenuItem,
+  Pagination,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
@@ -13,60 +15,28 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { LuEye } from "react-icons/lu";
 import { MdOutlineFileDownload } from "react-icons/md";
+import isUrl from "../util/isUrl";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const demoTableData = [
-  {
-    id: 1,
-    name: "Hamida Hasan",
-    username: "Hamida.Swopple.ID",
-    address: "0xB4Fh3466...67Xd",
-    code: "8hg4xcvv",
-    image:
-      "https://img.freepik.com/free-photo/portrait-elegant-professional-businesswoman_23-2150917246.jpg?t=st=1741512909~exp=1741516509~hmac=234907dc23cab8311b9c0bdf724cebec486b814bda168cf2f988a97577d5faf9&w=740",
-  },
-  {
-    id: 2,
-    name: "John Doe",
-    username: "John.Swopple.ID",
-    address: "0xA3Gh6572...88Yt",
-    code: "7as3sdvf",
-    image:
-      "https://img.freepik.com/free-photo/handsome-young-businessman-suit_23-2148197598.jpg?w=740",
-  },
-  {
-    id: 3,
-    name: "Sarah Adams",
-    username: "Sarah.Swopple.ID",
-    address: "0xF9Jk1234...77Wx",
-    code: "5xy7tuvw",
-    image:
-      "https://img.freepik.com/free-photo/confident-young-businesswoman-glasses_23-2148197620.jpg?w=740",
-  },
-  {
-    id: 4,
-    name: "Michael Brown",
-    username: "Michael.Swopple.ID",
-    address: "0xM1Nk5678...99Zx",
-    code: "4pq9lmno",
-    image:
-      "https://img.freepik.com/free-photo/young-smiling-businessman-sitting-office_23-2148197599.jpg?w=740",
-  },
-  {
-    id: 5,
-    name: "Emily Wilson",
-    username: "Emily.Swopple.ID",
-    address: "0xXyZk9876...55Qr",
-    code: "3mn8abcs",
-    image:
-      "https://img.freepik.com/free-photo/successful-businesswoman-smiling-office_23-2148197630.jpg?w=740",
-  },
-];
-
-const CustomTable = () => {
+const UserLists = ({ userLists }: { userLists: UserDataResponse }) => {
+  const searchParams = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
   const [name, setName] = useState("");
+  const router = useRouter();
+  const limit = Number(searchParams.get("limit")) || 10;
 
   const handleChangeName = (event: SelectChangeEvent) => {
     setName(event.target.value as string);
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    router.push(`/swop-id?page=${value}&limit=${limit}`);
+    setCurrentPage(value);
   };
 
   return (
@@ -120,15 +90,19 @@ const CustomTable = () => {
           </tr>
         </thead>
         <tbody>
-          {demoTableData.map((el) => (
+          {userLists.data.map((el) => (
             <tr
-              key={el.id}
+              key={el._id}
               className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center"
             >
               <td className="px-6 py-4 ">
                 <div className="flex items-center gap-2 space-x-2 ">
                   <Image
-                    src={el.image}
+                    src={
+                      isUrl(el.profilePic)
+                        ? el.profilePic
+                        : `/images/user_avator/${el.profilePic}@3x.png`
+                    }
                     alt="User Picture"
                     width={70}
                     height={70}
@@ -137,20 +111,20 @@ const CustomTable = () => {
                   <div className="flex flex-col justify-center items-start gap-1">
                     <h4 className="text-xl font-semibold">{el.name}</h4>
                     <span className="text-gray-400 text-sm font-normal">
-                      {el.username}
+                      {el.primaryWalletEns || "N/A"}
                     </span>
                   </div>
                 </div>
               </td>
               <td>
-                <p>{el.address}</p>
+                <p>{el?.walletData?.wallet?.ethAddress || "N/A"}</p>
               </td>
               <td>
-                <p>{el.code}</p>
+                <p>{el.referralCode}</p>
               </td>
               <td>
                 <Link
-                  href={`/swop-id/${el.id}`}
+                  href={`/swop-id/${el._id}`}
                   className="text-2xl text-gray-500"
                 >
                   <LuEye className="mx-auto" />
@@ -160,8 +134,23 @@ const CustomTable = () => {
           ))}
         </tbody>
       </table>
+      <div className="flex justify-center items-center mt-4">
+        <Pagination
+          count={userLists.pagination.totalPages} // Total number of pages
+          page={currentPage} // Current active page
+          onChange={handlePageChange} // Handler for page change
+          color="primary" // You can change the color (e.g., "secondary")
+          shape="rounded" // Rounded pagination buttons
+          sx={{
+            "& .MuiPaginationItem-root": {
+              fontSize: "1rem", // Customize font size
+              fontWeight: "bold", // Customize font weight
+            },
+          }}
+        />
+      </div>
     </div>
   );
 };
 
-export default CustomTable;
+export default UserLists;

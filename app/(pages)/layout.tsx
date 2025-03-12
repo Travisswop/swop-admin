@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "../../app/globals.css";
 import { Roboto } from "next/font/google";
 import Sidebar from "@/components/Sidebar";
-// import Topbar from "@/components/topbar/Topbar";
+import Topbar from "@/components/topbar/Topbar";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -38,7 +38,7 @@ export default function RootLayout({
       >
         <main>
           <Sidebar />
-          {/* <Topbar /> */}
+          <Topbar />
           <section
             style={{ height: `calc(100vh - 80px)` }}
             className="pl-64 overflow-y-auto overflow-x-hidden"
