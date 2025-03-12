@@ -148,7 +148,7 @@ const page = () => {
       <div className="flex items-center gap-5 mt-10">
         <Button
           variant={"default"}
-          className="max-w-32 w-full  text-black bg-white border border-black"
+          className="max-w-32 w-full  text-black bg-white border border-black hover:text-white"
         >
           Cancel
         </Button>
