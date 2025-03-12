@@ -1,3 +1,12 @@
+import { Skeleton } from "@mui/material";
+
 export default function Loading() {
-  return <p className="text-black">Loading...</p>;
+  return (
+    <div>
+      <Skeleton height={"120px"} animation={"wave"} />
+      <Skeleton height={"120px"} animation={"wave"} />
+      <Skeleton height={"120px"} animation={"wave"} />
+      <Skeleton height={"120px"} animation={"wave"} />
+    </div>
+  );
 }
