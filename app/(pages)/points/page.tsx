@@ -279,10 +279,7 @@ const CustomTable = () => {
               className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b text-[16px] font-medium text-gray-800 text-center"
             >
               <td className="px-6 py-4">
-                <Link
-                  className="flex items-center gap-4"
-                  href={`/points/${el.id}`}
-                >
+                <div className="flex items-center gap-4">
                   <Image
                     src={el.image}
                     alt={el.name}
@@ -296,14 +293,14 @@ const CustomTable = () => {
                       {el.username}
                     </span>
                   </div>
-                </Link>
+                </div>
               </td>
               <td className="px-4">{el.address}</td>
               <td className="px-4">{el.country}</td>
               <td className="px-4">{el.points}</td>
               <td>
                 <Link
-                  href="#"
+                  href={`/points/${el.id}`}
                   className="px-4 py-2 bg-transparent text-red-600 border border-red-600 text-base font-normal  flex items-center gap-2 h-10 max-w-32"
                 >
                   Reset Points
