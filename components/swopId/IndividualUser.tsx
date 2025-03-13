@@ -34,7 +34,7 @@ const IndividualUser = async ({ individualId }: { individualId: string }) => {
       </div>
       <div>
         <h3 className="text-2xl font-bold text-black mb-4">Smartsites</h3>
-        <SmartSites />
+        <SmartSites token={token || ""} individualId={individualId} />
       </div>
     </div>
   );
