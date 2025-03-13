@@ -3,11 +3,16 @@
 export async function getUserLists(
   token: string,
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
+  userId?: string
 ) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/users?page=${page}&limit=${limit}`,
+      `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/api/v1/admin/users?page=${page}&limit=${limit}${
+        userId && `&userId=${userId}`
+      }`,
       {
         method: "GET",
         headers: {
