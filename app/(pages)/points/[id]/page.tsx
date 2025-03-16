@@ -59,7 +59,7 @@ const page = () => {
       <div className="flex justify-between items-start gap-10 xl:gap-14">
         {/* First Half */}
         <div className="w-1/2">
-          <div className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200">
+          <div className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200 text-gray-500">
             <p>Name</p> <p className="max-w-60 w-full text-center">Points</p>
           </div>
           <div>
@@ -69,41 +69,8 @@ const page = () => {
                 className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200"
               >
                 <h5 className="text-lg font-medium">{point.point_type}</h5>
-                <div className="grid gap-6 mb-6 md:grid-cols-2 max-w-60 w-full">
-                  <div>
-                    <label
-                      htmlFor={`min_point_${point.id}`}
-                      className="block mb-2 text-sm font-normal text-gray-400 text-center"
-                    >
-                      Min
-                    </label>
-                    <input
-                      type="text"
-                      id={`min_point_${point.id}`}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder:text-center text-center"
-                      placeholder={point.min_point.toString()}
-                      required
-                      style={{ borderColor: point.color }}
-                      disabled
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor={`max_point_${point.id}`}
-                      className="block mb-2 text-sm font-normal text-gray-400 text-center"
-                    >
-                      Max
-                    </label>
-                    <input
-                      type="text"
-                      id={`max_point_${point.id}`}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder:text-center text-center"
-                      placeholder={point.max_point.toString()}
-                      required
-                      style={{ borderColor: point.color }}
-                      disabled
-                    />
-                  </div>
+                <div className="max-w-60 w-full text-center">
+                  <p>10</p>
                 </div>
               </div>
             ))}
@@ -112,7 +79,7 @@ const page = () => {
 
         {/* Last Half */}
         <div className="w-1/2">
-          <div className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200">
+          <div className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200 text-gray-500">
             <p>Name</p> <p className="max-w-60 w-full text-center">Points</p>
           </div>
           <div>
@@ -122,41 +89,8 @@ const page = () => {
                 className="flex justify-between items-center gap-5 pb-3 mb-4 border-b border-gray-200"
               >
                 <h5 className="text-lg font-medium">{point.point_type}</h5>
-                <div className="grid gap-6 mb-6 md:grid-cols-2 max-w-60 w-full">
-                  <div>
-                    <label
-                      htmlFor={`min_point_${point.id}`}
-                      className="block mb-2 text-sm font-normal text-gray-400 text-center"
-                    >
-                      Min
-                    </label>
-                    <input
-                      type="text"
-                      id={`min_point_${point.id}`}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder:text-center text-center"
-                      placeholder={point.min_point.toString()}
-                      required
-                      style={{ borderColor: point.color }}
-                      disabled
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor={`max_point_${point.id}`}
-                      className="block mb-2 text-sm font-normal text-gray-400 text-center"
-                    >
-                      Max
-                    </label>
-                    <input
-                      type="text"
-                      id={`max_point_${point.id}`}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder:text-center text-center"
-                      placeholder={point.max_point.toString()}
-                      required
-                      style={{ borderColor: point.color }}
-                      disabled
-                    />
-                  </div>
+                <div className="max-w-60 w-full text-center">
+                  <p>10</p>
                 </div>
               </div>
             ))}
