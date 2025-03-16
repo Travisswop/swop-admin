@@ -1,117 +1,30 @@
+"use client";
 import { FaSearch } from "react-icons/fa";
 import { LuDownload } from "react-icons/lu";
 import DateFilterDropdown from "./DateFilterDropdown";
 import NameFilterDropdown from "./NameFilterDropdown";
 
-const testData = [
-  {
-    id: "#10001",
-    name: "Hamid Hasan",
-    email: "hamidul3@gmail.com",
-    amount: "$58.89",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Nahid Khan",
-    email: "hamidul3@gmail.com",
-    amount: "$123.89",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Urmila Hasan",
-    email: "hamidul3@gmail.com",
-    amount: "$558.89",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Husain Rahman",
-    email: "hamidul3@gmail.com",
-    amount: "$235.678",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Nabila Khan",
-    email: "hamidul3@gmail.com",
-    amount: "$78.008",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Alex Biny",
-    email: "hamidul3@gmail.com",
-    amount: "$436.890",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Joly Inn",
-    email: "hamidul3@gmail.com",
-    amount: "$58.89",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Dgaiu Fhgh",
-    email: "hamidul3@gmail.com",
-    amount: "$235.678",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Fga KFG",
-    email: "hamidul3@gmail.com",
-    amount: "$123.89",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Faddy Fg",
-    email: "hamidul3@gmail.com",
-    amount: "$235.678",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "zasf uihj",
-    email: "hamidul3@gmail.com",
-    amount: "$558.89",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "xGhani",
-    email: "hamidul3@gmail.com",
-    amount: "$78.008",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "sdfed",
-    email: "hamidul3@gmail.com",
-    amount: "$558.89",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "scdita",
-    email: "hamidul3@gmail.com",
-    amount: "$235.678",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-  {
-    id: "#10001",
-    name: "Sawta Fren",
-    email: "hamidul3@gmail.com",
-    amount: "$123.89",
-    wallet_address: "0xB4fH3466gfd6j7nf7iR8mn800mda21fVnm,0df67Xd",
-  },
-];
-
 const OrderListTable = () => {
+  // const [ordersList, setOrderList] = useState([]);
+
+  // const token = (await cookies()).get("authToken")?.value;
+  // const page = 1;
+  // const limit = 10;
+  // const search = "";
+  // const startDate = "";
+  // const endDate = "";
+  // const sort = "createdAt:desc";
+
+  // const ordersList = await getOrderLists(
+  //   token || "",
+  //   page,
+  //   limit,
+  //   search,
+  //   startDate,
+  //   endDate,
+  //   sort
+  // );
+
   return (
     <div className="w-full overflow-x-auto bg-white rounded-2xl p-9">
       <div className="flex justify-between items-center mb-6">
@@ -153,22 +66,26 @@ const OrderListTable = () => {
               )}
             </tr>
           </thead>
-          <tbody>
-            {testData.map((el, index) => (
+          {/* <tbody>
+            {ordersList?.map((el, index) => (
               <tr
                 key={index}
                 className="odd:bg-white even:bg-gray-50 border-b text-gray-800 text-sm"
               >
-                <td className="px-6 py-4 text-center">{el?.id}</td>
-                <td className="px-6 py-4 text-center">{el?.name}</td>
-                <td className="px-6 py-4 text-center">{el?.email}</td>
-                <td className="px-6 py-4 text-center">{el?.amount}</td>
+                <td className="px-6 py-4 text-center">
+                  <Link href={`/order/${el?.id}`}>{el?.id}</Link>
+                </td>
+                <td className="px-6 py-4 text-center">{el?.customer?.name}</td>
+                <td className="px-6 py-4 text-center">{el?.customer?.email}</td>
+                <td className="px-6 py-4 text-center">
+                  {el?.financial?.totalCost}
+                </td>
                 <td className="px-6 py-4 break-all text-center">
-                  {el?.wallet_address}
+                  {el?.txResult?.hash}
                 </td>
               </tr>
             ))}
-          </tbody>
+          </tbody> */}
         </table>
       </div>
     </div>

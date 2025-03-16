@@ -1,6 +1,6 @@
 import OrderListTable from "@/components/order/OrderListTable";
 
-const page = () => {
+const page = async () => {
   return (
     <div>
       <OrderListTable />
