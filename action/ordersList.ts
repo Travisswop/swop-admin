@@ -40,3 +40,27 @@ export async function getOrderLists(
     return { success: false, message: "Failed to fetch orders." };
   }
 }
+
+export async function getOrderDetailsById(token: string, id: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/order/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching order details:", error);
+    return { success: false, message: "Failed to fetch order details." };
+  }
+}
