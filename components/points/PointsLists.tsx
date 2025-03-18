@@ -114,7 +114,7 @@ const PointsLists = ({ pointLists }: { pointLists: ApiResponse }) => {
                 <td className="px-4">{el?.availablePoints}</td>
                 <td>
                   <Link
-                    href={`/points/${el?._id}`}
+                    href={`/points/${el?.userId?._id}`}
                     className="px-4 py-2 bg-transparent text-black border border-black text-base font-normal  flex items-center gap-2 h-10 max-w-32"
                   >
                     View Points

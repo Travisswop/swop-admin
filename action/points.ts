@@ -32,6 +32,25 @@ export async function getCampaignPoints(token: string) {
   }
 }
 
+export async function getUserPoints(userId: string, token: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/points/user/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error from action:", error);
+  }
+}
+
 export async function updateCampaignPointsList(
   payload: UpdatePointsRequest,
   token: string
