@@ -199,18 +199,22 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       );
 
       if (response.success) {
-        toast.success("QR Code create successfully");
-        console.log("QR Code create successfully");
+        toast.success("QR Code created successfully");
+        console.log("QR Code created successfully");
         setCreateQRFlag(false);
         setQrCodeName("");
         setQrcodeUrl("");
+        setSearchTerm("");
+        setLimit(12);
       } else {
-        toast.error("Failed to QR Code create");
+        const errorMessage =
+          response.message ||
+          "An unexpected error occurred during QR Code creation.";
+        setError(errorMessage);
+        toast.error(errorMessage);
       }
     } catch (err) {
-      console.error("Error QR Code create:", err);
-      toast.error("Error QR Code create");
-      setError("Failed to QR Code create. Please try again.");
+      console.error("Error creating QR Code:", err);
     } finally {
       setCreateLoading(false);
     }
@@ -232,24 +236,26 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       );
 
       if (response.success) {
-        toast.success("QR Code update successfully");
-        console.log("QR Code update successfully");
+        toast.success("QR Code updated successfully");
+        console.log("QR Code updated successfully");
         setOpen(false);
         setQrCodeName("");
         setQrcodeUrl("");
+        setSearchTerm("");
+        setLimit(12);
       } else {
-        toast.error("Failed to QR Code update");
+        const errorMessage =
+          response.message ||
+          "An unexpected error occurred during QR Code update.";
+        setError(errorMessage);
+        toast.error(errorMessage);
       }
     } catch (err) {
-      console.error("Error QR Code update:", err);
-      toast.error("Error QR Code update");
-      setError("Failed to QR Code update. Please try again.");
+      console.error("Error updating QR Code:", err);
     } finally {
       setUpdateLoading(false);
     }
   };
-
-
 
   return (
     <div className="w-full overflow-x-auto">
@@ -356,7 +362,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
           ) : (
             <tr>
               <td colSpan={5} className="text-center py-6">
-                No orders found.
+                No qr code found.
               </td>
             </tr>
           )}
@@ -405,14 +411,14 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                       className="px-4 py-2 outline-none focus:outline-black rounded border w-full"
                     />
                     {micrositeFetchLoading && (
-                      <div className="absolute right-2 top-2">
+                      <div className="absolute right-2 top-2 text-sm">
                         <span className="loader" /> Loading...
                       </div>
                     )}
                     {showDropdown && microsites.length > 0 && (
                       <div
                         ref={dropdownRef}
-                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50"
+                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50 mt-2"
                       >
                         {microsites.map((site) => (
                           <button
@@ -441,6 +447,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                       )}
                   </div>
                 </div>
+
                 <PrimaryButton className="!px-6 " onClick={qrCodeUpdatehandler}>
                   <MdQrCodeScanner />
                   {updateLoading ? "Loading" : "Update QR"}
@@ -502,14 +509,14 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                       className="px-4 py-2 outline-none focus:outline-black rounded border w-full"
                     />
                     {micrositeFetchLoading && (
-                      <div className="absolute right-2 top-2 text-xs">
+                      <div className="absolute right-2 top-2 text-sm">
                         <span className="loader" /> Loading...
                       </div>
                     )}
                     {showDropdown && microsites.length > 0 && (
                       <div
                         ref={dropdownRef}
-                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50"
+                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50 mt-2"
                       >
                         {microsites.map((site) => (
                           <button
@@ -538,6 +545,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                       )}
                   </div>
                 </div>
+
                 <PrimaryButton
                   className="!px-8 space-x-2 "
                   onClick={qrCodeCreatehandler}

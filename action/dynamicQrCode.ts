@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
+
 export async function getDynamicQrCode(
   token: string,
   page: number,
@@ -23,6 +25,7 @@ export async function getDynamicQrCode(
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        next: { tags: ["qrCodeCreate", "qrCodeUpdate"] },
       }
     );
 
@@ -32,12 +35,17 @@ export async function getDynamicQrCode(
 
     const data = await response.json();
     return data;
-  } catch (error) {
-    console.error("Error fetching QR code details:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error fetching QR code details:", error.message);
+    } else {
+      console.error("An unknown error occurred:", error);
+    }
     return { success: false, message: "Failed to fetch QR code details." };
   }
 }
 
+// CREATE Dynamic QR Code
 export async function createDynamicQrCode(
   micrositeId: string,
   qrCodeName: string,
@@ -52,7 +60,7 @@ export async function createDynamicQrCode(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           micrositeId,
@@ -64,17 +72,27 @@ export async function createDynamicQrCode(
     );
 
     if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || `API Error: ${response.status}`);
     }
 
     const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error creating dynamic QR code:", error);
+
+    // Revalidate cache after creation
+    revalidateTag("qrCodeCreate");
+
+    return { success: true, data };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error creating dynamic QR code:", error.message);
+    } else {
+      console.error("An unknown error occurred:", error);
+    }
     return { success: false, message: "Failed to create dynamic QR code." };
   }
 }
 
+// UPDATE Dynamic QR Code
 export async function updateDynamicQrCode(
   dynamicQRCodeId: string,
   qrcodeUrl: string,
@@ -88,20 +106,29 @@ export async function updateDynamicQrCode(
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ dynamicQRCodeId, qrcodeUrl, redirectMicrosite }),
       }
     );
 
     if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || `API Error: ${response.status}`);
     }
 
     const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error updating dynamic QR code:", error);
+
+    // Revalidate cache after update
+    revalidateTag("qrCodeUpdate");
+
+    return { success: true, data };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error updating dynamic QR code:", error.message);
+    } else {
+      console.error("An unknown error occurred:", error);
+    }
     return { success: false, message: "Failed to update dynamic QR code." };
   }
 }
