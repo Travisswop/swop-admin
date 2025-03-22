@@ -249,6 +249,8 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
     }
   };
 
+
+
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex items-center justify-between w-full mb-4">
@@ -340,7 +342,8 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     <button
                       onClick={() => {
                         handleOpen();
-                        setDynamicQRCodeId(item._id);
+                        setDynamicQRCodeId(item?._id);
+                        setQrcodeUrl(item?.qrcodeUrl);
                       }}
                       className="bg-[#EAEAEA] text-[#989898] w-12 h-8 rounded-lg flex items-center justify-center"
                     >
@@ -367,6 +370,14 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       >
         <Box sx={style}>
           <div>
+            <div className="flex items-center justify-end -m-4 ">
+              <button
+                className="hover:bg-gray-200 rounded-full cursor-pointer"
+                onClick={handleClose}
+              >
+                <IoClose className="size-7 text-gray-800 p-1 " />
+              </button>
+            </div>
             <p className="mb-3 font-semibold text-lg">Tv Commercial QR</p>
             <div className="flex gap-8 w-full items-center">
               <div className="flex flex-1 flex-col gap-3">
@@ -378,7 +389,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                       className="px-4 py-2 outline-none focus:outline-black rounded border w-full"
                       placeholder="Enter Link"
                       value={qrcodeUrl}
-                      onChange={(e) => setQrcodeUrl(e.target.value)}
+                      // onChange={(e) => setQrcodeUrl(e.target.value)}
                     />
                   </div>
                 </div>
@@ -409,9 +420,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                             className="text-left p-2 border-b hover:bg-gray-100 w-full"
                             onClick={() => {
                               setMicrositeId(site._id);
-                              setRedirectMicrosite(
-                                site?.parentId?.referralLink
-                              );
+                              setRedirectMicrosite(site?.profileUrl);
                               setShowDropdown(false);
                             }}
                           >
@@ -508,9 +517,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                             className="text-left p-2 border-b hover:bg-gray-100 w-full"
                             onClick={() => {
                               setMicrositeId(site._id);
-                              setRedirectMicrosite(
-                                site?.parentId?.referralLink
-                              );
+                              setRedirectMicrosite(site?.profileUrl);
                               setShowDropdown(false);
                             }}
                           >
