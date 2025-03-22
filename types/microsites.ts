@@ -2,7 +2,11 @@ import { ObjectId } from "mongoose"; // Ensure this is installed and imported co
 
 export type Microsite = {
   _id: string; // ObjectId in string format
-  parentId: ObjectId | string; // Reference to User model
+  parentId: {
+    referralLink: string;
+    name: string;
+    bio: string;
+  }; // Reference to User model
   name: string;
   bio: string;
   brandImg: string;
