@@ -5,13 +5,11 @@ import {
   updateDynamicQrCode,
 } from "@/action/dynamicQrCode";
 import { getAllMicrosites } from "@/action/microsites";
-import qrCodeImg from "@/public/images/qr-code.png";
 import { Microsite } from "@/types/microsites";
 import { QRCodeData } from "@/types/qrcodedata";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import React, {
   MouseEventHandler,
   useCallback,
@@ -20,9 +18,8 @@ import React, {
   useState,
 } from "react";
 import { FaRegSave, FaSearch } from "react-icons/fa";
-import { FiEdit, FiSend } from "react-icons/fi";
 import { IoClose, IoQrCodeSharp } from "react-icons/io5";
-import { MdOutlineFileDownload, MdQrCodeScanner } from "react-icons/md";
+import { MdQrCodeScanner } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { toast } from "react-toastify";
 import PrimaryButton from "../button/PrimaryButton";
@@ -33,7 +30,6 @@ interface QrCodeListsProps {
 }
 
 const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
-  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -205,7 +201,9 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       if (response.success) {
         toast.success("QR Code create successfully");
         console.log("QR Code create successfully");
-        router.back();
+        setCreateQRFlag(false);
+        setQrCodeName("");
+        setQrcodeUrl("");
       } else {
         toast.error("Failed to QR Code create");
       }
@@ -236,7 +234,9 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       if (response.success) {
         toast.success("QR Code update successfully");
         console.log("QR Code update successfully");
-        router.back();
+        setOpen(false);
+        setQrCodeName("");
+        setQrcodeUrl("");
       } else {
         toast.error("Failed to QR Code update");
       }
@@ -370,8 +370,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
             <p className="mb-3 font-semibold text-lg">Tv Commercial QR</p>
             <div className="flex gap-8 w-full items-center">
               <div className="flex flex-1 flex-col gap-3">
-                <div>
-                  <p className="text-sm mb-2">Link</p>
+                <div className="max-w-md">
                   <div>
                     <p className="text-sm  mb-2">QR Code Link</p>
                     <input
@@ -437,20 +436,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                   <MdQrCodeScanner />
                   {updateLoading ? "Loading" : "Update QR"}
                 </PrimaryButton>
-              </div>
-              <div className="bg-[#EAEAEA] p-6  w-56 h-auto rounded-xl">
-                <Image src={qrCodeImg} alt="qr image" />
-                <div className="flex items-center gap-2 justify-center mt-4">
-                  <PrimaryButton className="!p-2">
-                    <FiEdit />
-                  </PrimaryButton>
-                  <PrimaryButton className="!p-2">
-                    <MdOutlineFileDownload />
-                  </PrimaryButton>
-                  <PrimaryButton className="!p-2">
-                    <FiSend />
-                  </PrimaryButton>
-                </div>
               </div>
             </div>
           </div>
