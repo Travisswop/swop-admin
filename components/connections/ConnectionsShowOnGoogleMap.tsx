@@ -10,6 +10,7 @@ import {
 import clsx from "clsx";
 import Image from "next/image";
 import { useRef } from "react";
+import isUrl from "../util/isUrl";
 
 // Defining the Friend interface with lat and lng
 interface Friend {
@@ -34,10 +35,10 @@ export default function ConnectionsShowOnGoogleMap({
   selectedFriend,
 }: ConnectionsShowOnGoogleMapProps) {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDaERPmsWGDCk2MrKXsqkMfPkSu614Simk", // Replace with your actual API key
+    googleMapsApiKey: "AIzaSyDaERPmsWGDCk2MrKXsqkMfPkSu614Simk",
   });
 
-  const mapRef = useRef<google.maps.Map | null>(null); // Map reference with proper type
+  const mapRef = useRef<google.maps.Map | null>(null);
 
   const mapStyles = [
     {
@@ -94,11 +95,11 @@ export default function ConnectionsShowOnGoogleMap({
       center={
         selectedConnection
           ? { lat: selectedConnection.lat, lng: selectedConnection.lng }
-          : { lat: 12.9716, lng: 77.5946 } // default coordinates
+          : { lat: 40.7128, lng: -74.006 } // New York City default
       }
-      zoom={12}
+      zoom={6}
       onLoad={(map: google.maps.Map) => {
-        mapRef.current = map; // Assign the map object to the mapRef
+        mapRef.current = map;
       }}
       options={{ styles: mapStyles }}
     >
@@ -152,7 +153,11 @@ export default function ConnectionsShowOnGoogleMap({
               {/* Profile Picture */}
               {connection.childId?.profilePic && (
                 <Image
-                  src={connection.childId.profilePic}
+                  src={
+                    isUrl(connection.childId.profilePic)
+                      ? connection.childId.profilePic
+                      : `/images/user_avator/${connection.childId.profilePic}@3x.png`
+                  }
                   alt="Profile"
                   className="w-full h-full rounded-full object-cover"
                   width={1200}

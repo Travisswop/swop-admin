@@ -2,12 +2,13 @@
 
 import { deleteDefaultConnection } from "@/action/connections";
 import { Connection } from "@/types/connections";
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
+import isUrl from "../util/isUrl";
 import ConnectionsShowOnGoogleMap from "./ConnectionsShowOnGoogleMap";
-import Image from "next/image";
 
 interface ConnectionsViewProps {
   connections: Connection[];
@@ -63,13 +64,14 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
     [connections]
   ); // Add `connections` to the dependency array
 
+  console.log("check vlaue tiemr", connections);
+
   return (
     <div className="text-black bg-white py-5 px-8">
       <div className="flex gap-4 w-full">
         <div className="flex-1 flex flex-col gap-5">
           <div>
             <h4 className="text-lg font-medium mb-4">Map</h4>
-            {/* <Image src={connectionMap} alt="connection map" /> */}
             <ConnectionsShowOnGoogleMap
               connections={connections}
               selectedFriend={selectedFriend}
@@ -96,21 +98,21 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
             >
               <div className="flex w-full items-center justify-between py-3 border-b">
                 <div className="flex items-center gap-2">
-                  {/* <Image
-                    src={randomImg}
-                    alt="user image"
-                    className="w-9 h-9 rounded-full"
-                  /> */}
-
                   <Image
-                    src={el.childId.profilePic}
+                    src={
+                      isUrl(el.childId.profilePic)
+                        ? el.childId.profilePic
+                        : `/images/user_avator/${el.childId.profilePic}@3x.png`
+                    }
                     alt="user image"
                     className="w-9 h-9 rounded-full"
                     width={120}
                     height={120}
                   />
                   <div>
-                    <p className="font-medium text-left">{el?.childId?.name}</p>
+                    <p className="font-medium text-left">
+                      {el?.childId?.name} test
+                    </p>
                     <p className="text-gray-400 text-xs text-left">
                       {el?.childId?.bio}
                     </p>

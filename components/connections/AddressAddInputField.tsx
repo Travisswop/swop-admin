@@ -48,7 +48,7 @@ const AddressAddInputField: React.FC<AddressAddInputFieldProps> = ({
 
   return (
     <LoadScript
-      googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY"
+      googleMapsApiKey="AIzaSyDaERPmsWGDCk2MrKXsqkMfPkSu614Simk"
       libraries={["places"]}
     >
       <div>
