@@ -7,10 +7,8 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  const resolvedParams = await params;
+  const { id } = await params;
   const token = (await cookies()).get("authToken")?.value;
-
-  const { id } = resolvedParams;
 
   const orderDetails = await getOrderDetailsById(token || "", id);
 

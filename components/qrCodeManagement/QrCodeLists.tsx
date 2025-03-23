@@ -418,7 +418,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     {showDropdown && microsites.length > 0 && (
                       <div
                         ref={dropdownRef}
-                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50 mt-2"
+                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50 mt-1"
                       >
                         {microsites.map((site) => (
                           <button
@@ -516,7 +516,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     {showDropdown && microsites.length > 0 && (
                       <div
                         ref={dropdownRef}
-                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50 mt-2"
+                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50 mt-1"
                       >
                         {microsites.map((site) => (
                           <button

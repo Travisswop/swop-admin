@@ -1,5 +1,5 @@
+"use client";
 import Image from "next/image";
-import { FaEthereum } from "react-icons/fa6";
 import { idShorter } from "../util/idShorter";
 
 interface OrderDetailsProps {
@@ -13,6 +13,16 @@ interface OrderDetailsProps {
       ownerAddress: string;
     }[];
     order: {
+      mintedNfts: {
+        nftTemplateId: {
+          image: string;
+          name: string;
+          description: string;
+          nftType: string;
+          price: string;
+          ownerAddress: string;
+        };
+      }[];
       sellerId: string;
       buyerId: string;
       txResult: {
@@ -39,22 +49,22 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
         <div className="">
           <div className=" grid grid-cols-1 gap-6 h-[70svh] overflow-y-auto">
             {/* shadow-[0px_2px_16px_rgba(0,0,0,0.15)] */}
-            {orderDetails?.collections?.map((product, index) => (
+            {orderDetails?.order?.mintedNfts?.map((product, index) => (
               <div
                 key={index}
                 className="user-card border-2 border-gray-200 p-6 2xl:p-8 rounded-lg bg-white "
               >
                 <div className=" flex gap-4 items-center pb-5 border-b mb-5">
                   <Image
-                    src={product?.image}
-                    alt={`${product?.name}'s profile`}
+                    src={product?.nftTemplateId?.image}
+                    alt={`${product?.nftTemplateId?.name}'s profile`}
                     width={80}
                     height={80}
                     className="border-2 border-white shadow-md rounded-full"
                   />
                   <div>
                     <h2 className="text-xl 2xl:text-2xl font-semibold text-black mb-1">
-                      {product?.name}
+                      {product?.nftTemplateId?.name}
                     </h2>
                   </div>
                 </div>
@@ -64,7 +74,7 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
                     Details
                   </p>
                   <p className="text-[#686B74] text-base font-normal">
-                    {product?.description}
+                    {product?.nftTemplateId?.description}
                   </p>
                 </div>
                 <div className="mb-4 ">
@@ -72,10 +82,10 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
                     NFT Type:
                   </p>
                   <p className="text-[#686B74] text-base font-normal">
-                    {product?.NFTType}
+                    {product?.nftTemplateId?.nftType}
                   </p>
                 </div>
-                <div className="mb-4 ">
+                {/* <div className="mb-4 ">
                   <p className="text-lg font-semibold text-[#424651] mb-1">
                     Price in ETH::
                   </p>
@@ -83,16 +93,16 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
                     <span>
                       <FaEthereum size={16} />
                     </span>
-                    {product?.price}
+                    {product?.nftTemplateId?.price}
                   </p>
-                </div>
+                </div> */}
 
                 <div className=" ">
                   <p className="text-lg font-semibold text-[#424651] mb-1">
                     Address:
                   </p>
                   <p className="text-[#686B74] text-base font-normal">
-                    {product?.ownerAddress}
+                    {product?.nftTemplateId?.ownerAddress}
                   </p>
                 </div>
               </div>
