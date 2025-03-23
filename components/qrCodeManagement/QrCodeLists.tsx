@@ -4,19 +4,11 @@ import {
   getDynamicQrCode,
   updateDynamicQrCode,
 } from "@/action/dynamicQrCode";
-import { getAllMicrosites } from "@/action/microsites";
-import { Microsite } from "@/types/microsites";
 import { QRCodeData } from "@/types/qrcodedata";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
-import React, {
-  MouseEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import { FaRegSave, FaSearch } from "react-icons/fa";
 import { IoClose, IoQrCodeSharp } from "react-icons/io5";
 import { MdQrCodeScanner } from "react-icons/md";
@@ -24,6 +16,7 @@ import { TbEdit } from "react-icons/tb";
 import { toast } from "react-toastify";
 import PrimaryButton from "../button/PrimaryButton";
 import { formatDate } from "../util/formatData";
+import MicrositeSearchInputField from "./MicrositeSearchInputField";
 
 interface QrCodeListsProps {
   token: string;
@@ -72,8 +65,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
   const [createLoading, setCreateLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
 
-  const [micrositeFetchLoading, setMicrositeFetchLoading] = useState(false);
-
   console.log(totalPages, error);
 
   useEffect(() => {
@@ -111,76 +102,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       isMounted = false;
     };
   }, [searchTerm, page, limit, token]);
-
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [microsites, setMicrosites] = useState<Microsite[]>([]);
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const fetchMicrosites = useCallback(
-    async (query: string) => {
-      if (query.trim() === "") {
-        setMicrosites([]);
-        setShowDropdown(false);
-        return;
-      }
-
-      try {
-        setMicrositeFetchLoading(true);
-        const response = await getAllMicrosites(token, query);
-        if (response?.data?.length > 0) {
-          setMicrosites(response.data);
-          setShowDropdown(true);
-        } else {
-          setMicrosites([]);
-          setShowDropdown(false);
-        }
-      } catch (error) {
-        console.error("Error fetching microsites:", error);
-        setMicrosites([]);
-        setShowDropdown(false);
-      } finally {
-        setMicrositeFetchLoading(false);
-      }
-    },
-    [token]
-  );
-
-  useEffect(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-    if (searchValue.trim() === "") {
-      setMicrosites([]);
-      setShowDropdown(false);
-      return;
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      fetchMicrosites(searchValue);
-    }, 300);
-
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [searchValue, fetchMicrosites]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const qrCodeCreatehandler: MouseEventHandler<HTMLButtonElement> = async (
     e
@@ -392,7 +313,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     <p className="text-sm  mb-2">QR Code Link</p>
                     <input
                       type="text"
-                      className="px-4 py-2 outline-none focus:outline-black rounded border w-full"
+                      className="px-4 py-2 outline-none focus:outline-none rounded border w-full bg-gray-200"
                       placeholder="Enter Link"
                       value={qrcodeUrl}
                       // onChange={(e) => setQrcodeUrl(e.target.value)}
@@ -400,52 +321,11 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                   </div>
                 </div>
                 <div className="pb-8">
-                  <p className="text-sm mb-2">Redirect Microsite</p>
-
-                  <div className="relative w-full max-w-md">
-                    <input
-                      type="text"
-                      placeholder="Search Microsites..."
-                      value={searchValue}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                      className="px-4 py-2 outline-none focus:outline-black rounded border w-full"
-                    />
-                    {micrositeFetchLoading && (
-                      <div className="absolute right-2 top-2 text-sm">
-                        <span className="loader" /> Loading...
-                      </div>
-                    )}
-                    {showDropdown && microsites.length > 0 && (
-                      <div
-                        ref={dropdownRef}
-                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50 mt-1"
-                      >
-                        {microsites.map((site) => (
-                          <button
-                            key={site._id}
-                            className="text-left p-2 border-b hover:bg-gray-100 w-full"
-                            onClick={() => {
-                              setMicrositeId(site._id);
-                              setRedirectMicrosite(site?.profileUrl);
-                              setShowDropdown(false);
-                            }}
-                          >
-                            <h3> {site?.parentId?.name}</h3>
-                            <p className="text-sm italic text-gray-600">
-                              {site?.parentId?.bio}
-                            </p>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    {showDropdown &&
-                      !micrositeFetchLoading &&
-                      microsites.length === 0 && (
-                        <div className="absolute bg-white shadow-lg w-full rounded p-2 text-gray-500">
-                          No microsite found
-                        </div>
-                      )}
-                  </div>
+                  <MicrositeSearchInputField
+                    setMicrositeId={setMicrositeId}
+                    setRedirectMicrosite={setRedirectMicrosite}
+                    token={token}
+                  />
                 </div>
 
                 <PrimaryButton className="!px-6 " onClick={qrCodeUpdatehandler}>
@@ -497,54 +377,11 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     onChange={(e) => setQrcodeUrl(e.target.value)}
                   />
                 </div>
-                <div className="pb-8">
-                  <p className="text-sm mb-2">Redirect Microsite</p>
-
-                  <div className="relative w-full max-w-md">
-                    <input
-                      type="text"
-                      placeholder="Search Microsites..."
-                      value={searchValue}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                      className="px-4 py-2 outline-none focus:outline-black rounded border w-full"
-                    />
-                    {micrositeFetchLoading && (
-                      <div className="absolute right-2 top-2 text-sm">
-                        <span className="loader" /> Loading...
-                      </div>
-                    )}
-                    {showDropdown && microsites.length > 0 && (
-                      <div
-                        ref={dropdownRef}
-                        className="absolute bg-white shadow-lg w-full max-h-64 overflow-y-auto rounded z-50 mt-1"
-                      >
-                        {microsites.map((site) => (
-                          <button
-                            key={site._id}
-                            className="text-left p-2 border-b hover:bg-gray-100 w-full"
-                            onClick={() => {
-                              setMicrositeId(site._id);
-                              setRedirectMicrosite(site?.profileUrl);
-                              setShowDropdown(false);
-                            }}
-                          >
-                            <h3> {site?.parentId?.name}</h3>
-                            <p className="text-sm italic text-gray-600">
-                              {site?.parentId?.bio}
-                            </p>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    {showDropdown &&
-                      !micrositeFetchLoading &&
-                      microsites.length === 0 && (
-                        <div className="absolute bg-white shadow-lg w-full rounded p-2 text-gray-500">
-                          No microsite found
-                        </div>
-                      )}
-                  </div>
-                </div>
+                <MicrositeSearchInputField
+                  setMicrositeId={setMicrositeId}
+                  setRedirectMicrosite={setRedirectMicrosite}
+                  token={token}
+                />
 
                 <PrimaryButton
                   className="!px-8 space-x-2 "
