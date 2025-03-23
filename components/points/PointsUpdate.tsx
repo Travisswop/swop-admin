@@ -5,6 +5,7 @@ import { PointsList } from "@/types/points";
 import { updateCampaignPointsList } from "@/action/points";
 import { TbTopologyStar3 } from "react-icons/tb";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const PointsUpdate = ({
   firstHalf,
@@ -16,6 +17,8 @@ const PointsUpdate = ({
   token: string;
 }) => {
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+
+  const router = useRouter();
 
   const handlePointsUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -164,6 +167,7 @@ const PointsUpdate = ({
       </div>
       <div className="flex items-center gap-5 mt-10">
         <Button
+          onClick={() => router.back()}
           variant={"default"}
           type="button"
           className="max-w-32 w-full  text-black bg-white border border-black hover:text-white"
