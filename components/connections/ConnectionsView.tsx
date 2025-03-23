@@ -7,6 +7,7 @@ import { useCallback, useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ConnectionsShowOnGoogleMap from "./ConnectionsShowOnGoogleMap";
+import Image from "next/image";
 
 interface ConnectionsViewProps {
   connections: Connection[];
@@ -101,10 +102,12 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                     className="w-9 h-9 rounded-full"
                   /> */}
 
-                  <img
+                  <Image
                     src={el.childId.profilePic}
                     alt="user image"
                     className="w-9 h-9 rounded-full"
+                    width={120}
+                    height={120}
                   />
                   <div>
                     <p className="font-medium text-left">{el?.childId?.name}</p>

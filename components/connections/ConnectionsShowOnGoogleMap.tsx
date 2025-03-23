@@ -8,6 +8,7 @@ import {
   useLoadScript,
 } from "@react-google-maps/api";
 import clsx from "clsx";
+import Image from "next/image";
 import { useRef } from "react";
 
 // Defining the Friend interface with lat and lng
@@ -150,10 +151,12 @@ export default function ConnectionsShowOnGoogleMap({
             >
               {/* Profile Picture */}
               {connection.childId?.profilePic && (
-                <img
+                <Image
                   src={connection.childId.profilePic}
                   alt="Profile"
                   className="w-full h-full rounded-full object-cover"
+                  width={1200}
+                  height={1200}
                 />
               )}
             </div>
