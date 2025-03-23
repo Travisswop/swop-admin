@@ -1,7 +1,7 @@
 import { getUserPoints } from "@/action/points";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { cookies } from "next/headers";
-import Link from "next/link";
+// import Link from "next/link";
 import * as React from "react";
 
 interface IPoints {
@@ -27,9 +27,9 @@ const UserPointDetails = async ({
     <div className="p-8 xl:p-10 text-black bg-white rounded-2xl">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-xl font-semibold">Reward earnings rate</h2>
-        <Link href={`/points/edit/update-points`}>
+        {/* <Link href={`/points/edit/update-points`}>
           <Button variant={"default"}>Edit Points</Button>
-        </Link>
+        </Link> */}
       </div>
       {points.success ? (
         <div className="flex justify-between items-start gap-10 xl:gap-14">

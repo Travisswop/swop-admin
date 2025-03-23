@@ -3,10 +3,14 @@ import UserLists from "@/components/swopId/UserLists";
 // import { SearchParams } from "@/types/user";
 import { cookies } from "next/headers";
 
-const SwopId = async () => {
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+const SwopId = async ({ searchParams }: PageProps) => {
   const token = (await cookies()).get("authToken")?.value;
-  const page = 1;
-  const limit = 10;
+  const page = Number((await searchParams).page) || 1;
+  const limit = Number((await searchParams).limit) || 10;
   const userLists = await getUserLists(token || "", page, limit);
 
   return (
