@@ -126,7 +126,7 @@ const MicrositeSearchInputField = ({ token, childId, setChildId }: Props) => {
             placeholder="Search Microsites..."
             value={selectedName || searchValue} // Show selected name if selected
             onChange={handleInputChange}
-            className="bg-[#ffffff] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-2 placeholder-gray-400 active:border-primary outline-none max-w-lg"
+            className="bg-[#ffffff] border border-gray-300 text-lg rounded-lg focus:ring-primary focus:border-primary block w-full pl-4 py-1 placeholder-gray-400 active:border-primary outline-none max-w-lg"
           />
           {micrositeFetchLoading && (
             <div className="absolute right-2 top-2 text-base">

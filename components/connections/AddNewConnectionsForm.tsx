@@ -63,7 +63,7 @@ const AddNewConnectionsForm = ({ token }: { token: string }) => {
     }
   };
 
-  console.log("check data value", error);
+  console.log("check data value 123", error);
 
   return (
     <div className="text-black bg-white py-5 px-8">
@@ -85,9 +85,7 @@ const AddNewConnectionsForm = ({ token }: { token: string }) => {
 
         <AddressAddInputField
           setAddress={setAddress}
-          address={address}
           setCoordinates={setCoordinates}
-          coordinates={coordinates}
         />
       </div>
 
