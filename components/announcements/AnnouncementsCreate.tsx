@@ -113,11 +113,10 @@ const AnnouncementsCreate = ({ token }: { token: string }) => {
 
   return (
     <div className="text-black bg-white px-6 py-10">
-      <div className="flex justify-between items-end py-6 border px-6">
-        <div className="flex gap-3">
+      <div className="flex justify-between items-end py-6 border px-6  gap-6">
+        <div className="flex gap-6 flex-1">
           <div
-            className="bg-gray-100 p-8 rounded-lg border-2 border-dashed text-center border-gray-300 h-[220px] -mt-2"
-            style={{ minWidth: "300px", width: "70%" }}
+            className="bg-gray-100 p-8 rounded-lg border-2 border-dashed text-center border-gray-300 h-[220px] -mt-2 w-80"
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleImageDrop}
           >
@@ -176,37 +175,38 @@ const AnnouncementsCreate = ({ token }: { token: string }) => {
             )}
           </div>
 
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-1">
-              <div>
+          <div className="flex flex-col gap-4 flex-1">
+            <div className="flex  gap-4">
+              <div className="flex-1">
                 <p className="font-medium">Header:</p>
                 <input
                   type="text"
                   placeholder="Input text here"
-                  className="focus:outline-none py-2 border px-3 w-64 2xl:w-72"
+                  className="focus:outline-none py-2 border px-3 w-full"
                   value={header}
                   onChange={(e) => setHeader(e.target.value)}
                 />
               </div>
-              <div>
-                <p className="font-medium">Subtext:</p>
+              <div className="flex-1">
+                <p className="font-medium">Link:</p>
                 <input
                   type="text"
                   placeholder="Input text here"
-                  className="focus:outline-none py-2 border px-3 w-64 2xl:w-72"
-                  value={subText}
-                  onChange={(e) => setSubtext(e.target.value)}
+                  className="focus:outline-none py-2 border px-3 w-full"
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
                 />
               </div>
             </div>
-            <div>
-              <p className="font-medium">Link:</p>
+
+            <div className="">
+              <p className="font-medium">Subtext:</p>
               <input
                 type="text"
                 placeholder="Input text here"
-                className="focus:outline-none py-2 border px-3 w-64 2xl:w-72"
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
+                className="focus:outline-none py-2 border px-3 w-full"
+                value={subText}
+                onChange={(e) => setSubtext(e.target.value)}
               />
             </div>
           </div>
