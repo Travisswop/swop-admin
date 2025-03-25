@@ -17,7 +17,7 @@ const EditJobPost = ({
   id,
 }: {
   token: string;
-  jobDetails: jobs;
+  jobDetails: Jobs[];
   id: string;
 }) => {
   const router = useRouter();
@@ -26,17 +26,18 @@ const EditJobPost = ({
   const [error, setError] = useState<string>("");
 
   const [jobsForm, setJobsForm] = useState<Jobs>({
-    jobTitle: jobDetails?.jobTitle || "",
-    officeLocation: jobDetails?.officeLocation || "",
-    skills: jobDetails?.skills || [],
-    jobType: jobDetails?.jobType || "",
-    minSalary: jobDetails?.minSalary || 0,
-    maxSalary: jobDetails?.maxSalary || 0,
-    salaryType: jobDetails?.salaryType || "",
-    currency: jobDetails?.currency || "",
-    deadline: jobDetails?.deadline || new Date(),
-    description: jobDetails?.description || "",
-    status: jobDetails?.status || "",
+    jobTitle: jobDetails?.[0]?.jobTitle || "",
+    officeLocation: jobDetails?.[0]?.officeLocation || "",
+    skills: jobDetails?.[0]?.skills || [],
+    jobType: jobDetails?.[0]?.jobType || "",
+    minSalary: jobDetails?.[0]?.minSalary || 0,
+    maxSalary: jobDetails?.[0]?.maxSalary || 0,
+    salaryType: jobDetails?.[0]?.salaryType || "",
+    currency: jobDetails?.[0]?.currency || "",
+    deadline: jobDetails?.[0]?.deadline || new Date(),
+    description: jobDetails?.[0]?.description || "",
+    status: jobDetails?.[0]?.status || "",
+ 
   });
 
   const [inputValue, setInputValue] = useState("");
@@ -71,7 +72,7 @@ const EditJobPost = ({
   ) => {
     const { name, value } = e.target;
 
-    setJobsForm((prev) => ({
+    setJobsForm((prev: Jobs) => ({
       ...prev,
       [name]: value, // Update the corresponding key dynamically
     }));
@@ -84,7 +85,9 @@ const EditJobPost = ({
     }));
   };
 
-  const handleSubmit = async (status: string) => {
+  const handleSubmit = async (
+    status: "" | "draft" | "published" | "expired" | undefined
+  ) => {
     setJobsForm((prev) => ({
       ...prev,
       status,
@@ -111,6 +114,7 @@ const EditJobPost = ({
           jobTitle: "",
           officeLocation: "",
           skills: [],
+          jobType: "",
           minSalary: 0,
           maxSalary: 0,
           salaryType: "",
@@ -437,7 +441,7 @@ const EditJobPost = ({
                 placeholder="Select a date..."
                 required
                 name="deadline"
-                value={jobsForm.deadline}
+                value={jobsForm.deadline.toISOString().split("T")[0]}
                 onChange={handleInputChange}
               />
             </form>

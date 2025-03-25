@@ -28,6 +28,7 @@ const AddJobPost = ({ token }: { token: string }) => {
     deadline: new Date(),
     description: "",
     status: "",
+
   });
 
   const [inputValue, setInputValue] = useState("");
@@ -62,7 +63,7 @@ const AddJobPost = ({ token }: { token: string }) => {
   ) => {
     const { name, value } = e.target;
 
-    setJobsForm((prev) => ({
+    setJobsForm((prev: Jobs) => ({
       ...prev,
       [name]: value, // Update the corresponding key dynamically
     }));
@@ -75,7 +76,9 @@ const AddJobPost = ({ token }: { token: string }) => {
     }));
   };
 
-  const handleSubmit = async (status: string) => {
+  const handleSubmit = async (
+    status: "" | "draft" | "published" | "expired" | undefined
+  ) => {
     setJobsForm((prev) => ({
       ...prev,
       status,
@@ -101,6 +104,7 @@ const AddJobPost = ({ token }: { token: string }) => {
           jobTitle: "",
           officeLocation: "",
           skills: [],
+          jobType: "",
           minSalary: 0,
           maxSalary: 0,
           salaryType: "",
@@ -422,12 +426,9 @@ const AddJobPost = ({ token }: { token: string }) => {
             <form className="w-60">
               <input
                 type="date"
-                id="date-picker"
-                className="block w-full py-3 px-4  text-base border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-black focus:ring-1 focus:outline-none text-slate-900"
-                placeholder="Select a date..."
                 required
                 name="deadline"
-                value={jobsForm.deadline}
+                value={jobsForm.deadline.toISOString().split("T")[0]}
                 onChange={handleInputChange}
               />
             </form>

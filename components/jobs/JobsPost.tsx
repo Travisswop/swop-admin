@@ -3,7 +3,6 @@ import Link from "next/link";
 import { formatDate } from "../util/formatData";
 
 const JobsPost = ({ jobDetails }: { jobDetails: Jobs[] }) => {
-  
   return (
     <div className="p-9 bg-white min-h-fit h-full rounded-2xl">
       <div>
@@ -20,7 +19,10 @@ const JobsPost = ({ jobDetails }: { jobDetails: Jobs[] }) => {
                 <p className="text-sm font-medium capitalize">({el?.status})</p>
               </div>
               <p className="text-base text-[#737791] font-normal mt-2 mb-1">
-                Deadline: {formatDate(el?.createdAt)}
+                Deadline:{" "}
+                {formatDate(
+                  el?.createdAt ? new Date(el.createdAt) : new Date()
+                )}
               </p>
               <div className="flex gap-3 items-center font-medium ">
                 <p className="text-lg capitalize">{el?.jobType}</p>

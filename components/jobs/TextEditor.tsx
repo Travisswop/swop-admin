@@ -1,22 +1,20 @@
 "use client";
 
+import { Jobs } from "@/types/jobs";
 import { Editor } from "@tinymce/tinymce-react";
 
-interface JobsForm {
-  description: string;
-  [key: string]: string | number | boolean | undefined; // Allows other keys if necessary
-}
 
 interface TextEditorProps {
-  setJobsForm: React.Dispatch<React.SetStateAction<JobsForm>>;
-  jobsForm: JobsForm;
+  setJobsForm: React.Dispatch<React.SetStateAction<Jobs>>;
+  jobsForm: Jobs;
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({ setJobsForm, jobsForm }) => {
+  // Handler for editor content change
   const handleEditorChange = (content: string) => {
     setJobsForm((prev) => ({
       ...prev,
-      description: content, // Update the description field
+      description: content, // Update only the description field
     }));
   };
 
@@ -24,7 +22,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ setJobsForm, jobsForm }) => {
     <div className="w-full">
       <Editor
         apiKey="njethe5lk1z21je67jjdi9v3wimfducwhl6jnnuip46yxwxh" // Replace with your TinyMCE API key
-        value={jobsForm?.description}
+        value={jobsForm?.description || ""} // Fallback to empty string if description is undefined
         onEditorChange={handleEditorChange}
         init={{
           height: 400,

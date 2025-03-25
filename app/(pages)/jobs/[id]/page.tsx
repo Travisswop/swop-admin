@@ -13,7 +13,9 @@ const page = async ({ params }: PageProps) => {
 
   const jobDetails = await getJobsById(id, token || "");
 
-  return <EditJobPost jobDetails={jobDetails?.data} id={id} token={token} />;
+  return (
+    <EditJobPost jobDetails={jobDetails?.data} id={id} token={token || ""} />
+  );
 };
 
 export default page;

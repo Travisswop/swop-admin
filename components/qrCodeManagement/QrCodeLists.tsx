@@ -262,7 +262,9 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                   Dynamic
                 </td>
                 <td className="py-3 px-4 text-gray-400">
-                  {formatDate(item.createdAt)}
+                  {formatDate(
+                    item?.createdAt ? new Date(item.createdAt) : new Date()
+                  )}
                 </td>
                 <td className="py-3 px-4">
                   <div className="flex gap-2">
