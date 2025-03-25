@@ -1,9 +1,11 @@
 import { Jobs } from "@/types/jobs";
 import Link from "next/link";
+import { formatDate } from "../util/formatData";
 
 const JobsPost = ({ jobDetails }: { jobDetails: Jobs[] }) => {
+  
   return (
-    <div className="p-10 bg-white min-h-fit h-full">
+    <div className="p-9 bg-white min-h-fit h-full rounded-2xl">
       <div>
         {jobDetails?.map((el, index) => (
           <div
@@ -15,14 +17,16 @@ const JobsPost = ({ jobDetails }: { jobDetails: Jobs[] }) => {
                 <h4 className="text-2xl font-semibold text-[#2D3032]">
                   {el?.jobTitle}
                 </h4>
-                <span className="text-sm font-medium">(Published)</span>
+                <p className="text-sm font-medium capitalize">({el?.status})</p>
               </div>
               <p className="text-base text-[#737791] font-normal mt-2 mb-1">
-                Deadline: 5 - 8 - 2023
+                Deadline: {formatDate(el?.createdAt)}
               </p>
               <div className="flex gap-3 items-center font-medium ">
-                <p className="text-lg">Full-Time</p>
-                <p className="text-lg">Salary: 15000-2000</p>
+                <p className="text-lg capitalize">{el?.jobType}</p>
+                <p className="text-lg">
+                  Salary: {el?.minSalary} - {el?.maxSalary}
+                </p>
               </div>
             </div>
             <div className="flex gap-5 shrink-0 ">
@@ -36,7 +40,7 @@ const JobsPost = ({ jobDetails }: { jobDetails: Jobs[] }) => {
                 </span>
               </Link>
               <Link
-                href="/jobs/edit"
+                href={`/jobs/${el?._id}`}
                 className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
               >
                 Edit

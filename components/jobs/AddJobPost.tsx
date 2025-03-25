@@ -2,7 +2,7 @@
 
 import { createJob } from "@/action/jobs";
 import { Jobs } from "@/types/jobs";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { GrLocation } from "react-icons/gr";
@@ -12,24 +12,82 @@ import { toast } from "react-toastify";
 import TextEditor from "./TextEditor";
 
 const AddJobPost = ({ token }: { token: string }) => {
-  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [publisLoading, setPublisLoading] = useState(false);
+  const [draftLoading, setDraftLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [jobsForm, setJobsForm] = useState<Jobs>({
-    jobTitle: "Full Stack Developer",
-    officeLocation: "Dhaka, Bangladesh",
-    skills: ["React Js"],
-    minSalary: 3000,
-    maxSalary: 5000,
-    salaryType: "hourly",
-    currency: "Taka",
-    deadline: new Date("2025-04-30T23:59:59Z"),
-    description: "Adobe services, like Adobe Document Cloud, are available ",
-    status: "draft",
+    jobTitle: "",
+    officeLocation: "",
+    skills: [],
+    jobType: "",
+    minSalary: 0,
+    maxSalary: 0,
+    salaryType: "",
+    currency: "",
+    deadline: new Date(),
+    description: "",
+    status: "",
   });
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setLoading(true);
+  const [inputValue, setInputValue] = useState("");
+
+  // Add skill when pressing Enter
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && inputValue.trim()) {
+      e.preventDefault();
+      if (!jobsForm.skills.includes(inputValue.trim())) {
+        setJobsForm((prev) => ({
+          ...prev,
+          skills: [...prev.skills, inputValue.trim()],
+        }));
+      }
+      setInputValue("");
+    }
+  };
+
+  // Remove skill
+  const handleRemoveSkill = (skillToRemove: string) => {
+    setJobsForm((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((skill) => skill !== skillToRemove),
+    }));
+  };
+
+  // Handle input change dynamically
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+
+    setJobsForm((prev) => ({
+      ...prev,
+      [name]: value, // Update the corresponding key dynamically
+    }));
+  };
+
+  const handleCheckboxChange = (jobType: string) => {
+    setJobsForm((prev) => ({
+      ...prev,
+      jobType, // Update the jobType with the selected one
+    }));
+  };
+
+  const handleSubmit = async (status: string) => {
+    setJobsForm((prev) => ({
+      ...prev,
+      status,
+    }));
+
+    if (status === "draft") {
+      setDraftLoading(true);
+    }
+
+    if (status === "published") {
+      setPublisLoading(true);
+    }
     setError("");
 
     try {
@@ -47,10 +105,12 @@ const AddJobPost = ({ token }: { token: string }) => {
           maxSalary: 0,
           salaryType: "",
           currency: "",
-          deadline: new Date("2025-04-30T23:59:59Z"),
+          deadline: new Date(),
           description: "",
           status: "",
         });
+
+        router.back();
       } else {
         toast.error(response.message || "Failed to post job");
       }
@@ -59,7 +119,8 @@ const AddJobPost = ({ token }: { token: string }) => {
       toast.error("Error posting job");
       setError("Failed to post job. Please try again.");
     } finally {
-      setLoading(false);
+      setPublisLoading(false);
+      setDraftLoading(false);
     }
   };
 
@@ -78,17 +139,17 @@ const AddJobPost = ({ token }: { token: string }) => {
             </p>
           </div>
           <div className="flex gap-5 shrink-0 ">
-            <Link
-              href="#"
+            <button
+              onClick={() => handleSubmit("draft")}
               className=" text-base font-medium py-2 flex justify-center items-center w-44   text-center border border-black rounded text-black "
             >
-              Save as draft
-            </Link>
+              {draftLoading ? "Loading..." : "Save as draft "}
+            </button>
             <button
-              onClick={handleSubmit}
+              onClick={() => handleSubmit("published")}
               className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
             >
-              {loading ? "Loading" : "Publish"}
+              {publisLoading ? "Loading..." : "Publish"}
             </button>
           </div>
         </div>
@@ -102,13 +163,16 @@ const AddJobPost = ({ token }: { token: string }) => {
           </div>
           <div className="w-max gap-5 shrink-0 ">
             <div className=" flex flex-col gap-4">
-              <form className="w-[400px] 2xl:[w-600px]">
+              <form className="w-[400px] 2xl:[w-700px]">
                 <input
                   type="search"
                   id="default-search"
                   className="block py-3 px-4 text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900  w-full mb-2 "
                   placeholder="Job title write here"
                   required
+                  name="jobTitle"
+                  value={jobsForm.jobTitle}
+                  onChange={handleInputChange}
                 />
                 <label className="text-base text-[#838383] ">
                   26 character
@@ -126,62 +190,32 @@ const AddJobPost = ({ token }: { token: string }) => {
             </p>
           </div>
           <div className="w-max gap-5 shrink-0 ">
-            <ul className="">
-              <li className="w-full">
-                <div className="flex items-center ps-3 gap-1">
-                  <input id="full-time" type="checkbox" className="w-5 h-5 " />
-                  <label
-                    htmlFor="full-time"
-                    className="w-full py-3 ms-2 text-lg font-medium text-black"
-                  >
-                    Full Time
-                  </label>
-                </div>
-              </li>
-              <li className="w-full">
-                <div className="flex items-center ps-3 gap-1">
-                  <input id="part-time" type="checkbox" className="w-5 h-5 " />
-                  <label
-                    htmlFor="part-time"
-                    className="w-full py-3 ms-2 text-lg font-medium text-black"
-                  >
-                    Part Time
-                  </label>
-                </div>
-              </li>
-              <li className="w-full">
-                <div className="flex items-center ps-3 gap-1">
-                  <input id="contract" type="checkbox" className="w-5 h-5 " />
-                  <label
-                    htmlFor="contract"
-                    className="w-full py-3 ms-2 text-lg font-medium text-black"
-                  >
-                    Contract
-                  </label>
-                </div>
-              </li>
-              <li className="w-full">
-                <div className="flex items-center ps-3 gap-1">
-                  <input id="freelance" type="checkbox" className="w-5 h-5 " />
-                  <label
-                    htmlFor="freelance"
-                    className="w-full py-3 ms-2 text-lg font-medium text-black"
-                  >
-                    Freelance
-                  </label>
-                </div>
-              </li>
-              <li className="w-full">
-                <div className="flex items-center ps-3 gap-1">
-                  <input id="internship" type="checkbox" className="w-5 h-5 " />
-                  <label
-                    htmlFor="internship"
-                    className="w-full py-3 ms-2 text-lg font-medium text-black"
-                  >
-                    Internship
-                  </label>
-                </div>
-              </li>
+            <ul>
+              {[
+                "Full Time",
+                "Part Time",
+                "Contract",
+                "Freelance",
+                "Internship",
+              ].map((type) => (
+                <li key={type} className="w-full">
+                  <div className="flex items-center ps-3 gap-1">
+                    <input
+                      id={type.toLowerCase()}
+                      type="checkbox"
+                      checked={jobsForm.jobType === type} // Only one is checked at a time
+                      onChange={() => handleCheckboxChange(type)}
+                      className="w-5 h-5"
+                    />
+                    <label
+                      htmlFor={type.toLowerCase()}
+                      className="w-full py-3 ms-2 text-lg font-medium text-black"
+                    >
+                      {type}
+                    </label>
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -203,15 +237,18 @@ const AddJobPost = ({ token }: { token: string }) => {
                     <GrLocation className="text-black text-2xl" />
                   </div>
                   <input
-                    type="search"
+                    type="text"
                     id="default-search"
                     className="block py-3 px-4 ps-12 text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900  w-full"
                     placeholder="Address..."
                     required
+                    name="officeLocation"
+                    value={jobsForm.officeLocation}
+                    onChange={handleInputChange}
                   />
                 </div>
               </form>
-
+              {/* 
               <form className="relative max-w-80">
                 <select
                   id="countries"
@@ -230,7 +267,7 @@ const AddJobPost = ({ token }: { token: string }) => {
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none"
                   size={24}
                 />
-              </form>
+              </form> */}
             </div>
           </div>
         </div>
@@ -244,38 +281,41 @@ const AddJobPost = ({ token }: { token: string }) => {
             </p>
           </div>
           <div className="w-max gap-5 shrink-0 ">
-            <div className=" flex flex-col gap-4 w-[400px] 2xl:[w-600px]">
-              <div className="flex gap-3 items-center">
-                <div className=" inline-flex items-center gap-2 bg-black rounded text-white py-2 px-3">
-                  <span>
-                    <FaXmark />
-                  </span>
-                  <span>Node Js</span>
-                </div>
-                <div className=" inline-flex items-center gap-2 bg-black rounded text-white py-2 px-3">
-                  <span>
-                    <FaXmark />
-                  </span>
-                  <span>Java</span>
-                </div>
-                <div className=" inline-flex items-center gap-2 bg-black rounded text-white py-2 px-3">
-                  <span>
-                    <FaXmark />
-                  </span>
-                  <span>React Native</span>
-                </div>
+            <div className="flex flex-col gap-4 w-[400px] 2xl:w-[600px]">
+              {/* Skills List */}
+              <div className="flex gap-3 items-center flex-wrap">
+                {jobsForm.skills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className="inline-flex items-center gap-2 bg-black rounded text-white py-2 px-3"
+                  >
+                    <span>{skill}</span>
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => handleRemoveSkill(skill)}
+                    >
+                      <FaXmark />
+                    </span>
+                  </div>
+                ))}
               </div>
-              <form className=" max-w-screen-sm">
+
+              {/* Input Field */}
+              <form
+                className="max-w-screen-sm"
+                onSubmit={(e) => e.preventDefault()} // Prevents accidental form submission
+              >
                 <div className="relative">
                   <div className="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
                     <IoIosSearch className="text-black text-2xl" />
                   </div>
                   <input
-                    type="search"
-                    id="default-search"
-                    className="block w-full  py-3 px-4 ps-12 text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900"
-                    placeholder="Press enter to add another skills"
-                    required
+                    type="text"
+                    className="block w-full py-3 px-4 ps-12 text-base border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent text-slate-900"
+                    placeholder="Press enter to add another skill"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </form>
@@ -292,13 +332,28 @@ const AddJobPost = ({ token }: { token: string }) => {
           </div>
           <div className="w-max gap-5 shrink-0 ">
             <form className=" flex flex-col 2xl:flex-row gap-4 items-center">
-              <div>
+              <div className="flex items-center space-x-3">
+                <p>Min</p>
                 <input
-                  type="search"
+                  type="number"
                   id="default-search"
-                  className="block   py-3.5 px-4  text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900  w-60  text-center"
-                  placeholder="Salary Amount"
+                  className="block   py-3.5 px-4  text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900  w-32  text-center"
+                  placeholder=""
                   required
+                  name="minSalary"
+                  value={jobsForm.minSalary}
+                  onChange={handleInputChange}
+                />
+                <p>Max</p>
+                <input
+                  type="number"
+                  id="default-search"
+                  className="block   py-3.5 px-4  text-base  border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-transparent focus:ring-0  focus:inset-0 text-slate-900 w-32  text-center"
+                  placeholder=""
+                  required
+                  name="maxSalary"
+                  value={jobsForm.maxSalary}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="relative w-60 ">
@@ -306,17 +361,17 @@ const AddJobPost = ({ token }: { token: string }) => {
                   id="salaryType"
                   defaultValue=""
                   className="bg-[#F2F2F2] border border-[#EBEBEB] text-gray-900 text-lg rounded-lg focus:ring-transparent focus:border-transparent block w-full py-3 px-4 appearance-none"
+                  name="salaryType"
+                  value={jobsForm.salaryType}
+                  onChange={handleInputChange}
                 >
                   <option value="" disabled>
                     Select salary type
                   </option>
                   <option value="hourly">Hourly</option>
-                  <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
                   <option value="monthly">Monthly</option>
                   <option value="annually">Annually</option>
-                  <option value="negotiable">Negotiable</option>
-                  <option value="commission">Commission-based</option>
                 </select>
                 <MdOutlineKeyboardArrowDown
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none"
@@ -328,6 +383,9 @@ const AddJobPost = ({ token }: { token: string }) => {
                   id="currency"
                   defaultValue=""
                   className="bg-[#F2F2F2] border border-[#EBEBEB] text-gray-900 text-lg rounded-lg focus:ring-transparent focus:border-transparent block w-full py-3 px-4 appearance-none"
+                  name="currency"
+                  value={jobsForm.currency}
+                  onChange={handleInputChange}
                 >
                   <option value="" disabled>
                     Select currency
@@ -342,6 +400,7 @@ const AddJobPost = ({ token }: { token: string }) => {
                   <option value="CNY">CNY</option>
                   <option value="SGD">SGD</option>
                   <option value="ZAR">ZAR</option>
+                  <option value="BDT">BDT</option>
                 </select>
                 <MdOutlineKeyboardArrowDown
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none"
@@ -367,6 +426,9 @@ const AddJobPost = ({ token }: { token: string }) => {
                 className="block w-full py-3 px-4  text-base border border-[#EBEBEB] rounded-lg bg-[#F2F2F2] focus:ring-transparent focus:border-black focus:ring-1 focus:outline-none text-slate-900"
                 placeholder="Select a date..."
                 required
+                name="deadline"
+                value={jobsForm.deadline}
+                onChange={handleInputChange}
               />
             </form>
           </div>
@@ -384,7 +446,7 @@ const AddJobPost = ({ token }: { token: string }) => {
           <div className="w-full gap-5 shrink-0 ">
             <form className=" w-full">
               <div className="">
-                <TextEditor />
+                <TextEditor setJobsForm={setJobsForm} jobsForm={jobsForm} />
               </div>
             </form>
           </div>

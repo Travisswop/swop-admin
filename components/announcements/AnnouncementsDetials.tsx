@@ -10,7 +10,7 @@ const AnnouncementsDetials = ({
   announcementsDetials: Announcements[];
 }) => {
   return (
-    <div className="text-black bg-white p-6">
+    <div className="text-black bg-white p-9 rounded-2xl">
       <div className="flex justify-end">
         <Link
           href={`/create-announcement`}
