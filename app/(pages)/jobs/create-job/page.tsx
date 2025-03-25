@@ -1,9 +1,10 @@
-"use client";
-import React from "react";
 import AddJobPost from "@/components/jobs/AddJobPost";
+import { cookies } from "next/headers";
 
-const CreateJobPage = () => {
-  return <AddJobPost />;
+const Page = async () => {
+  const token = (await cookies()).get("authToken")?.value;
+
+  return <AddJobPost token={token ? token : ""} />;
 };
 
-export default CreateJobPage;
+export default Page;

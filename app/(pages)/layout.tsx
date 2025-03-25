@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
-import "../../app/globals.css";
-import { Roboto } from "next/font/google";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/topbar/Topbar";
+import { Roboto } from "next/font/google";
+import { Bounce, ToastContainer } from "react-toastify";
+import "../../app/globals.css";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -47,6 +48,7 @@ export default function RootLayout({
               {children}
             </section>
           </section>
+          <ToastContainer transition={Bounce} />
         </main>
       </body>
     </html>

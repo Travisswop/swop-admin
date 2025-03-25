@@ -1,11 +1,14 @@
 import OrderListTable from "@/components/order/OrderListTable";
+import { cookies } from "next/headers";
 
-const page = () => {
+const OrderPage = async () => {
+  const token = (await cookies()).get("authToken")?.value;
+
   return (
     <div>
-      <OrderListTable />
+      <OrderListTable token={token ? token : ""} />
     </div>
   );
 };
 
-export default page;
+export default OrderPage;

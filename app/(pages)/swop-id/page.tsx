@@ -12,7 +12,6 @@ const SwopId = async ({ searchParams }: PageProps) => {
   const page = Number((await searchParams).page) || 1;
   const limit = Number((await searchParams).limit) || 10;
   const userLists = await getUserLists(token || "", page, limit);
-  console.log("user lists", userLists);
 
   return (
     <section className="w-full h-full flex flex-col justify-start items-center text-[#737791]">

@@ -1,12 +1,70 @@
+"use client";
+
+import { createJob } from "@/action/jobs";
+import { Jobs } from "@/types/jobs";
 import Link from "next/link";
-import React from "react";
+import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { GrLocation } from "react-icons/gr";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import TextEditor from "./TextEditor";
 import { IoIosSearch } from "react-icons/io";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { toast } from "react-toastify";
+import TextEditor from "./TextEditor";
 
-const AddJobPost = () => {
+const AddJobPost = ({ token }: { token: string }) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+  const [jobsForm, setJobsForm] = useState<Jobs>({
+    jobTitle: "Full Stack Developer",
+    officeLocation: "Dhaka, Bangladesh",
+    skills: ["React Js"],
+    minSalary: 3000,
+    maxSalary: 5000,
+    salaryType: "hourly",
+    currency: "Taka",
+    deadline: new Date("2025-04-30T23:59:59Z"),
+    description: "Adobe services, like Adobe Document Cloud, are available ",
+    status: "draft",
+  });
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await createJob(jobsForm, token);
+
+      if (response.success) {
+        toast.success("Job posted successfully");
+        console.log("Job posted successfully");
+
+        setJobsForm({
+          jobTitle: "",
+          officeLocation: "",
+          skills: [],
+          minSalary: 0,
+          maxSalary: 0,
+          salaryType: "",
+          currency: "",
+          deadline: new Date("2025-04-30T23:59:59Z"),
+          description: "",
+          status: "",
+        });
+      } else {
+        toast.error(response.message || "Failed to post job");
+      }
+    } catch (err) {
+      console.error("Error job post:", err);
+      toast.error("Error posting job");
+      setError("Failed to post job. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  console.log("error", error);
+
   return (
     <div className="p-10 bg-white min-h-fit h-full overflow-hidden">
       <div>
@@ -26,12 +84,12 @@ const AddJobPost = () => {
             >
               Save as draft
             </Link>
-            <Link
-              href="#"
+            <button
+              onClick={handleSubmit}
               className=" text-base font-medium py-2 flex justify-center items-center w-44  text-center border border-black rounded bg-black text-white"
             >
-              Publish
-            </Link>
+              {loading ? "Loading" : "Publish"}
+            </button>
           </div>
         </div>
         {/* Office Location */}
