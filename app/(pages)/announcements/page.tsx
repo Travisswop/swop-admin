@@ -9,7 +9,10 @@ const page = async () => {
 
   return (
     <div>
-      <AnnouncementsDetials announcementsDetials={announcementsDetials?.data} />
+      <AnnouncementsDetials
+        announcementsDetials={announcementsDetials?.data}
+        token={token ? token : ""}
+      />
     </div>
   );
 };

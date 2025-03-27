@@ -104,3 +104,52 @@ export async function createAnnouncements(
     };
   }
 }
+
+export async function sendAnnouncements(
+  title: string,
+  body: string,
+  token: string
+) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notification/pushNotification`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title,
+          body,
+        }),
+      }
+    );
+
+    revalidateTag("sendAnnouncements");
+
+    if (!response.ok) {
+      // Try to extract backend error
+      const errorResponse = await response.json();
+      throw new Error(
+        errorResponse.message ||
+          `API Error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+
+    return {
+      success: true,
+      message: data.message || "Announcements send successfully",
+      data: data.data || null,
+    };
+  } catch (error) {
+    console.error("Error send  announcements:", error);
+    return {
+      success: false,
+      message: error || "Failed to send announcements",
+      data: null,
+    };
+  }
+}

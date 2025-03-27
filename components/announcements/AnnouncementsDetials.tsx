@@ -1,14 +1,48 @@
+"use client";
+
+import { sendAnnouncements } from "@/action/announcements";
 import PrimaryButton from "@/components/button/PrimaryButton";
 import astro from "@/public/images/Astro.png";
 import { Announcements } from "@/types/Announcements";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 const AnnouncementsDetials = ({
   announcementsDetials,
+  token,
 }: {
   announcementsDetials: Announcements[];
+  token: string;
 }) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+
+  const handleSubmit = async (title: string, body: string) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await sendAnnouncements(title, body, token);
+
+      if (response.success) {
+        toast.success("Announcement sent successfully");
+        console.log("Announcement sent successfully");
+      } else {
+        toast.error("Failed to send announcement");
+      }
+    } catch (err) {
+      console.error("Error sending announcement:", err);
+      toast.error("Error sending announcement");
+      setError("Failed to send announcement. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  console.log("check", error);
+
   return (
     <div className="text-black bg-white p-9 rounded-2xl">
       <div className="flex justify-end">
@@ -39,8 +73,11 @@ const AnnouncementsDetials = ({
               </p>
             </div>
           </div>
-          <PrimaryButton className="w-[11rem] flex items-center justify-center">
-            Send everyone
+          <PrimaryButton
+            className="w-[11rem] flex items-center justify-center"
+            onClick={() => handleSubmit(el?.header || "", el?.subtext || "")}
+          >
+            {loading ? "Sending..." : " Send everyone"}
           </PrimaryButton>
         </div>
       ))}
