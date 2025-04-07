@@ -10,9 +10,9 @@ import Modal from "@mui/material/Modal";
 import Image from "next/image";
 import React, { MouseEventHandler, useEffect, useMemo, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { FaRegSave, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { IoClose, IoQrCodeSharp } from "react-icons/io5";
-import { MdQrCodeScanner } from "react-icons/md";
+// import { MdQrCodeScanner } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { toast } from "react-toastify";
 import PrimaryButton from "../button/PrimaryButton";
@@ -79,6 +79,13 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
   const [updateLoading, setUpdateLoading] = useState(false);
 
   console.log(totalPages, error);
+
+  useEffect(() => {
+    setQrCodeName("");
+    setQrcodeUrl("");
+    setSearchTerm("");
+    setMicrositeName("");
+  }, [createQRFlag]);
 
   useEffect(() => {
     let isMounted = true;
@@ -159,7 +166,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
         setQrCodeName("");
         setQrcodeUrl("");
         setSearchTerm("");
-
         setMicrositeName("");
       } else {
         const errorMessage =
@@ -425,7 +431,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     </button>
                   </div>
                 </td>
-   
               </tr>
             ))
           ) : (
@@ -485,9 +490,16 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                   />
                 </div>
 
-                <PrimaryButton className="!px-6 " onClick={qrCodeUpdatehandler}>
-                  <MdQrCodeScanner />
-                  {updateLoading ? "Loading" : "Update QR"}
+                <PrimaryButton
+                  className="!px-8 space-x-2 w-[120px] h-[30px] flex items-center justify-center"
+                  onClick={qrCodeUpdatehandler}
+                >
+                  {/* <MdQrCodeScanner /> */}
+                  {updateLoading ? (
+                    <Loader size="size-5" color="fill-primary" />
+                  ) : (
+                    "Update QR"
+                  )}
                 </PrimaryButton>
               </div>
             </div>
@@ -543,11 +555,15 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                 />
 
                 <PrimaryButton
-                  className="!px-8 space-x-2 "
+                  className="!px-8 space-x-2 w-[120px] h-[30px] flex items-center justify-center"
                   onClick={qrCodeCreatehandler}
                 >
-                  <FaRegSave />
-                  {createLoading ? "Loading" : " Create"}
+                  {/* <FaRegSave /> */}
+                  {createLoading ? (
+                    <Loader size="size-5" color="fill-primary" />
+                  ) : (
+                    " Create"
+                  )}
                 </PrimaryButton>
               </div>
               <div className="bg-white p-6  w-56 h-auto rounded-xl"></div>
