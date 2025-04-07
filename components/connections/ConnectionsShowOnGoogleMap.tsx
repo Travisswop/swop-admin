@@ -161,7 +161,7 @@ export default function ConnectionsShowOnGoogleMap({
                   alt="Profile"
                   className="w-full h-full rounded-full object-cover"
                   width={1200}
-                  height={1200}
+                  height={700}
                 />
               )}
             </div>

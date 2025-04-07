@@ -64,8 +64,6 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
     [connections]
   ); // Add `connections` to the dependency array
 
-  console.log("check vlaue tiemr", connections);
-
   return (
     <div className="text-black bg-white py-5 px-8">
       <div className="flex gap-4 w-full">
@@ -89,49 +87,51 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
               Add New
             </Link>
           </div>
-          {connections?.map((el) => (
-            <button
-              onClick={() => handleSelectFriend(el._id)}
-              className={`py-3 px-5 rounded-lg border hover:bg-gray-100 w-full 
+          <div className="h-[600px] overflow-auto">
+            {connections?.map((el) => (
+              <button
+                onClick={() => handleSelectFriend(el._id)}
+                className={`py-3 px-5 rounded-lg border hover:bg-gray-100 w-full 
               }`}
-              key={el._id} // Use unique identifier directly
-            >
-              <div className="flex w-full items-center justify-between py-3 border-b">
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={
-                      isUrl(el.childId.profilePic)
-                        ? el.childId.profilePic
-                        : `/images/user_avator/${el.childId.profilePic}@3x.png`
-                    }
-                    alt="user image"
-                    className="w-9 h-9 rounded-full"
-                    width={120}
-                    height={120}
-                  />
-                  <div>
-                    <p className="font-medium text-left">
-                      {el?.childId?.name} test
-                    </p>
-                    <p className="text-gray-400 text-xs text-left">
-                      {el?.childId?.bio}
-                    </p>
+                key={el._id} // Use unique identifier directly
+              >
+                <div className="flex w-full items-center justify-between py-3 border-b">
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={
+                        isUrl(el.childId.profilePic)
+                          ? el.childId.profilePic
+                          : `/images/user_avator/${el.childId.profilePic}@3x.png`
+                      }
+                      alt="user image"
+                      className="w-9 h-9 rounded-full"
+                      width={120}
+                      height={120}
+                    />
+                    <div>
+                      <p className="font-medium text-left">
+                        {el?.childId?.name} test
+                      </p>
+                      <p className="text-gray-400 text-xs text-left">
+                        {el?.childId?.bio}
+                      </p>
+                    </div>
                   </div>
+                  <p className="text-gray-500 text-sm">{el?.address}</p>
+                  <button
+                    style={{ color: "red" }}
+                    className="text-sm"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering selection
+                      deletedConnection(el?._id);
+                    }}
+                  >
+                    Remove
+                  </button>
                 </div>
-                <p className="text-gray-500 text-sm">{el?.address}</p>
-                <button
-                  style={{ color: "red" }}
-                  className="text-sm"
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent triggering selection
-                    deletedConnection(el?._id);
-                  }}
-                >
-                  Remove
-                </button>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
