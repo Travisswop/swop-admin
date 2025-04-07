@@ -8,18 +8,27 @@ import { QRCodeData } from "@/types/qrcodedata";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, { MouseEventHandler, useEffect, useMemo, useState } from "react";
+import { BsThreeDots } from "react-icons/bs";
 import { FaRegSave, FaSearch } from "react-icons/fa";
 import { IoClose, IoQrCodeSharp } from "react-icons/io5";
 import { MdQrCodeScanner } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { toast } from "react-toastify";
 import PrimaryButton from "../button/PrimaryButton";
+import Loader from "../ui/Loader";
 import { formatDate } from "../util/formatData";
 import MicrositeSearchInputField from "./MicrositeSearchInputField";
 
 interface QrCodeListsProps {
   token: string;
+}
+
+interface Pagination {
+  totalPages: number | null;
+  previousPage: number | null;
+  currentPage: number | null;
+  nextPage: number | null;
 }
 
 const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
@@ -49,14 +58,18 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [qrCodeData, setQrCodeData] = useState<QRCodeData[]>([]);
 
   const [totalPages, setTotalPages] = useState(1);
+  const [limit] = useState(8);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
+
   const [micrositeDataLoading, setMicrositeDataLoading] = useState(false);
   const [error, setError] = useState<string>("");
 
   const [micrositeId, setMicrositeId] = useState("");
+  const [micrositeName, setMicrositeName] = useState("");
   const [qrCodeName, setQrCodeName] = useState("");
   const [qrcodeUrl, setQrcodeUrl] = useState("");
   const [redirectMicrosite, setRedirectMicrosite] = useState("");
@@ -73,14 +86,21 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
 
     const fetchData = async () => {
       try {
-        const result = await getDynamicQrCode(token, page, limit, searchTerm);
+        const result = await getDynamicQrCode(
+          token,
+          currentPage,
+          limit,
+          searchTerm
+        );
+
+        console.log("result", result);
 
         if (isMounted) {
           if (result.success) {
             setQrCodeData(result?.data);
             setTotalPages(result.pagination.totalPages);
+            setPagination(result?.pagination);
             setPage(1);
-            setLimit(10);
           } else {
             console.error(result.message);
           }
@@ -101,7 +121,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
     return () => {
       isMounted = false;
     };
-  }, [searchTerm, page, limit, token]);
+  }, [searchTerm, page, limit, token, currentPage]);
 
   const qrCodeCreatehandler: MouseEventHandler<HTMLButtonElement> = async (
     e
@@ -116,8 +136,21 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
         qrCodeName,
         qrcodeUrl,
         redirectMicrosite,
+        micrositeName,
         token
       );
+
+      const result = await getDynamicQrCode(
+        token,
+        currentPage,
+        limit,
+        searchTerm
+      );
+      if (result.success) {
+        setQrCodeData(result.data);
+        setPagination(result.pagination);
+        setTotalPages(result.pagination.totalPages);
+      }
 
       if (response.success) {
         toast.success("QR Code created successfully");
@@ -126,7 +159,8 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
         setQrCodeName("");
         setQrcodeUrl("");
         setSearchTerm("");
-        setLimit(12);
+
+        setMicrositeName("");
       } else {
         const errorMessage =
           response.message ||
@@ -153,8 +187,21 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
         dynamicQRCodeId,
         qrcodeUrl,
         redirectMicrosite,
+        micrositeName,
         token
       );
+
+      const result = await getDynamicQrCode(
+        token,
+        currentPage,
+        limit,
+        searchTerm
+      );
+      if (result.success) {
+        setQrCodeData(result.data);
+        setPagination(result.pagination);
+        setTotalPages(result.pagination.totalPages);
+      }
 
       if (response.success) {
         toast.success("QR Code updated successfully");
@@ -163,7 +210,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
         setQrCodeName("");
         setQrcodeUrl("");
         setSearchTerm("");
-        setLimit(12);
+        setMicrositeName("");
       } else {
         const errorMessage =
           response.message ||
@@ -177,6 +224,100 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       setUpdateLoading(false);
     }
   };
+
+  const handlePaginationClick = React.useCallback(
+    (page: number) => {
+      if (page > 0 && page !== currentPage) {
+        setCurrentPage(page);
+      }
+    },
+    [currentPage]
+  );
+
+  const renderPagination = useMemo(() => {
+    const generatePageNumbers = () => {
+      const pageNumbers: number[] = [];
+
+      // Use default values to prevent issues with null or undefined
+      const safeCurrentPage = currentPage ?? 1;
+      const safeTotalPages = pagination?.totalPages ?? 1;
+
+      const startPage = Math.max(1, safeCurrentPage - 1);
+      const endPage = Math.min(safeTotalPages, safeCurrentPage + 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+
+      return pageNumbers;
+    };
+
+    const pageNumbers = generatePageNumbers();
+
+    return (
+      pageNumbers.length > 0 && (
+        <nav aria-label="Page navigation" className="flex justify-end mt-8">
+          <ul className="inline-flex -space-x-px text-base items-center">
+            {/* Previous button */}
+            <li>
+              <button
+                onClick={() => handlePaginationClick((currentPage ?? 1) - 1)}
+                disabled={pagination?.previousPage === null || currentPage <= 1}
+                className="bg-white border rounded-l-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
+              >
+                <span>Previous</span>
+              </button>
+            </li>
+
+            {/* Ellipsis before page numbers */}
+            {pagination?.previousPage && pagination.previousPage > 1 && (
+              <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
+                <BsThreeDots />
+              </li>
+            )}
+
+            {/* Page number buttons */}
+            {pageNumbers.map((page) => (
+              <li key={page}>
+                <button
+                  onClick={() => handlePaginationClick(page)}
+                  className={`px-4 py-2 border h-[42px] w-[45px] ${
+                    page === currentPage
+                      ? "bg-primary text-white"
+                      : "bg-white text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {page}
+                </button>
+              </li>
+            ))}
+
+            {/* Ellipsis after page numbers */}
+            {pagination?.currentPage &&
+              pagination.currentPage + 1 < (pagination.totalPages ?? 0) && (
+                <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
+                  <BsThreeDots />
+                </li>
+              )}
+
+            {/* Next button */}
+            <li>
+              <button
+                onClick={() => handlePaginationClick((currentPage ?? 1) + 1)}
+                disabled={
+                  pagination?.nextPage === null ||
+                  currentPage >= (pagination?.totalPages ?? 1)
+                }
+                className="px-4 py-2 bg-white border rounded-r-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
+              >
+                <span>Next</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )
+    );
+  }, [pagination, currentPage, handlePaginationClick]);
 
   return (
     <div className="w-full overflow-x-auto">
@@ -216,7 +357,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
         <PrimaryButton className="text-sm">Export</PrimaryButton>
       </div> */}
       <table className="table-auto w-full border-collapse">
-        <thead>
+        <thead className="border-b">
           <tr>
             <th className="py-2 px-4 text-left text-gray-500 font-normal">
               Name
@@ -234,8 +375,11 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
         </thead>
         <tbody className="bg-white">
           {micrositeDataLoading ? (
-            <td colSpan={5} className="text-center py-6">
-              Loading...
+            <td colSpan={5} className="text-center w-full h-[400px]">
+              <div className="flex items-center justify-center w-full h-full space-x-2 text-gray-900 ">
+                <Loader size={"size-7"} color={"fill-primary"} />
+                <span className="">Loading...</span>
+              </div>
             </td>
           ) : qrCodeData?.length > 0 ? (
             qrCodeData.map((item, index) => (
@@ -273,6 +417,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                         handleOpen();
                         setDynamicQRCodeId(item?._id);
                         setQrcodeUrl(item?.qrcodeUrl);
+                        setMicrositeName(item?.micrositeName || "");
                       }}
                       className="bg-[#EAEAEA] text-[#989898] w-12 h-8 rounded-lg flex items-center justify-center"
                     >
@@ -280,17 +425,25 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     </button>
                   </div>
                 </td>
+   
               </tr>
             ))
           ) : (
-            <tr>
-              <td colSpan={5} className="text-center py-6">
-                No qr code found.
+            <tr className="w-full h-[400px]">
+              <td colSpan={5} className="text-center">
+                <p className="text-base">No qr code found.</p>
               </td>
             </tr>
           )}
         </tbody>
       </table>
+
+      {qrCodeData?.length > 0 ? (
+        <div className="mr-5"> {renderPagination}</div>
+      ) : (
+        ""
+      )}
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -326,6 +479,8 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                   <MicrositeSearchInputField
                     setMicrositeId={setMicrositeId}
                     setRedirectMicrosite={setRedirectMicrosite}
+                    setMicrositeName={setMicrositeName}
+                    micrositeName={micrositeName}
                     token={token}
                   />
                 </div>
@@ -382,6 +537,8 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                 <MicrositeSearchInputField
                   setMicrositeId={setMicrositeId}
                   setRedirectMicrosite={setRedirectMicrosite}
+                  setMicrositeName={setMicrositeName}
+                  micrositeName={micrositeName}
                   token={token}
                 />
 

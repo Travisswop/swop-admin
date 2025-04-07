@@ -4,6 +4,7 @@ export interface QRCodeData {
   qrcodeNFCID: string;
   qrcodeUrl: string;
   redirectMicrosite: string;
+  micrositeName: string;
   updatedAt: string; // ISO 8601 date string
   __v: number;
   _id: string;

@@ -4,13 +4,13 @@ import { revalidateTag } from "next/cache";
 
 export async function getDynamicQrCode(
   token: string,
-  page: number,
+  currentPage: number,
   limit: number,
   search: string = ""
 ) {
   try {
     const params = new URLSearchParams({
-      page: page.toString(),
+      currentPage: currentPage.toString(),
       limit: limit.toString(),
       ...(search && { search }),
     });
@@ -51,6 +51,7 @@ export async function createDynamicQrCode(
   qrCodeName: string,
   qrcodeUrl: string,
   redirectMicrosite: string,
+  micrositeName: string,
   token: string
 ) {
   try {
@@ -67,6 +68,7 @@ export async function createDynamicQrCode(
           qrCodeName,
           qrcodeUrl,
           redirectMicrosite,
+          micrositeName,
         }),
       }
     );
@@ -97,6 +99,7 @@ export async function updateDynamicQrCode(
   dynamicQRCodeId: string,
   qrcodeUrl: string,
   redirectMicrosite: string,
+  micrositeName: string,
   token: string
 ) {
   try {
@@ -108,7 +111,12 @@ export async function updateDynamicQrCode(
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ dynamicQRCodeId, qrcodeUrl, redirectMicrosite }),
+        body: JSON.stringify({
+          dynamicQRCodeId,
+          qrcodeUrl,
+          redirectMicrosite,
+          micrositeName,
+        }),
       }
     );
 

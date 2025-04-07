@@ -16,18 +16,22 @@ interface Props {
   token: string;
   setRedirectMicrosite: (id: string) => void;
   setMicrositeId: (id: string) => void;
+  setMicrositeName: (name: string) => void;
+  micrositeName: string;
 }
 
 const MicrositeSearchInputField = ({
   token,
   setRedirectMicrosite,
   setMicrositeId,
+  setMicrositeName,
+  micrositeName,
 }: Props) => {
   const [micrositeFetchLoading, setMicrositeFetchLoading] = useState(false);
   const [searchValue, setSearchValue] = useState<string>("");
   const [microsites, setMicrosites] = useState<Microsite[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedName, setSelectedName] = useState<string>("");
+  const [selectedName, setSelectedName] = useState<string>(micrositeName || "");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -106,12 +110,15 @@ const MicrositeSearchInputField = ({
     setMicrositeId(site._id || "");
     setRedirectMicrosite(site?.parentId?.profileUrl || "");
     setShowDropdown(false);
+    setMicrositeName(site?.parentId?.name || ""); // Save selected name
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedName(""); // Reset selected state
     setSearchValue(e.target.value);
   };
+
+  console.log("check microsites", microsites);
 
   return (
     <div>
