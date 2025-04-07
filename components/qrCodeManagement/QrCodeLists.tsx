@@ -480,7 +480,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     />
                   </div>
                 </div>
-                <div className="pb-8">
+                <div className="pb-4">
                   <MicrositeSearchInputField
                     setMicrositeId={setMicrositeId}
                     setRedirectMicrosite={setRedirectMicrosite}
@@ -491,14 +491,14 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                 </div>
 
                 <PrimaryButton
-                  className="!px-8 space-x-2 w-[120px] h-[30px] flex items-center justify-center"
+                  className="!px-8 space-x-2 w-[120px] h-[40px] flex items-center justify-center"
                   onClick={qrCodeUpdatehandler}
                 >
                   {/* <MdQrCodeScanner /> */}
                   {updateLoading ? (
                     <Loader size="size-5" color="fill-primary" />
                   ) : (
-                    "Update QR"
+                    "Update"
                   )}
                 </PrimaryButton>
               </div>
@@ -555,7 +555,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                 />
 
                 <PrimaryButton
-                  className="!px-8 space-x-2 w-[120px] h-[30px] flex items-center justify-center"
+                  className="!px-8 space-x-2 w-[120px] h-[40px] flex items-center justify-center mt-4"
                   onClick={qrCodeCreatehandler}
                 >
                   {/* <FaRegSave /> */}
