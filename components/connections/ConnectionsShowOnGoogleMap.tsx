@@ -144,7 +144,8 @@ export default function ConnectionsShowOnGoogleMap({
               className={clsx(
                 "w-16 h-16 rounded-full p-1 flex items-center justify-center shadow-lg border-4 transition-all duration-300 transform",
                 {
-                  "border-blue-500 bg-blue-100 scale-110": isSelected, // Enlarged for selected
+                  "border-blue-500 bg-blue-100 scale-110 z-50 absolute":
+                    isSelected, // Enlarged for selected
                   "border-purple-500 bg-purple-100": isNearby && !isSelected,
                   "border-gray-300 bg-white": !isSelected && !isNearby,
                 }

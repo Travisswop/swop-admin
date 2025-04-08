@@ -205,6 +205,7 @@ const MicrositeSearchInputField = ({
                 width={120}
                 height={120}
               />
+              
               <div className="">
                 <h3 className="font-medium">{site?.name}</h3>
                 <p className="text-sm text-gray-600 italic">{site?.bio}</p>
