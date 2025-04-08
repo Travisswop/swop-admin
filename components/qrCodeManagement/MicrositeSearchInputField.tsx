@@ -12,6 +12,7 @@ interface Microsite {
   email: string | null;
   bio: string | null;
   profilePic: string | null;
+  profileUrl: string | null;
   parentId: {
     name: string | null;
     bio: string | null;
@@ -100,7 +101,7 @@ const MicrositeSearchInputField = ({
   const handleSelect = (site: Microsite) => {
     const name = site?.name || "";
     setMicrositeName(name);
-    setRedirectMicrosite(site?.profilePic || "");
+    setRedirectMicrosite(site?.profileUrl || "");
     setMicrositeId(site._id);
     setShowDropdown(false);
   };
@@ -205,7 +206,6 @@ const MicrositeSearchInputField = ({
                 width={120}
                 height={120}
               />
-              
               <div className="">
                 <h3 className="font-medium">{site?.name}</h3>
                 <p className="text-sm text-gray-600 italic">{site?.bio}</p>
