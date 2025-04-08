@@ -1,16 +1,20 @@
-
 "use client";
 
 import { getAllMicrosites } from "@/action/microsites";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Loader from "../ui/Loader";
+import isUrl from "../util/isUrl";
 
 interface Microsite {
   _id: string;
+  name: string | null;
+  email: string | null;
+  bio: string | null;
+  profilePic: string | null;
   parentId: {
     name: string | null;
     bio: string | null;
-    profileUrl: string | null;
   } | null;
 }
 
@@ -94,9 +98,9 @@ const MicrositeSearchInputField = ({
   }, []);
 
   const handleSelect = (site: Microsite) => {
-    const name = site?.parentId?.name || "";
+    const name = site?.name || "";
     setMicrositeName(name);
-    setRedirectMicrosite(site?.parentId?.profileUrl || "");
+    setRedirectMicrosite(site?.profilePic || "");
     setMicrositeId(site._id);
     setShowDropdown(false);
   };
@@ -136,15 +140,26 @@ const MicrositeSearchInputField = ({
         Redirect Microsite<span className="text-primary">*</span>
       </p>
       <div className="relative">
-        <input
-          ref={inputRef}
-          type="text"
-          value={searchValue || micrositeName}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Search microsites..."
-          className="w-full pl-4 pr-10 py-2 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary outline-none text-lg"
-        />
+        {micrositeName ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={micrositeName}
+            onKeyDown={handleKeyDown}
+            placeholder="Search microsites..."
+            className="w-full pl-4 pr-10 py-2 text-left rounded-lg border border-gray-300 focus:ring-primary focus:border-primary outline-none text-lg"
+          />
+        ) : (
+          <input
+            ref={inputRef}
+            type="text"
+            value={searchValue}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Search microsites..."
+            className="w-full pl-4 pr-10 py-2 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary outline-none text-lg"
+          />
+        )}
 
         {loading && (
           <div className="absolute right-10 top-3">
@@ -154,7 +169,10 @@ const MicrositeSearchInputField = ({
         {searchValue && (
           <button
             className="absolute right-3 top-3 text-gray-400"
-            onClick={() => setSearchValue("")}
+            onClick={() => {
+              setSearchValue("");
+              setMicrositeName("");
+            }}
           >
             ✕
           </button>
@@ -170,14 +188,27 @@ const MicrositeSearchInputField = ({
             <div
               key={site._id}
               onClick={() => handleSelect(site)}
-              className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${
+              className={`cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center space-x-4 border-b ${
                 highlightedIndex === index ? "bg-gray-100" : ""
               }`}
             >
-              <h3 className="font-medium">{site?.parentId?.name}</h3>
-              <p className="text-sm text-gray-600 italic">
-                {site?.parentId?.bio}
-              </p>
+              <Image
+                src={
+                  site.profilePic && isUrl(site.profilePic)
+                    ? site.profilePic
+                    : site.profilePic
+                    ? `/images/user_avator/${site.profilePic}@3x.png`
+                    : "/images/user_avator/default@3x.png" // fallback image
+                }
+                alt="user image"
+                className="w-9 h-9 rounded-full"
+                width={120}
+                height={120}
+              />
+              <div className="">
+                <h3 className="font-medium">{site?.name}</h3>
+                <p className="text-sm text-gray-600 italic">{site?.bio}</p>
+              </div>
             </div>
           ))}
           {!microsites.length && !loading && (
