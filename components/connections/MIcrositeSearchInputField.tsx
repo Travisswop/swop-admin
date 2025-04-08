@@ -1,11 +1,17 @@
 "use client";
 
 import { getAllMicrosites } from "@/action/microsites";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Loader from "../ui/Loader";
+import isUrl from "../util/isUrl";
 
 interface Microsite {
   _id: string;
+  name: string | null;
+  email: string | null;
+  bio: string | null;
+  profilePic: string | null;
   parentId: {
     name: string | null;
     bio: string | null;
@@ -22,6 +28,8 @@ const MicrositeSearchInputField = ({ token, childId, setChildId }: Props) => {
   const [searchValue, setSearchValue] = useState("");
   const [microsites, setMicrosites] = useState<Microsite[]>([]);
   const [miscrositeName, setMicrositeName] = useState("");
+  const [miscrositeBio, setMicrositeBio] = useState("");
+  const [miscrositeImage, setMicrositeImage] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
@@ -85,9 +93,11 @@ const MicrositeSearchInputField = ({ token, childId, setChildId }: Props) => {
   }, []);
 
   const handleSelect = (site: Microsite) => {
-    const name = site?.parentId?.name || "";
+    const name = site?.name || "";
     setMicrositeName(name); // Set the input value to the selected name
     setChildId(site._id);
+    setMicrositeImage(site?.profilePic || "");
+    setMicrositeBio(site?.bio || "");
     setShowDropdown(false);
   };
 
@@ -117,8 +127,13 @@ const MicrositeSearchInputField = ({ token, childId, setChildId }: Props) => {
 
   console.log("", childId);
 
+  console.log("check microsite", miscrositeBio, miscrositeImage);
+
   return (
     <div className="w-full max-w-lg relative">
+      <p className="text-base mb-2 mt-4">
+        Select Microsite<span className="text-primary">*</span>
+      </p>
       <div className="relative">
         {miscrositeName ? (
           <input
@@ -127,7 +142,7 @@ const MicrositeSearchInputField = ({ token, childId, setChildId }: Props) => {
             value={miscrositeName}
             onKeyDown={handleKeyDown}
             placeholder="Search microsites..."
-            className="w-full pl-4 pr-10 py-2 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary outline-none text-lg"
+            className="w-full pl-4 pr-10 py-2 text-left rounded-lg border border-gray-300 focus:ring-primary focus:border-primary outline-none text-lg"
           />
         ) : (
           <input
@@ -168,14 +183,27 @@ const MicrositeSearchInputField = ({ token, childId, setChildId }: Props) => {
             <div
               key={site._id}
               onClick={() => handleSelect(site)}
-              className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${
+              className={`cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center space-x-4 border-b ${
                 highlightedIndex === index ? "bg-gray-100" : ""
               }`}
             >
-              <h3 className="font-medium">{site?.parentId?.name}</h3>
-              <p className="text-sm text-gray-600 italic">
-                {site?.parentId?.bio}
-              </p>
+              <Image
+                src={
+                  site.profilePic && isUrl(site.profilePic)
+                    ? site.profilePic
+                    : site.profilePic
+                    ? `/images/user_avator/${site.profilePic}@3x.png`
+                    : "/images/user_avator/default@3x.png" // fallback image
+                }
+                alt="user image"
+                className="w-9 h-9 rounded-full"
+                width={120}
+                height={120}
+              />
+              <div className="">
+                <h3 className="font-medium">{site?.name}</h3>
+                <p className="text-sm text-gray-600 italic">{site?.bio}</p>
+              </div>
             </div>
           ))}
           {!microsites.length && !loading && (
