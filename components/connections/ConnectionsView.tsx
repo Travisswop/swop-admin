@@ -183,7 +183,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
               </button>
             </div>
 
-            <div className="border rounded-lg max-h-[320px]  overflow-y-auto">
+            <div className="border rounded-lg h-[320px]  overflow-y-auto">
               {connections?.filter(({ spotlight }) => spotlight).length ===
                 0 && (
                 <div className="flex items-center justify-center mt-36">
@@ -269,11 +269,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
               </div>
             )}
             {connections
-              ?.sort(
-                (a, b) =>
-                  (b.spotlight === true ? 1 : 0) -
-                  (a.spotlight === true ? 1 : 0)
-              )
+              ?.filter(({ spotlight }) => !spotlight)
               ?.map((el) => (
                 <div
                   className={`px-5 rounded-lg  hover:bg-gray-100 w-full 
