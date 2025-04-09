@@ -5,6 +5,7 @@ export type Connection = {
   lat: number;
   lng: number;
   address: string;
+  spotlight: boolean;
   rank: number;
   createdAt: string;
   updatedAt: string;

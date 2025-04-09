@@ -39,6 +39,8 @@ interface OrderDetailsProps {
 }
 
 const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
+  console.log("orderDetails", orderDetails);
+
   return (
     <div className="p-8 xl:p-10 text-black bg-white rounded-2xl">
       <div className="flex justify-between items-center mb-10">

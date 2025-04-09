@@ -8,7 +8,7 @@ const ConnectionsMap = async () => {
   const { data: connections } = await getDefaultConnection(token ? token : "");
 
   return (
-    <div>
+    <div className="overflow-y-hidden ">
       <ConnectionsView connections={connections} token={token ? token : ""} />
     </div>
   );

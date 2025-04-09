@@ -9,7 +9,7 @@ import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
 import { useCallback, useState } from "react";
-import { FaUserPlus } from "react-icons/fa";
+import { AiOutlineUserAdd } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import PrimaryButton from "../button/PrimaryButton";
@@ -32,6 +32,7 @@ const style = {
   p: 4,
   borderRadius: "16px",
 };
+
 interface ConnectionsViewProps {
   connections: Connection[];
   token: string;
@@ -55,6 +56,7 @@ interface AddDefaultConnectionResponse {
 const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
   const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
   const [childId, setChildId] = useState<string>("");
+  const [spotlight, setSpotlight] = useState<boolean>(false);
 
   const [address, setAddress] = useState<string>("");
   const [coordinates, setCoordinates] = useState<Coordinates>({
@@ -67,7 +69,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
 
   const [addConnectionFlag, setAddConnectionFlag] = useState(false);
 
-  const handleOpenAddConnectionFlag = () => setAddConnectionFlag(true);
+  // const handleOpenAddConnectionFlag = () => setAddConnectionFlag(true);
   const handleCloseAddConnectionFlag = () => setAddConnectionFlag(false);
 
   const handleSelectFriend = useCallback(
@@ -109,6 +111,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
         lat.toString(), // Send lat and lng as strings if needed by the API
         lng.toString(), // Send lat and lng as strings if needed by the API
         childId,
+        spotlight,
         token
       );
 
@@ -147,72 +150,156 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
   console.log("check data value 123", error, connections);
 
   return (
-    <div className="text-black bg-white py-5 px-8">
-      <div className="flex gap-4 w-full">
-        <div className="flex-1 flex flex-col gap-5">
+    <div className="text-[#424651] bg-white py-5 px-8 overflow-y-hidden">
+      <div className="flex space-x-10  w-full">
+        {/*Connection Map Top Part */}
+
+        <div className="flex-1">
           <div>
-            <h4 className="text-lg font-medium mb-4">Map</h4>
+            <h4 className="text-xl font-medium mb-5">Map</h4>
             <ConnectionsShowOnGoogleMap
               connections={connections}
               selectedFriend={selectedFriend}
             />
           </div>
+
+          {/*Spotlight  Bottom Part */}
+
+          <div className="mt-10">
+            <div className="flex items-center justify-between mb-6">
+              <h4 className="text-xl font-medium">Spotlight</h4>
+              <button
+                onClick={() => {
+                  setAddConnectionFlag(true);
+                  setSpotlight(true);
+                }}
+                className="border border-black hover:border-gray-500 hover:!text-white text-sm px-6 py-2 bg-white text-primary rounded-lg shadow-md hover:bg-black transition duration-200 flex items-center gap-1 w-max"
+              >
+                <AiOutlineUserAdd className="size-5" />
+                Add New
+              </button>
+            </div>
+
+            <div className="border rounded-lg overflow-hidden h-[310px]  overflow-y-auto">
+              {connections
+                ?.filter(({ spotlight }) => spotlight)
+                ?.map(({ _id, childId, address }) => {
+                  const { name, bio, profilePic } = childId || {};
+                  const imageSrc = isUrl(profilePic)
+                    ? profilePic
+                    : `/images/user_avator/${profilePic}@3x.png`;
+
+                  return (
+                    <button
+                      key={_id}
+                      onClick={() => handleSelectFriend(_id)}
+                      className="px-5 w-full text-left hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center justify-between py-6 border-b">
+                        <div className="flex items-center gap-2">
+                          <Image
+                            src={imageSrc}
+                            alt={`${name || "User"}'s avatar`}
+                            className="w-12 h-12 rounded-full object-cover"
+                            width={120}
+                            height={120}
+                          />
+                          <div>
+                            <p className="font-medium">
+                              {name || "Unnamed User"}
+                            </p>
+                            <p className="text-gray-400 text-xs">
+                              {bio || "No bio available"}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-gray-500 text-sm">
+                          {address || "No address"}
+                        </p>
+                        <button
+                          className="text-sm text-red-600 hover:underline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deletedConnection(_id);
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </button>
+                  );
+                })}
+            </div>
+          </div>
         </div>
+
+        {/* Default Connect Right Part */}
+
         <div className="flex-1">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="text-lg font-medium">Default Connections</h4>
+          <div className="flex items-center justify-between mb-6">
+            <h4 className="text-xl font-medium">Default Connections</h4>
             <button
-              onClick={handleOpenAddConnectionFlag}
-              className="border border-black hover:border-gray-500 hover:!text-white text-sm px-6 py-2 bg-black text-white rounded-lg shadow-md hover:bg-gray-600 transition duration-200 flex items-center gap-1 w-max"
+              onClick={() => {
+                setAddConnectionFlag(true);
+                setSpotlight(false);
+              }}
+              className="border border-black hover:border-gray-500 hover:!text-white text-sm px-6 py-2 bg-white text-primary rounded-lg shadow-md hover:bg-black transition duration-200 flex items-center gap-1 w-max"
             >
-              <FaUserPlus />
+              <AiOutlineUserAdd className="size-5" />
               Add New
             </button>
           </div>
-          <div className="h-[600px] overflow-auto">
-            {connections?.map((el) => (
-              <button
-                onClick={() => handleSelectFriend(el._id)}
-                className={`py-3 px-5 rounded-lg border hover:bg-gray-100 w-full 
+          <div className="h-[1000px]  border rounded-lg overflow-y-auto">
+            {connections
+              ?.sort(
+                (a, b) =>
+                  (b.spotlight === true ? 1 : 0) -
+                  (a.spotlight === true ? 1 : 0)
+              )
+              ?.map((el) => (
+                <button
+                  className={`px-5 rounded-lg  hover:bg-gray-100 w-full 
               }`}
-                key={el._id} // Use unique identifier directly
-              >
-                <div className="flex w-full items-center justify-between py-3 border-b">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src={
-                        isUrl(el.childId.profilePic)
-                          ? el.childId.profilePic
-                          : `/images/user_avator/${el.childId.profilePic}@3x.png`
-                      }
-                      alt="user image"
-                      className="w-9 h-9 rounded-full"
-                      width={120}
-                      height={120}
-                    />
-                    <div>
-                      <p className="font-medium text-left">
-                        {el?.childId?.name}
-                      </p>
-                      <p className="text-gray-400 text-xs text-left">
-                        {el?.childId?.bio}
-                      </p>
+                  key={el._id}
+                >
+                  <div className="flex w-full items-center justify-between py-6 border-b">
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={
+                          isUrl(el.childId.profilePic)
+                            ? el.childId.profilePic
+                            : `/images/user_avator/${el.childId.profilePic}@3x.png`
+                        }
+                        alt="user image"
+                        className={`w-12 h-12 rounded-full ${
+                          el?.spotlight ? "border-4 border-[#5E20FE]" : ""
+                        }`}
+                        width={120}
+                        height={120}
+                      />
+                      <div>
+                        <p className="font-medium text-left">
+                          {el?.childId?.name}
+                        </p>
+                        <p className="text-gray-400 text-xs text-left">
+                          {el?.childId?.bio}
+                        </p>
+                      </div>
                     </div>
+                    <p className="text-gray-500 text-sm">{el?.address}</p>
+                    <button
+                      style={{ color: "red" }}
+                      className="text-sm"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent triggering selection
+                        deletedConnection(el?._id);
+                      }}
+                    >
+                      Remove
+                    </button>
                   </div>
-                  <p className="text-gray-500 text-sm">{el?.address}</p>
-                  <button
-                    style={{ color: "red" }}
-                    className="text-sm"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent triggering selection
-                      deletedConnection(el?._id);
-                    }}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </button>
-            ))}
+                </button>
+              ))}
           </div>
         </div>
       </div>
@@ -268,12 +355,6 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                   "Add New Connection"
                 )}
               </PrimaryButton>
-              {/* <button
-                type="submit"
-                className="border border-black hover:border-gray-500  hover:!text-white text-base px-3 py-2 bg-black text-white rounded-lg shadow-md hover:bg-gray-600 transition duration-200 flex items-center gap-1 w-max"
-              >
-                {loading ? <p>Loading...</p> : <p> Add New Connection</p>}
-              </button> */}
             </form>
           </div>
         </Box>
@@ -283,74 +364,3 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
 };
 
 export default ConnectionsView;
-
-{
-  /* <div>
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="text-lg font-medium">Spotlight</h4>
-              <PrimaryButton className="flex items-center gap-1 bg-white border border-black hover:border-gray-500 !text-black hover:!text-white !py-1.5 text-sm">
-                <FaUserPlus />
-                Add New
-              </PrimaryButton>
-            </div>
-            <div className="py-3 px-5 rounded-lg border">
-              <div className="">
-                <div className="flex w-full items-center justify-between py-3 border-b">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src={randomImg}
-                      alt="user image"
-                      className="w-9 h-9 rounded-full"
-                    />
-                    <div>
-                      <p className="font-medium">Kamal Shekh</p>
-                      <p className="text-gray-400 text-xs">General Manager</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-500 text-sm">Uttara, Dhaka</p>
-                  <button style={{ color: "red" }} className="text-sm">
-                    Remove
-                  </button>
-                </div>
-              </div>
-              <div className="">
-                <div className="flex w-full items-center justify-between py-3 border-b">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src={salmanImg}
-                      alt="user image"
-                      className="w-9 h-9 rounded-full"
-                    />
-                    <div>
-                      <p className="font-medium">Salman H. Saikote</p>
-                      <p className="text-gray-400 text-xs">CTO Of Swop</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-500 text-sm">Aftabnagar, Dhaka</p>
-                  <button style={{ color: "red" }} className="text-sm">
-                    Remove
-                  </button>
-                </div>
-              </div>
-              <div className="">
-                <div className="flex w-full items-center justify-between py-3">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src={travisImg}
-                      alt="user image"
-                      className="w-9 h-9 rounded-full"
-                    />
-                    <div>
-                      <p className="font-medium">Travis Herron</p>
-                      <p className="text-gray-400 text-xs">CEO Of Swop</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-500 text-sm">Charlotte, NC</p>
-                  <button style={{ color: "red" }} className="text-sm">
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div> */
-}

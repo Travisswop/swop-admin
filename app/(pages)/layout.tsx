@@ -37,7 +37,7 @@ export default function RootLayout({
         className={roboto.className}
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main>
+        <main className="">
           <Sidebar />
           <Topbar />
           <section

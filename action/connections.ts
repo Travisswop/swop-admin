@@ -103,6 +103,7 @@ export async function addDefaultConnection(
   lat: string,
   lng: string,
   childId: string,
+  spotlight: boolean,
   token: string
 ) {
   try {
@@ -119,6 +120,7 @@ export async function addDefaultConnection(
           lat,
           lng,
           childId,
+          spotlight,
         }),
       }
     );
