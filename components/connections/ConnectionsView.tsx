@@ -153,11 +153,11 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
   console.log("check data value 123", error);
 
   return (
-    <div className="text-[#424651] bg-white py-5 px-8 overflow-y-hidden">
-      <div className="flex space-x-10  w-full">
+    <div className="text-[#424651] bg-white py-5 px-8">
+      <div className="grid grid-cols-2 gap-10">
         {/*Connection Map Top Part */}
 
-        <div className="flex-1">
+        <div className="">
           <div>
             <h4 className="text-xl font-medium mb-5">Map</h4>
             <ConnectionsShowOnGoogleMap
@@ -183,7 +183,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
               </button>
             </div>
 
-            <div className="border rounded-lg overflow-hidden h-[310px]  overflow-y-auto">
+            <div className="border rounded-lg max-h-[320px]  overflow-y-auto">
               {connections?.filter(({ spotlight }) => spotlight).length ===
                 0 && (
                 <div className="flex items-center justify-center mt-36">
@@ -226,7 +226,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                           {address || "No address"}
                         </p>
                         <button
-                          className="text-sm text-red-600 hover:underline"
+                          className="text-sm text-red-600 hover:underline w-16 flex items-center justify-center"
                           onClick={(e) => {
                             e.stopPropagation();
                             deletedConnection(_id);
@@ -248,7 +248,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
 
         {/* Default Connect Right Part */}
 
-        <div className="flex-1">
+        <div className="">
           <div className="flex items-center justify-between mb-6">
             <h4 className="text-xl font-medium">Default Connections</h4>
             <button
@@ -262,7 +262,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
               Add New
             </button>
           </div>
-          <div className="h-[1000px]  border rounded-lg overflow-y-auto">
+          <div className=" border rounded-lg max-h-[1000px]  overflow-y-auto">
             {connections.length === 0 && (
               <div className="flex items-center justify-center mt-44">
                 <p className="text-gray-500">No connections found.</p>
@@ -275,7 +275,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                   (a.spotlight === true ? 1 : 0)
               )
               ?.map((el) => (
-                <button
+                <div
                   className={`px-5 rounded-lg  hover:bg-gray-100 w-full 
               }`}
                   key={el._id}
@@ -319,7 +319,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                       )}
                     </button>
                   </div>
-                </button>
+                </div>
               ))}
           </div>
         </div>
