@@ -125,7 +125,9 @@ export default function ConnectionsShowOnGoogleMap({
 
         {/* Markers for spotlight users */}
         {connections
-          ?.filter(({ spotlight }) => spotlight)
+          ?.filter(({ connectionType }) =>
+            connectionType?.includes("spotlight")
+          )
           ?.map((connection) => {
             const isSelected = selectedFriend?._id === connection._id;
             const isNearby =

@@ -58,7 +58,7 @@ interface AddDefaultConnectionResponse {
 const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
   const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
   const [childId, setChildId] = useState<string>("");
-  const [spotlight, setSpotlight] = useState<boolean>(false);
+  const [connectionType, setConnectionType] = useState<string[]>([]);
 
   const [address, setAddress] = useState<string>("");
   const [coordinates, setCoordinates] = useState<Coordinates>({
@@ -108,7 +108,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
         lat.toString(),
         lng.toString(),
         childId,
-        spotlight,
+        connectionType,
         token
       );
 
@@ -130,11 +130,33 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
+  // const deletedConnection = async (id: string, connectionType: string) => {
+  //   try {
+  //     setDeletingId(id);
+  //     const response = await deleteDefaultConnection(id, connectionType, token);
+
+  //     if (response.success) {
+  //       toast.success("Connection deleted successfully");
+  //     } else {
+  //       toast.error("Failed to delete connection");
+  //     }
+  //   } catch (error) {
+  //     console.error("Unexpected error:", error);
+  //     toast.error("Something went wrong");
+  //   } finally {
+  //     setDeletingId(null);
+  //   }
+  // };
+
   const deletedConnection = useCallback(
-    async (id: string) => {
+    async (id: string, connectionType: string) => {
       try {
         setDeletingId(id);
-        const response = await deleteDefaultConnection(id, token);
+        const response = await deleteDefaultConnection(
+          id,
+          connectionType,
+          token
+        );
         if (response.success) {
           toast.success("Connection deleted successfully");
         } else {
@@ -150,7 +172,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
     [token]
   );
 
-  console.log("check data value 123", error);
+  console.log("check data value 123", error, connections);
 
   return (
     <div className="text-[#424651] bg-white py-5 px-8">
@@ -174,7 +196,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
               <button
                 onClick={() => {
                   setAddConnectionFlag(true);
-                  setSpotlight(true);
+                  setConnectionType(["spotlight"]);
                 }}
                 className="border border-black hover:border-gray-500 hover:!text-white text-sm px-6 py-2 bg-white text-primary rounded-lg shadow-md hover:bg-black transition duration-200 flex items-center gap-1 w-max"
               >
@@ -184,14 +206,17 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
             </div>
 
             <div className="border rounded-lg h-[320px]  overflow-y-auto">
-              {connections?.filter(({ spotlight }) => spotlight).length ===
-                0 && (
+              {connections?.filter(({ connectionType }) =>
+                connectionType?.includes("spotlight")
+              ).length === 0 && (
                 <div className="flex items-center justify-center mt-36">
                   <p className="text-gray-500">No spotlight found.</p>
                 </div>
               )}
               {connections
-                ?.filter(({ spotlight }) => spotlight)
+                ?.filter(({ connectionType }) =>
+                  connectionType?.includes("spotlight")
+                )
                 ?.map(({ _id, childId, address }) => {
                   const { name, bio, profilePic } = childId || {};
                   const imageSrc = isUrl(profilePic)
@@ -229,7 +254,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                           className="text-sm text-red-600 hover:underline w-16 flex items-center justify-center"
                           onClick={(e) => {
                             e.stopPropagation();
-                            deletedConnection(_id);
+                            deletedConnection(_id, "spotlight");
                           }}
                         >
                           {deletingId === _id ? (
@@ -254,7 +279,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
             <button
               onClick={() => {
                 setAddConnectionFlag(true);
-                setSpotlight(false);
+                setConnectionType(["default"]);
               }}
               className="border border-black hover:border-gray-500 hover:!text-white text-sm px-6 py-2 bg-white text-primary rounded-lg shadow-md hover:bg-black transition duration-200 flex items-center gap-1 w-max"
             >
@@ -262,14 +287,18 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
               Add New
             </button>
           </div>
-          <div className=" border rounded-lg max-h-[1000px]  overflow-y-auto">
-            {connections.length === 0 && (
+          <div className=" border rounded-lg h-[1000px]  overflow-y-auto">
+            {connections?.filter(({ connectionType }) =>
+              connectionType?.includes("default")
+            )?.length === 0 && (
               <div className="flex items-center justify-center mt-44">
                 <p className="text-gray-500">No connections found.</p>
               </div>
             )}
             {connections
-              ?.filter(({ spotlight }) => !spotlight)
+              ?.filter(({ connectionType }) =>
+                connectionType?.includes("default")
+              )
               ?.map((el) => (
                 <div
                   className={`px-5 rounded-lg  hover:bg-gray-100 w-full 
@@ -285,9 +314,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                             : `/images/user_avator/${el.childId.profilePic}@3x.png`
                         }
                         alt="user image"
-                        className={`w-12 h-12 rounded-full ${
-                          el?.spotlight ? "border-4 border-[#5E20FE]" : ""
-                        }`}
+                        className={`w-12 h-12 rounded-full object-cover`}
                         width={120}
                         height={120}
                       />
@@ -305,7 +332,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                       className="text-sm text-red-500 w-16 flex items-center justify-center"
                       onClick={(e) => {
                         e.stopPropagation();
-                        deletedConnection(el?._id);
+                        deletedConnection(el?._id, "default");
                       }}
                     >
                       {deletingId === el?._id ? (

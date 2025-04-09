@@ -56,7 +56,11 @@ export async function getDefaultConnection(token: string) {
   }
 }
 
-export async function deleteDefaultConnection(id: string, token: string) {
+export async function deleteDefaultConnection(
+  id: string,
+  connectionType: string,
+  token: string
+) {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/connections/${id}`,
@@ -66,6 +70,9 @@ export async function deleteDefaultConnection(id: string, token: string) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify({
+          connectionType,
+        }),
         next: {
           tags: ["clientDataCreate", "clientDataDelete"],
         },
@@ -103,7 +110,7 @@ export async function addDefaultConnection(
   lat: string,
   lng: string,
   childId: string,
-  spotlight: boolean,
+  connectionType: string[],
   token: string
 ) {
   try {
@@ -120,7 +127,7 @@ export async function addDefaultConnection(
           lat,
           lng,
           childId,
-          spotlight,
+          connectionType,
         }),
       }
     );
