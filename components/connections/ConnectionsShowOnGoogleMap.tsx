@@ -83,6 +83,7 @@ export default function ConnectionsShowOnGoogleMap({
           width: "100%",
           height: "600px",
           overflow: "hidden",
+          borderRadius: "10px",
         }}
         center={
           selectedConnection

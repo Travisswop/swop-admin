@@ -4,6 +4,7 @@ import {
   addDefaultConnection,
   deleteDefaultConnection,
 } from "@/action/connections";
+
 import { Connection } from "@/types/connections";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
@@ -15,6 +16,7 @@ import { toast } from "react-toastify";
 import PrimaryButton from "../button/PrimaryButton";
 import Loader from "../ui/Loader";
 import isUrl from "../util/isUrl";
+
 import AddressAddInputField from "./AddressAddInputField";
 import ConnectionsShowOnGoogleMap from "./ConnectionsShowOnGoogleMap";
 import MicrositeSearchInputField from "./MIcrositeSearchInputField";
@@ -69,28 +71,24 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
 
   const [addConnectionFlag, setAddConnectionFlag] = useState(false);
 
-  // const handleOpenAddConnectionFlag = () => setAddConnectionFlag(true);
   const handleCloseAddConnectionFlag = () => setAddConnectionFlag(false);
 
   const handleSelectFriend = useCallback(
     (id: string) => {
       setSelectedFriend((prev) => {
-        // Check if the selected friend exists in the connections array
         const selectedConnection = connections.find(
           (friend) => friend._id === id
         );
 
-        // If a friend is selected and it's the same as the previous selection, set it to null
         if (prev?._id === id) {
           return null;
         }
 
-        // If a valid friend is found, set the friend object
         if (selectedConnection) {
           return selectedConnection;
         }
 
-        return null; // Return null if no friend found
+        return null;
       });
     },
     [connections]
@@ -101,15 +99,14 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
     setLoading(true);
     setError("");
 
-    const lat = coordinates.lat ?? 0; // Ensure `lat` is a number or 0
-    const lng = coordinates.lng ?? 0; // Ensure `lng` is a number or 0
+    const lat = coordinates.lat ?? 0;
+    const lng = coordinates.lng ?? 0;
 
     try {
-      // Ensure that address, coordinates, and childId are correctly typed
       const response: AddDefaultConnectionResponse = await addDefaultConnection(
         address,
-        lat.toString(), // Send lat and lng as strings if needed by the API
-        lng.toString(), // Send lat and lng as strings if needed by the API
+        lat.toString(),
+        lng.toString(),
         childId,
         spotlight,
         token
@@ -131,23 +128,29 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
     }
   };
 
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
   const deletedConnection = useCallback(
     async (id: string) => {
       try {
+        setDeletingId(id);
         const response = await deleteDefaultConnection(id, token);
         if (response.success) {
           toast.success("Connection deleted successfully");
         } else {
-          toast.error("");
+          toast.error("Failed to delete connection");
         }
       } catch (error) {
         console.error("Unexpected error:", error);
+        toast.error("Something went wrong");
+      } finally {
+        setDeletingId(null);
       }
     },
     [token]
   );
 
-  console.log("check data value 123", error, connections);
+  console.log("check data value 123", error);
 
   return (
     <div className="text-[#424651] bg-white py-5 px-8 overflow-y-hidden">
@@ -181,6 +184,12 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
             </div>
 
             <div className="border rounded-lg overflow-hidden h-[310px]  overflow-y-auto">
+              {connections?.filter(({ spotlight }) => spotlight).length ===
+                0 && (
+                <div className="flex items-center justify-center mt-36">
+                  <p className="text-gray-500">No spotlight found.</p>
+                </div>
+              )}
               {connections
                 ?.filter(({ spotlight }) => spotlight)
                 ?.map(({ _id, childId, address }) => {
@@ -223,7 +232,11 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                             deletedConnection(_id);
                           }}
                         >
-                          Remove
+                          {deletingId === _id ? (
+                            <Loader size={"size-6"} color={"fill-primary"} />
+                          ) : (
+                            "Remove"
+                          )}
                         </button>
                       </div>
                     </button>
@@ -250,6 +263,11 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
             </button>
           </div>
           <div className="h-[1000px]  border rounded-lg overflow-y-auto">
+            {connections.length === 0 && (
+              <div className="flex items-center justify-center mt-44">
+                <p className="text-gray-500">No connections found.</p>
+              </div>
+            )}
             {connections
               ?.sort(
                 (a, b) =>
@@ -288,14 +306,17 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                     </div>
                     <p className="text-gray-500 text-sm">{el?.address}</p>
                     <button
-                      style={{ color: "red" }}
-                      className="text-sm"
+                      className="text-sm text-red-500 w-16 flex items-center justify-center"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering selection
+                        e.stopPropagation();
                         deletedConnection(el?._id);
                       }}
                     >
-                      Remove
+                      {deletingId === el?._id ? (
+                        <Loader size={"size-6"} color={"fill-primary"} />
+                      ) : (
+                        "Remove"
+                      )}
                     </button>
                   </div>
                 </button>
@@ -303,6 +324,8 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
           </div>
         </div>
       </div>
+
+      {/* Add Connection Modal */}
 
       <Modal
         open={addConnectionFlag}
@@ -348,7 +371,6 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                 className="!px-8 space-x-2 w-[120px] h-[40px] flex items-center justify-center mt-4"
                 type="submit"
               >
-                {/* <FaRegSave /> */}
                 {loading ? (
                   <Loader size="size-5" color="fill-primary" />
                 ) : (
