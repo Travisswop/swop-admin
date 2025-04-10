@@ -3,13 +3,13 @@
 import {
   addDefaultConnection,
   deleteDefaultConnection,
+  getDefaultConnection,
 } from "@/action/connections";
 
-import { Connection } from "@/types/connections";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
@@ -17,9 +17,10 @@ import PrimaryButton from "../button/PrimaryButton";
 import Loader from "../ui/Loader";
 import isUrl from "../util/isUrl";
 
+import { Connection } from "@/types/connections";
 import AddressAddInputField from "./AddressAddInputField";
 import ConnectionsShowOnGoogleMap from "./ConnectionsShowOnGoogleMap";
-import MicrositeSearchInputField from "./MIcrositeSearchInputField";
+import MIcrositeSearchInputField from "./MIcrositeSearchInputField";
 
 const style = {
   position: "absolute",
@@ -36,7 +37,6 @@ const style = {
 };
 
 interface ConnectionsViewProps {
-  connections: Connection[];
   token: string;
 }
 
@@ -47,15 +47,16 @@ interface Friend {
 }
 
 interface Coordinates {
-  lat: number | null;
-  lng: number | null;
+  lat: number | string | null;
+  lng: number | string | null;
 }
 
 interface AddDefaultConnectionResponse {
   success: boolean;
 }
 
-const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
+const ConnectionsView = ({ token }: ConnectionsViewProps) => {
+  const [connections, setConnections] = useState<Connection[]>([]);
   const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
   const [childId, setChildId] = useState<string>("");
   const [connectionType, setConnectionType] = useState<string[]>([]);
@@ -67,11 +68,39 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [connectionLoading, setConnectionLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const [deletingDefaultId, setDeletingDefaultId] = useState<string | null>(
+    null
+  );
+
+  const [deletingSpotlightId, setDeletingSpotlightId] = useState<string | null>(
+    null
+  );
 
   const [addConnectionFlag, setAddConnectionFlag] = useState(false);
 
   const handleCloseAddConnectionFlag = () => setAddConnectionFlag(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setConnectionLoading(true);
+      setError("");
+      try {
+        const response = await getDefaultConnection(token);
+        setConnections(response?.data);
+      } catch (err) {
+        console.log("Error fetching connections:", err);
+        setError("Failed to fetch data");
+      } finally {
+        setConnectionLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchData();
+    }
+  }, [token]);
 
   const handleSelectFriend = useCallback(
     (id: string) => {
@@ -113,9 +142,11 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
       );
 
       if (response.success) {
-        toast.success("Connection added successfully");
         console.log("Connection added successfully");
+        const response = await getDefaultConnection(token);
+        setConnections(response?.data);
         setAddConnectionFlag(false);
+        toast.success("Connection added successfully");
       } else {
         toast.error("Failed to add connection");
       }
@@ -128,36 +159,26 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
     }
   };
 
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  // const deletedConnection = async (id: string, connectionType: string) => {
-  //   try {
-  //     setDeletingId(id);
-  //     const response = await deleteDefaultConnection(id, connectionType, token);
-
-  //     if (response.success) {
-  //       toast.success("Connection deleted successfully");
-  //     } else {
-  //       toast.error("Failed to delete connection");
-  //     }
-  //   } catch (error) {
-  //     console.error("Unexpected error:", error);
-  //     toast.error("Something went wrong");
-  //   } finally {
-  //     setDeletingId(null);
-  //   }
-  // };
-
   const deletedConnection = useCallback(
     async (id: string, connectionType: string) => {
       try {
-        setDeletingId(id);
+        if (connectionType === "spotlight") {
+          setDeletingSpotlightId(id);
+        }
+
+        if (connectionType === "default") {
+          setDeletingDefaultId(id);
+        }
+
         const response = await deleteDefaultConnection(
           id,
           connectionType,
           token
         );
+
         if (response.success) {
+          const response = await getDefaultConnection(token);
+          setConnections(response?.data);
           toast.success("Connection deleted successfully");
         } else {
           toast.error("Failed to delete connection");
@@ -166,16 +187,17 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
         console.error("Unexpected error:", error);
         toast.error("Something went wrong");
       } finally {
-        setDeletingId(null);
+        setDeletingDefaultId(null);
+        setDeletingSpotlightId(null);
       }
     },
     [token]
   );
 
-  console.log("check data value 123", error, connections);
+  console.log("check data value 123", error);
 
   return (
-    <div className="text-[#424651] bg-white py-5 px-8">
+    <div className="text-[#424651] bg-white py-5 px-8  overflow-y-hidden">
       <div className="grid grid-cols-2 gap-10">
         {/*Connection Map Top Part */}
 
@@ -205,14 +227,23 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
               </button>
             </div>
 
-            <div className="border rounded-lg h-[320px]  overflow-y-auto">
-              {connections?.filter(({ connectionType }) =>
-                connectionType?.includes("spotlight")
-              ).length === 0 && (
-                <div className="flex items-center justify-center mt-36">
-                  <p className="text-gray-500">No spotlight found.</p>
+            <div className="border rounded-lg h-[310px]  overflow-y-auto">
+              {connectionLoading ? (
+                <div className="flex items-center justify-center mt-32">
+                  <Loader size={"size-8"} color={"fill-primary"} />
+                </div>
+              ) : (
+                <div className="">
+                  {connections?.filter(({ connectionType }) =>
+                    connectionType?.includes("spotlight")
+                  ).length === 0 && (
+                    <div className="flex items-center justify-center mt-36">
+                      <p className="text-gray-500">No spotlight found.</p>
+                    </div>
+                  )}
                 </div>
               )}
+
               {connections
                 ?.filter(({ connectionType }) =>
                   connectionType?.includes("spotlight")
@@ -257,7 +288,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                             deletedConnection(_id, "spotlight");
                           }}
                         >
-                          {deletingId === _id ? (
+                          {deletingSpotlightId === _id ? (
                             <Loader size={"size-6"} color={"fill-primary"} />
                           ) : (
                             "Remove"
@@ -288,13 +319,22 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
             </button>
           </div>
           <div className=" border rounded-lg h-[1000px]  overflow-y-auto">
-            {connections?.filter(({ connectionType }) =>
-              connectionType?.includes("default")
-            )?.length === 0 && (
+            {connectionLoading ? (
               <div className="flex items-center justify-center mt-44">
-                <p className="text-gray-500">No connections found.</p>
+                <Loader size={"size-8"} color={"fill-primary"} />
+              </div>
+            ) : (
+              <div className="">
+                {connections?.filter(({ connectionType }) =>
+                  connectionType?.includes("default")
+                )?.length === 0 && (
+                  <div className="flex items-center justify-center mt-44">
+                    <p className="text-gray-500">No connections found.</p>
+                  </div>
+                )}
               </div>
             )}
+
             {connections
               ?.filter(({ connectionType }) =>
                 connectionType?.includes("default")
@@ -335,7 +375,7 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
                         deletedConnection(el?._id, "default");
                       }}
                     >
-                      {deletingId === el?._id ? (
+                      {deletingDefaultId === el?._id ? (
                         <Loader size={"size-6"} color={"fill-primary"} />
                       ) : (
                         "Remove"
@@ -369,11 +409,20 @@ const ConnectionsView = ({ connections, token }: ConnectionsViewProps) => {
           <div className="text-black bg-white py-5 px-8">
             <h4 className="text-lg font-medium">Default Connections Add</h4>
 
-            <MicrositeSearchInputField
-              token={token}
-              setChildId={setChildId}
-              childId={childId}
-            />
+            <div className="my-4">
+              <label
+                htmlFor="name-icon"
+                className="block mb-2 text-lg font-normal text-gray-900"
+              >
+                Microsite<span className="text-base">*</span>
+              </label>
+
+              <MIcrositeSearchInputField
+                token={token}
+                setChildId={setChildId}
+                childId={childId}
+              />
+            </div>
 
             <div className="my-4">
               <label

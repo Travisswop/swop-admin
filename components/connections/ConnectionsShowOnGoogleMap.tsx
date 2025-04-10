@@ -28,7 +28,8 @@ export default function ConnectionsShowOnGoogleMap({
   selectedFriend,
 }: ConnectionsShowOnGoogleMapProps) {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDaERPmsWGDCk2MrKXsqkMfPkSu614Simk",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY || "",
+    libraries: ["places", "geometry"],
   });
 
   const mapRef = useRef<google.maps.Map | null>(null);

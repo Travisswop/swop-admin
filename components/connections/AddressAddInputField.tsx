@@ -27,15 +27,22 @@ interface PlaceValue {
   };
 }
 
+const isGoogleMapsScriptLoaded = () =>
+  typeof window !== "undefined" &&
+  typeof window.google === "object" &&
+  typeof window.google.maps === "object";
+
 const AddressAddInputField: React.FC<AddressAddInputFieldProps> = ({
   setAddress,
   setCoordinates,
 }) => {
   const [value, setValue] = useState<PlaceValue | null>(null);
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(
+    isGoogleMapsScriptLoaded()
+  );
 
   useEffect(() => {
-    if (value?.value?.place_id && window.google && isScriptLoaded) {
+    if (value?.value?.place_id && isGoogleMapsScriptLoaded()) {
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ placeId: value.value.place_id }, (results, status) => {
         if (status === "OK" && results && results.length > 0) {
@@ -56,17 +63,22 @@ const AddressAddInputField: React.FC<AddressAddInputFieldProps> = ({
         }
       });
     }
-  }, [value, setAddress, setCoordinates, isScriptLoaded]);
+  }, [value, setAddress, setCoordinates]);
 
   return (
     <>
-      {/* Load Google Maps Places script manually */}
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
-        strategy="afterInteractive"
-        onLoad={() => setIsScriptLoaded(true)}
-        onError={() => console.error("Google Maps script failed to load")}
-      />
+      {/* Load Google Maps script manually */}
+      {!isGoogleMapsScriptLoaded() && (
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
+          strategy="afterInteractive"
+          onLoad={() => setIsScriptLoaded(true)}
+          onError={() => {
+            console.error("Google Maps script failed to load");
+            setIsScriptLoaded(false);
+          }}
+        />
+      )}
 
       <div className="max-w-lg">
         {isScriptLoaded ? (
