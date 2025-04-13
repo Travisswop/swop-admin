@@ -54,6 +54,10 @@ export async function createDynamicQrCode(
   micrositeName: string,
   token: string
 ) {
+  console.log("Creating dynamic QR code with data:",
+    redirectMicrosite,
+  );
+  
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/dynamicQRCode`,

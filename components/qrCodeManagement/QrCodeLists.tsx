@@ -137,6 +137,9 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
     setCreateLoading(true);
     setError("");
 
+    console.log("micrositeId", redirectMicrosite);
+    
+
     try {
       const response = await createDynamicQrCode(
         micrositeId,
@@ -259,6 +262,10 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
     };
 
     const pageNumbers = generatePageNumbers();
+
+
+    console.log("pageNumbers", redirectMicrosite);
+    
 
     return (
       pageNumbers.length > 0 && (
@@ -546,13 +553,21 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     onChange={(e) => setQrcodeUrl(e.target.value)}
                   />
                 </div>
-                <MicrositeSearchInputField
-                  setMicrositeId={setMicrositeId}
-                  setRedirectMicrosite={setRedirectMicrosite}
-                  setMicrositeName={setMicrositeName}
-                  micrositeName={micrositeName}
-                  token={token}
-                />
+
+                <div className="">
+                  <p className="text-sm mb-2">
+                    Redirect Microsite
+                  </p>
+
+                  <MicrositeSearchInputField
+                    setMicrositeId={setMicrositeId}
+                    setRedirectMicrosite={setRedirectMicrosite}
+                    setMicrositeName={setMicrositeName}
+                    micrositeName={micrositeName}
+                    token={token}
+                  />
+                </div>
+                
 
                 <PrimaryButton
                   className="!px-8 space-x-2 w-[120px] h-[40px] flex items-center justify-center mt-4"
