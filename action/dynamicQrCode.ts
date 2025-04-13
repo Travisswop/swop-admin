@@ -2,6 +2,11 @@
 
 import { revalidateTag } from "next/cache";
 
+type DeleteQRCodeResponse = {
+  success: boolean;
+  message: string;
+};
+
 export async function getDynamicQrCode(
   token: string,
   currentPage: number,
@@ -142,5 +147,52 @@ export async function updateDynamicQrCode(
       console.error("An unknown error occurred:", error);
     }
     return { success: false, message: "Failed to update dynamic QR code." };
+  }
+}
+
+
+
+
+export async function deleteDynamicQRCode(
+  id: string,
+  token: string
+): Promise<DeleteQRCodeResponse> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/dynamicQRCode/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        next: {
+          tags: ["deleteDynamicQRCode"],
+        },
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || `API Error: ${response.status}`);
+    }
+
+    return {
+      success: result.success,
+      message: result.message,
+    };
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "An unexpected error occurred.";
+
+    console.error("Error deleting dynamic QR code:", message);
+
+    return {
+      success: false,
+      message,
+    };
   }
 }

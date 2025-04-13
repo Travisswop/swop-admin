@@ -2,7 +2,7 @@
 import {
   createDynamicQrCode,
   getDynamicQrCode,
-  updateDynamicQrCode,
+  updateDynamicQrCode
 } from "@/action/dynamicQrCode";
 import { QRCodeData } from "@/types/qrcodedata";
 import Box from "@mui/material/Box";
@@ -243,6 +243,39 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
     [currentPage]
   );
 
+  // Dynamic qr code delete
+
+  // const [qrCodeDeleteLoading, setQrCodeDeleteLoading] = useState(false);
+
+
+  // const qrCodeDeleteHandler = async (id: string) => {
+
+
+  //     setQrCodeDeleteLoading(true);
+  
+  //     try {
+  //       const response = await deleteDynamicQRCode(id, token);
+  
+  //       if (response.success) {
+  //         toast.success("QR Code deleted successfully.");
+  //         // Optionally, trigger a UI refresh or refetch here
+  //       } else {
+  //         const errorMessage =
+  //           response.message || "An unexpected error occurred during QR Code deletion.";
+  //         setError(errorMessage);
+  //         toast.error(errorMessage);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error deleting QR Code:", err);
+  //       setError("Something went wrong. Please try again.");
+  //       toast.error("Failed to delete QR Code.");
+  //     } finally {
+  //       setQrCodeDeleteLoading(false);
+  //     }
+    
+  // };
+  
+
   const renderPagination = useMemo(() => {
     const generatePageNumbers = () => {
       const pageNumbers: number[] = [];
@@ -262,10 +295,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
     };
 
     const pageNumbers = generatePageNumbers();
-
-
-    console.log("pageNumbers", redirectMicrosite);
-    
 
     return (
       pageNumbers.length > 0 && (
@@ -331,6 +360,11 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       )
     );
   }, [pagination, currentPage, handlePaginationClick]);
+
+
+  
+
+  console.log("pageNumbers", redirectMicrosite);
 
   return (
     <div className="w-full overflow-x-auto">
@@ -436,8 +470,17 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     >
                       <TbEdit size={17} />
                     </button>
+                    {/* <button
+                      onClick={() => {
+                        qrCodeDeleteHandler(item?._id);
+                      }}
+                      className="bg-[#EAEAEA] text-[#989898] w-12 h-8 rounded-lg flex items-center justify-center"
+                    >
+                   <RiDeleteBin6Line size={17} />
+                    </button> */}
                   </div>
                 </td>
+                
               </tr>
             ))
           ) : (
@@ -475,7 +518,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
             <p className="mb-3 font-semibold text-lg">Tv Commercial QR</p>
             <div className="flex gap-8 w-full items-center">
               <div className="flex flex-1 flex-col gap-3">
-                <div className="max-w-md">
+                <div className="max-w-lg">
                   <div>
                     <p className="text-sm  mb-2">QR Code Link</p>
                     <input
@@ -488,6 +531,10 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                   </div>
                 </div>
                 <div className="pb-4">
+                  <p className="text-sm mb-2">
+                    Redirect Microsite
+                  </p>
+
                   <MicrositeSearchInputField
                     setMicrositeId={setMicrositeId}
                     setRedirectMicrosite={setRedirectMicrosite}

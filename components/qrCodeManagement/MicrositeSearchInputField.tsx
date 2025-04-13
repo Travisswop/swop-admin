@@ -16,6 +16,7 @@ interface Microsite {
   email: string | null;
   bio: string | null;
   profilePic: string | null;
+  profileUrl: string | null;
   parentId: {
     name: string | null;
     bio: string | null;
@@ -35,7 +36,7 @@ const MIcrositeSearchInputField = ({ token,
   setMicrositeId,
   setMicrositeName,
   micrositeName,}: Props) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [microsites, setMicrosites] = useState<Microsite[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedMicrosite, setSelectedMicrosite] = useState<Microsite | null>(
@@ -77,11 +78,9 @@ const MIcrositeSearchInputField = ({ token,
   };
 
 
-  console.log("micrositeName", micrositeName);
-
-
   return (
     <Autocomplete
+
       sx={{ width: "100%", maxWidth: 510 }}
       size="medium"
       getOptionLabel={(option) => option.name || "Unnamed"}
@@ -130,7 +129,8 @@ const MIcrositeSearchInputField = ({ token,
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder="Search microsite..."
+          placeholder={micrositeName || "Search for a microsite"}
+
           sx={{
             "& .MuiOutlinedInput-root": {
               paddingY: "2px",
