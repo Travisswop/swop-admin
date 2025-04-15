@@ -379,7 +379,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
           <div className="w-60 2xl:w-72 relative">
             <input
               type="text"
-              className="px-3 py-1.5 border border-slate-200 rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
+              className="px-3 py-2 border border-slate-200 rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

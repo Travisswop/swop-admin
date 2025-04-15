@@ -2,25 +2,25 @@
 
 export async function getOrderLists(
   token: string,
-  page: number = 1,
-  limit: number = 10,
+  currentPage: number,
+  limit: number,
   search: string = "",
-  startDate: string = "",
-  endDate: string = "",
-  sort: string = "createdAt:desc"
+  sort: string
 ) {
   try {
-    const queryParams = new URLSearchParams({
-      page: page.toString(),
+    console.log("Fetching order lists with params:", sort);
+
+    const params = new URLSearchParams({
+      currentPage: currentPage.toString(),
       limit: limit.toString(),
       ...(search && { search }),
-      ...(startDate && { startDate }),
-      ...(endDate && { endDate }),
       ...(sort && { sort }),
     });
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/orders?${queryParams}`,
+      `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/api/v1/admin/orders?${params.toString()}`,
       {
         method: "GET",
         headers: {

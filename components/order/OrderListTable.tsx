@@ -2,111 +2,196 @@
 import { getOrderLists } from "@/action/ordersList";
 import { Order } from "@/types/orders";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { BsThreeDots } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
+import { FaArrowUpLong } from "react-icons/fa6";
+import Loader from "../ui/Loader";
 import { idShorter } from "../util/idShorter";
 import ExportButton from "./ExportButton";
 
-interface IPagination {
-  totalPages: number;
-  currentPage: number;
-  previousPage: number;
+interface Pagination {
+  totalPages: number | null;
+  previousPage: number | null;
+  currentPage: number | null;
+  nextPage: number | null;
 }
 
 const OrderListTable = ({ token }: { token: string }) => {
   const [ordersList, setOrderList] = useState<Order[]>([]);
-  console.log("ordersList", ordersList);
+  const [sort, setSort] = useState("orderDate:desc");
 
-  const [queryParams, setQueryParams] = useState({
-    page: 1,
-    limit: 10,
-    search: "",
-    startDate: "",
-    endDate: "",
-    sort: "createdAt:desc",
-  });
+  const [orderDataLoading, setOrderDataLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
 
-  const [pagination, setPagination] = useState<IPagination>();
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit] = useState(8);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
 
   // Fetch Orders Data
+
   useEffect(() => {
-    const fetchOrders = async () => {
-      const { page, limit, search, startDate, endDate, sort } = queryParams;
+    let isMounted = true;
+    setOrderDataLoading(true);
+
+    const fetchData = async () => {
       try {
-        const response = await getOrderLists(
-          token as string,
-          page,
+        const result = await getOrderLists(
+          token,
+          currentPage,
           limit,
-          search,
-          startDate,
-          endDate,
+          searchTerm,
           sort
         );
 
-        setOrderList(response?.data);
-        setPagination(response?.pagination);
+        if (isMounted) {
+          if (result.success) {
+            setOrderList(result?.data);
+            setTotalPages(result.pagination.totalPages);
+            setPagination(result?.pagination);
+            setPage(1);
+          } else {
+            console.error(result.message);
+          }
+        }
       } catch (error) {
-        console.error("Error fetching orders:", error);
+        if (isMounted) {
+          console.error("Error fetching data:", error);
+        }
+      } finally {
+        if (isMounted) {
+          setOrderDataLoading(false);
+        }
       }
     };
 
-    if (token) {
-      fetchOrders();
-    }
-  }, [queryParams, token]);
+    fetchData();
 
-  // --- HANDLERS ---
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1) return;
-    setQueryParams((prev) => ({ ...prev, page: newPage }));
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQueryParams((prev) => ({
-      ...prev,
-      search: e.target.value,
-      page: 1, // Reset to first page on search
-    }));
-  };
-
-  // const handleDateChange = (startDate, endDate) => {
-  //   setQueryParams((prev) => ({
-  //     ...prev,
-  //     startDate,
-  //     endDate,
-  //     page: 1,
-  //   }));
-  // };
+    return () => {
+      isMounted = false;
+    };
+  }, [searchTerm, page, limit, token, currentPage, sort]);
 
   const handleSortChange = (column: string) => {
-    setQueryParams((prev) => {
-      // Determine if we need to toggle the sort direction for the given column
-      const newSortDirection = prev.sort === `${column}:asc` ? "desc" : "asc";
-
-      // Set new query parameters, always reset to page 1 for a fresh sort
-      return {
-        ...prev,
-        sort: `${column}:${newSortDirection}`, // Update sort with new direction
-        page: 1, // Reset to first page
-      };
+    setSort((prevSort) => {
+      const [field, direction] = prevSort.split(":");
+      const newDirection =
+        field === column && direction === "asc" ? "desc" : "asc";
+      return `${column}:${newDirection}`;
     });
   };
 
+  const handlePaginationClick = React.useCallback(
+    (page: number) => {
+      if (page > 0 && page !== currentPage) {
+        setCurrentPage(page);
+      }
+    },
+    [currentPage]
+  );
 
+  const renderPagination = useMemo(() => {
+    const generatePageNumbers = () => {
+      const pageNumbers: number[] = [];
+
+      const safeCurrentPage = currentPage ?? 1;
+      const safeTotalPages = pagination?.totalPages ?? 1;
+
+      const startPage = Math.max(1, safeCurrentPage - 1);
+      const endPage = Math.min(safeTotalPages, safeCurrentPage + 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+
+      return pageNumbers;
+    };
+
+    const pageNumbers = generatePageNumbers();
+
+    return (
+      pageNumbers.length > 0 && (
+        <nav aria-label="Page navigation" className="flex justify-end mt-8">
+          <ul className="inline-flex -space-x-px text-base items-center">
+            {/* Previous button */}
+            <li>
+              <button
+                onClick={() => handlePaginationClick((currentPage ?? 1) - 1)}
+                disabled={pagination?.previousPage === null || currentPage <= 1}
+                className="bg-white border rounded-l-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
+              >
+                <span>Previous</span>
+              </button>
+            </li>
+
+            {/* Ellipsis before page numbers */}
+            {pagination?.previousPage && pagination.previousPage > 1 && (
+              <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
+                <BsThreeDots />
+              </li>
+            )}
+
+            {/* Page number buttons */}
+            {pageNumbers.map((page) => (
+              <li key={page}>
+                <button
+                  onClick={() => handlePaginationClick(page)}
+                  className={`px-4 py-2 border h-[42px] w-[45px] ${
+                    page === currentPage
+                      ? "bg-primary text-white"
+                      : "bg-white text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {page}
+                </button>
+              </li>
+            ))}
+
+            {/* Ellipsis after page numbers */}
+            {pagination?.currentPage &&
+              pagination.currentPage + 1 < (pagination.totalPages ?? 0) && (
+                <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
+                  <BsThreeDots />
+                </li>
+              )}
+
+            {/* Next button */}
+            <li>
+              <button
+                onClick={() => handlePaginationClick((currentPage ?? 1) + 1)}
+                disabled={
+                  pagination?.nextPage === null ||
+                  currentPage >= (pagination?.totalPages ?? 1)
+                }
+                className="px-4 py-2 bg-white border rounded-r-lg text-gray-600 hover:bg-gray-100 h-[42px] w-[90px] flex items-center justify-center"
+              >
+                <span>Next</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )
+    );
+  }, [pagination, currentPage, handlePaginationClick]);
+
+  console.log("check data", totalPages);
 
   return (
     <div className="w-full overflow-x-auto bg-white rounded-2xl p-9">
       {/* --- Top Controls --- */}
+
       <div className="flex justify-between items-center mb-6">
         {/* Search Input */}
         <div className="flex items-center gap-6">
-          <div className="w-96 relative">
+          <div className="w-60 2xl:w-72 relative">
             <input
               type="text"
-              value={queryParams.search}
-              onChange={handleSearchChange}
-              className="px-3 py-2 bg-[#F1F8FF] rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
-              placeholder="Search by name or email..."
+              className="px-3 py-2 border border-slate-200 rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <FaSearch className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400" />
           </div>
@@ -115,9 +200,21 @@ const OrderListTable = ({ token }: { token: string }) => {
         {/* Filters & Export */}
         <div className="flex items-center space-x-5">
           <p className="text-gray-800 font-medium capitalize">Filter</p>
-          {/* <DateFilterDropdown handleSortChange={handleSortChange} /> */}
-
-          {/* <NameFilterDropdown handleSortChange={handleSortChange} /> */}
+          <th
+            onClick={() => handleSortChange("orderDate")}
+            className="cursor-pointer select-none px-2 py-2 text-base font-medium text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-100 flex items-center justify-center gap-1 w-32 transition"
+          >
+            Sort
+            {sort.startsWith("orderDate") && (
+              <span className="text-xs">
+                {sort === "orderDate:asc" ? (
+                  <FaArrowUpLong className="text-gray-600 rotate-0 size-4" />
+                ) : (
+                  <FaArrowUpLong className="text-gray-600 rotate-180 size-4" />
+                )}
+              </span>
+            )}
+          </th>
 
           <ExportButton ordersList={ordersList} />
         </div>
@@ -146,7 +243,16 @@ const OrderListTable = ({ token }: { token: string }) => {
             </tr>
           </thead>
           <tbody>
-            {ordersList?.length > 0 ? (
+            {orderDataLoading ? (
+              <tr>
+                <td colSpan={5} className="text-center w-full h-[400px]">
+                  <div className="flex items-center justify-center w-full h-full space-x-2 text-gray-900">
+                    <Loader size={"size-7"} color={"fill-primary"} />
+                    <span>Loading...</span>
+                  </div>
+                </td>
+              </tr>
+            ) : ordersList?.length > 0 ? (
               ordersList?.map((el, index) => (
                 <tr
                   key={index}
@@ -177,45 +283,19 @@ const OrderListTable = ({ token }: { token: string }) => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center py-6">
+                <td colSpan={5} className="text-center w-full h-[400px]">
                   No orders found.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-      </div>
 
-      {/* --- Pagination --- */}
-      <div className="flex justify-center items-center mt-6 space-x-7">
-        {/* Previous Button */}
-        <button
-          onClick={() => handlePageChange(queryParams.page - 1)}
-          disabled={queryParams.page <= 1} // Disabled if page is 1 or less
-          className={`px-4 py-2 rounded-lg w-28 ${
-            queryParams.page <= 1
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-gray-200"
-          }`}
-        >
-          Previous
-        </button>
-
-        {/* Current Page Display */}
-        <span>Page {queryParams.page}</span>
-
-        {/* Next Button */}
-        <button
-          onClick={() => handlePageChange(queryParams.page + 1)}
-          className={`px-4 py-2 rounded-lg w-28 ${
-            pagination?.totalPages === queryParams.page
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-gray-200"
-          }`}
-          disabled={pagination?.totalPages === queryParams.page} // Disabled if it's the last page
-        >
-          Next
-        </button>
+        {ordersList?.length > 0 ? (
+          <div className="mr-5"> {renderPagination}</div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
