@@ -1,4 +1,3 @@
-
 "use client";
 
 import { getAllMicrosites } from "@/action/microsites";
@@ -31,12 +30,14 @@ interface Props {
   micrositeName: string;
 }
 
-const MIcrositeSearchInputField = ({ token,
+const MIcrositeSearchInputField = ({
+  token,
   setRedirectMicrosite,
   setMicrositeId,
   setMicrositeName,
-  micrositeName,}: Props) => {
-  const [inputValue, setInputValue] = useState('');
+  micrositeName,
+}: Props) => {
+  const [inputValue, setInputValue] = useState("");
   const [microsites, setMicrosites] = useState<Microsite[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedMicrosite, setSelectedMicrosite] = useState<Microsite | null>(
@@ -77,10 +78,8 @@ const MIcrositeSearchInputField = ({ token,
     }
   };
 
-
   return (
     <Autocomplete
-
       sx={{ width: "100%", maxWidth: 510 }}
       size="medium"
       getOptionLabel={(option) => option.name || "Unnamed"}
@@ -130,7 +129,6 @@ const MIcrositeSearchInputField = ({ token,
         <TextField
           {...params}
           placeholder={micrositeName || "Search for a microsite"}
-
           sx={{
             "& .MuiOutlinedInput-root": {
               paddingY: "2px",

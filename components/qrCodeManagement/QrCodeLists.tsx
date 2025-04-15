@@ -2,7 +2,7 @@
 import {
   createDynamicQrCode,
   getDynamicQrCode,
-  updateDynamicQrCode
+  updateDynamicQrCode,
 } from "@/action/dynamicQrCode";
 import { QRCodeData } from "@/types/qrcodedata";
 import Box from "@mui/material/Box";
@@ -138,7 +138,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
     setError("");
 
     console.log("micrositeId", redirectMicrosite);
-    
 
     try {
       const response = await createDynamicQrCode(
@@ -247,15 +246,13 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
 
   // const [qrCodeDeleteLoading, setQrCodeDeleteLoading] = useState(false);
 
-
   // const qrCodeDeleteHandler = async (id: string) => {
 
-
   //     setQrCodeDeleteLoading(true);
-  
+
   //     try {
   //       const response = await deleteDynamicQRCode(id, token);
-  
+
   //       if (response.success) {
   //         toast.success("QR Code deleted successfully.");
   //         // Optionally, trigger a UI refresh or refetch here
@@ -272,9 +269,8 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
   //     } finally {
   //       setQrCodeDeleteLoading(false);
   //     }
-    
+
   // };
-  
 
   const renderPagination = useMemo(() => {
     const generatePageNumbers = () => {
@@ -360,9 +356,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
       )
     );
   }, [pagination, currentPage, handlePaginationClick]);
-
-
-  
 
   console.log("pageNumbers", redirectMicrosite);
 
@@ -480,7 +473,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     </button> */}
                   </div>
                 </td>
-                
               </tr>
             ))
           ) : (
@@ -531,9 +523,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                   </div>
                 </div>
                 <div className="pb-4">
-                  <p className="text-sm mb-2">
-                    Redirect Microsite
-                  </p>
+                  <p className="text-sm mb-2">Redirect Microsite</p>
 
                   <MicrositeSearchInputField
                     setMicrositeId={setMicrositeId}
@@ -602,9 +592,7 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                 </div>
 
                 <div className="">
-                  <p className="text-sm mb-2">
-                    Redirect Microsite
-                  </p>
+                  <p className="text-sm mb-2">Redirect Microsite</p>
 
                   <MicrositeSearchInputField
                     setMicrositeId={setMicrositeId}
@@ -614,7 +602,6 @@ const QrCodeLists: React.FC<QrCodeListsProps> = ({ token }) => {
                     token={token}
                   />
                 </div>
-                
 
                 <PrimaryButton
                   className="!px-8 space-x-2 w-[120px] h-[40px] flex items-center justify-center mt-4"

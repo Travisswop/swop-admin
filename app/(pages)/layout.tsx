@@ -5,6 +5,7 @@ import Topbar from "@/components/topbar/Topbar";
 import { Roboto } from "next/font/google";
 import { Bounce, ToastContainer } from "react-toastify";
 import "../../app/globals.css";
+import { Providers } from "../providers";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -37,19 +38,21 @@ export default function RootLayout({
         className={roboto.className}
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main>
-          <Sidebar />
-          <Topbar />
-          <section
-            style={{ height: `calc(100vh - 80px)` }}
-            className="pl-64 overflow-y-auto overflow-x-hidden"
-          >
-            <section className="container mx-auto px-6 py-6 max-w-7xl 2xl:max-w-full bg-[#F2F2F2] min-h-full ">
-              {children}
+        <Providers>
+          <main>
+            <Sidebar />
+            <Topbar />
+            <section
+              style={{ height: `calc(100vh - 80px)` }}
+              className="pl-64 overflow-y-auto overflow-x-hidden"
+            >
+              <section className="container mx-auto px-6 py-6 max-w-7xl 2xl:max-w-full bg-[#F2F2F2] min-h-full ">
+                {children}
+              </section>
             </section>
-          </section>
-          <ToastContainer transition={Bounce} />
-        </main>
+            <ToastContainer transition={Bounce} />
+          </main>
+        </Providers>
       </body>
     </html>
   );
