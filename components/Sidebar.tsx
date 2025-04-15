@@ -5,17 +5,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import swopLogo from "@/public/images/swop-logo.png";
-import { LuLayoutGrid, LuMapPinned } from "react-icons/lu";
-import { HiOutlineLogout } from "react-icons/hi";
 import { GrAnnounce } from "react-icons/gr";
+import { HiOutlineLogout } from "react-icons/hi";
+import { LuLayoutGrid, LuMapPinned } from "react-icons/lu";
 
-import { LiaIdCard } from "react-icons/lia";
-import { IoBagHandleOutline } from "react-icons/io5";
+import { logout } from "@/action/logout";
 import { FaUsers } from "react-icons/fa";
-import { MdOutlineQrCodeScanner } from "react-icons/md";
 import { FaStar } from "react-icons/fa6";
 import { GoChecklist } from "react-icons/go";
-import { logout } from "@/action/logout";
+import { IoBagHandleOutline } from "react-icons/io5";
+import { LiaIdCard } from "react-icons/lia";
+import { MdCancelPresentation, MdOutlineQrCodeScanner } from "react-icons/md";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: <LuLayoutGrid /> },
@@ -31,6 +31,7 @@ const navItems = [
   { href: "/jobs", label: "Jobs", icon: <IoBagHandleOutline /> },
   { href: "/announcements", label: "Announcements", icon: <GrAnnounce /> },
   { href: "/order", label: "Order", icon: <GoChecklist /> },
+  { href: "/dispute", label: "Dispute", icon: <MdCancelPresentation /> },
 ];
 
 export default function Sidebar() {
