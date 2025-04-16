@@ -185,7 +185,7 @@ const DisputeListTable = ({ token }: { token: string }) => {
     <div className="w-full overflow-x-auto bg-white rounded-2xl p-9">
       {/* --- Top Controls --- */}
 
-      <div className="flex justify-between items-center mb-6 w-full">
+      <div className="mb-6 w-full">
         {/* Top Tabs */}
         <TopTabSection />
       </div>
@@ -196,7 +196,7 @@ const DisputeListTable = ({ token }: { token: string }) => {
           <div className="w-60 2xl:w-72 relative">
             <input
               type="text"
-              className="px-3 py-2 border border-slate-200 rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
+              className="bg-[#F1F8FF] px-3 py-2 border border-slate-200 rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

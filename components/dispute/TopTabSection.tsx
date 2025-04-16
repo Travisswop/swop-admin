@@ -23,10 +23,10 @@ const TopTabSection = () => {
               key={index}
               onClick={() => setSelected(tab?.slug)}
               className={clsx(
-                "relative py-2 text-base font-medium transition-colors duration-200 flex items-center space-x-2",
+                "relative py-2 text-base font-medium transition-colors duration-200 flex items-center space-x-2 ",
                 selected === tab?.slug
                   ? "text-gray-800 font-medium"
-                  : "text-gray-500"
+                  : "text-gray-400"
               )}
             >
               <p> {tab.title}</p>{" "}
