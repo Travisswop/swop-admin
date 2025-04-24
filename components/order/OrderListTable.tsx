@@ -176,7 +176,7 @@ const OrderListTable = ({ token }: { token: string }) => {
     );
   }, [pagination, currentPage, handlePaginationClick]);
 
-  console.log("check data", totalPages);
+  console.log("check data", totalPages, ordersList);
 
   return (
     <div className="w-full overflow-x-auto bg-white rounded-2xl p-9">
@@ -262,12 +262,10 @@ const OrderListTable = ({ token }: { token: string }) => {
                     <Link href={`/order/${el?._id}`}>{el?._id}</Link>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>{el?.customer?.name}</Link>
+                    <Link href={`/order/${el?._id}`}>{el?.buyer?.name}</Link>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>
-                      {el?.customer?.email}
-                    </Link>
+                    <Link href={`/order/${el?._id}`}>{el?.buyer?.email}</Link>
                   </td>
                   <td className="px-6 py-4 text-center">
                     <Link href={`/order/${el?._id}`}>

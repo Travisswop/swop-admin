@@ -62,15 +62,15 @@ export default function ConnectionsShowOnGoogleMap({
   };
 
   const selectedConnection = selectedFriend
-    ? connections.find((c) => c._id === selectedFriend._id)
+    ? connections?.find((c) => c?._id === selectedFriend?._id)
     : undefined;
 
   // Pan to selected connection only once after map is ready
   useEffect(() => {
     if (mapReady && selectedConnection && mapRef.current) {
       mapRef.current.panTo({
-        lat: selectedConnection.lat,
-        lng: selectedConnection.lng,
+        lat: selectedConnection?.lat,
+        lng: selectedConnection?.lng,
       });
     }
   }, [mapReady, selectedConnection]);
@@ -88,7 +88,7 @@ export default function ConnectionsShowOnGoogleMap({
         }}
         center={
           selectedConnection
-            ? { lat: selectedConnection.lat, lng: selectedConnection.lng }
+            ? { lat: selectedConnection?.lat, lng: selectedConnection?.lng }
             : { lat: 40.7128, lng: -74.006 }
         }
         zoom={6}
@@ -110,8 +110,8 @@ export default function ConnectionsShowOnGoogleMap({
         {selectedConnection?.lat && selectedConnection?.lng && (
           <Circle
             center={{
-              lat: selectedConnection.lat,
-              lng: selectedConnection.lng,
+              lat: selectedConnection?.lat,
+              lng: selectedConnection?.lng,
             }}
             radius={5000}
             options={{
@@ -130,14 +130,14 @@ export default function ConnectionsShowOnGoogleMap({
             connectionType?.includes("spotlight")
           )
           ?.map((connection) => {
-            const isSelected = selectedFriend?._id === connection._id;
+            const isSelected = selectedFriend?._id === connection?._id;
             const isNearby =
               selectedFriend &&
               getDistance(
-                connection.lat,
-                connection.lng,
-                selectedFriend.lat,
-                selectedFriend.lng
+                connection?.lat,
+                connection?.lng,
+                selectedFriend?.lat,
+                selectedFriend?.lng
               ) < 5;
 
             return (
@@ -159,12 +159,12 @@ export default function ConnectionsShowOnGoogleMap({
                       }
                     )}
                   >
-                    {connection.childId?.profilePic && (
+                    {connection?.childId?.profilePic && (
                       <Image
                         src={
-                          isUrl(connection.childId.profilePic)
-                            ? connection.childId.profilePic
-                            : `/images/user_avator/${connection.childId.profilePic}@3x.png`
+                          isUrl(connection?.childId?.profilePic)
+                            ? connection?.childId?.profilePic
+                            : `/images/user_avator/${connection?.childId?.profilePic}@3x.png`
                         }
                         alt="Profile"
                         className="w-full h-full rounded-full object-cover"

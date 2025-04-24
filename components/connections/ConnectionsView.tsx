@@ -194,7 +194,7 @@ const ConnectionsView = ({ token }: ConnectionsViewProps) => {
     [token]
   );
 
-  console.log("check data value 123", error);
+  console.log("check data value 123", error, connections);
 
   return (
     <div className="text-[#424651] bg-white py-5 px-8  overflow-y-hidden">
@@ -343,15 +343,15 @@ const ConnectionsView = ({ token }: ConnectionsViewProps) => {
                 <div
                   className={`px-5 rounded-lg  hover:bg-gray-100 w-full 
               }`}
-                  key={el._id}
+                  key={el?._id}
                 >
                   <div className="flex w-full items-center justify-between py-6 border-b">
                     <div className="flex items-center gap-2">
                       <Image
                         src={
-                          isUrl(el.childId.profilePic)
-                            ? el.childId.profilePic
-                            : `/images/user_avator/${el.childId.profilePic}@3x.png`
+                          isUrl(el?.childId?.profilePic)
+                            ? el?.childId?.profilePic
+                            : `/images/user_avator/${el?.childId?.profilePic}@3x.png`
                         }
                         alt="user image"
                         className={`w-12 h-12 rounded-full object-cover`}
