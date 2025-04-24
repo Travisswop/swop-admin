@@ -407,7 +407,7 @@ const ConnectionsView = ({ token }: ConnectionsViewProps) => {
           </div>
 
           <div className="text-black bg-white py-5 px-8">
-            <h4 className="text-lg font-medium">Default Connections Add</h4>
+            {/* <h4 className="text-lg font-medium">Default Connections Add</h4> */}
 
             <div className="my-4">
               <label
@@ -446,7 +446,7 @@ const ConnectionsView = ({ token }: ConnectionsViewProps) => {
                 {loading ? (
                   <Loader size="size-5" color="fill-primary" />
                 ) : (
-                  "Add New Connection"
+                  "Save"
                 )}
               </PrimaryButton>
             </form>
