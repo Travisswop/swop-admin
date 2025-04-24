@@ -29,8 +29,8 @@ const ExportButton = ({ ordersList }: { ordersList: Order[] }) => {
     ];
     const rows = data.map((el) => [
       el?._id,
-      el?.customer?.name,
-      el?.customer?.email,
+      el?.buyer?.name,
+      el?.buyer?.email,
       el?.financial?.totalCost,
       el?.txResult?.hash,
     ]);

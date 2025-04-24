@@ -1,4 +1,13 @@
-export type Customer = {
+export type buyer = {
+  name: string;
+  email: string;
+  phone: string;
+  shippingAddress: string;
+  walletAddress: string;
+  [key: string]: any; // In case there are additional fields
+};
+
+export type customer = {
   name: string;
   email: string;
   phone: string;
@@ -68,7 +77,8 @@ export type Order = {
   orderDate: string;
   createdAt: string;
   updatedAt: string;
-  customer: Customer;
+  buyer: buyer;
+  customers: buyer;
   financial: Financial;
   mintedNfts: MintedNft[];
   phygitalDetails: PhygitalDetails;

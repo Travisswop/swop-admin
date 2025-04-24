@@ -274,7 +274,7 @@ const DisputeListTable = ({ token }: { token: string }) => {
                   </td>
                   <td className="px-6 py-4 text-center">
                     <Link href={`/dispute/${el?._id}`}>
-                      {el?.customer?.name}
+                      {el?.buyer?.name}
                     </Link>
                   </td>
                   <td className="px-6 py-4 text-center">
