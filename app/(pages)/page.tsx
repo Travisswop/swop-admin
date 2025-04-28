@@ -7,7 +7,10 @@ import SubsidyWalletChart from "@/components/homepageChart/SubsidyChart";
 import SwopIDGrowthChart from "@/components/homepageChart/SwopIdGrowth";
 import UserGrowthWithDropdown from "@/components/homepageChart/UserGrowth";
 
-export default function Home() {
+
+const Home = async () => {
+
+
   return (
     <section className="w-full h-full text-black flex flex-col gap-5">
       <div className="w-full flex gap-5">
@@ -27,4 +30,6 @@ export default function Home() {
       </div>
     </section>
   );
-}
+};
+
+export default Home;
