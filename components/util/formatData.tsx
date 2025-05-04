@@ -1,12 +1,13 @@
-export const formatDate = (isoDate: Date | undefined): string => {
+export const formatDate = (isoDate: Date | string | undefined): string => {
   if (!isoDate) {
-    return ""; // Or return a placeholder, e.g., "N/A" if you prefer
+    return ""; // Or "N/A"
   }
-  const date = new Date(isoDate);
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1;
-  const year = date.getUTCFullYear();
 
-  // Return the formatted date as a string
-  return `${day}/${month}/${year}`;
+  const date = new Date(isoDate);
+
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };

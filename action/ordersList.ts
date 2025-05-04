@@ -30,6 +30,8 @@ export async function getOrderLists(
       }
     );
 
+    console.log("check order list", response.status);
+
     if (!response.ok) {
       throw new Error(`API Error: ${response.status} ${response.statusText}`);
     }

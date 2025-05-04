@@ -31,19 +31,25 @@ interface OrderDetailsProps {
     }[];
     order: {
       processingStages: ProcessingStage[];
-      customer: {
+      buyer: {
         name: string;
-        ens: string;
         email: string;
-        mobileNo: string;
-        address: string;
+        phone: string;
+        address: { line1: string };
+        wallet: {
+          ens: string;
+          address: string;
+        };
       };
-      sellerId: {
+      seller: {
         name: string;
-        ens: string;
         email: string;
-        mobileNo: string;
-        address: string;
+        phone: string;
+        address: { line1: string };
+        wallet: {
+          ens: string;
+          address: string;
+        };
       };
       mintedNfts: {
         quantity: number;
@@ -56,11 +62,18 @@ interface OrderDetailsProps {
           ownerAddress: string;
         };
       }[];
+      stripePaymentMethod: string;
       orderId: string;
       orderDate: string;
       buyerId: string;
       txResult: {
         hash: string;
+        status: string;
+        tokenAmount: string;
+        transferAmount: string;
+        tokenName: string;
+        tokenSymbol: string;
+        tokenAddress: string;
       };
       financial: {
         subtotal: number;
@@ -77,6 +90,7 @@ const tabItems = [
   { title: "Customer Details", slug: "customerDetails" },
   { title: "Seller Details", slug: "sellerDetails" },
   { title: "Dispute", slug: "dispute" },
+  { title: "Payment Method", slug: "stripePaymentMethod" },
 ];
 
 const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
@@ -308,26 +322,36 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
       </div>
 
       <div className="flex flex-col flex-wrap gap-4 mt-8 w-full">
-        <div className="relative flex gap-10 border-b border-gray-300 w-full max-w-lg">
-          {tabItems.map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => setSelected(tab?.slug)}
-              className={clsx(
-                "relative py-2 text-base font-medium transition-colors duration-200",
-                selected === tab?.slug ? "text-gray-600" : "text-gray-500"
-              )}
-            >
-              {tab.title}
-              {/* Animated underline */}
-              {selected === tab?.slug && (
-                <motion.div
-                  layoutId="underline"
-                  className="absolute left-0 right-0 -bottom-1 h-[2px] bg-gray-600"
-                />
-              )}
-            </button>
-          ))}
+        <div className="relative flex gap-10 border-b border-gray-300 w-full max-w-3xl">
+          {tabItems
+            .filter((tab) => {
+              if (
+                tab.slug === "stripePaymentMethod" &&
+                orderDetails?.order?.stripePaymentMethod !== "stripe"
+              ) {
+                return false;
+              }
+              return true;
+            })
+            ?.map((tab, index) => (
+              <button
+                key={index}
+                onClick={() => setSelected(tab?.slug)}
+                className={clsx(
+                  "relative py-2 text-base font-medium transition-colors duration-200",
+                  selected === tab?.slug ? "text-gray-600" : "text-gray-500"
+                )}
+              >
+                {tab.title}
+                {/* Animated underline */}
+                {selected === tab?.slug && (
+                  <motion.div
+                    layoutId="underline"
+                    className="absolute left-0 right-0 -bottom-1 h-[2px] bg-gray-600"
+                  />
+                )}
+              </button>
+            ))}
         </div>
 
         {/* Content Area */}
@@ -342,31 +366,28 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
               <div className="space-y-8">
                 <DetailItem
                   label="Customer Name"
-                  value={
-                    orderDetails?.order?.customer?.name || "Unknown Customer"
-                  }
+                  value={orderDetails?.order?.buyer?.name || "Unknown Customer"}
                 />
                 <DetailItem
                   label="Swop.ID"
-                  value={orderDetails?.order?.customer?.ens || "4234545454"}
+                  value={
+                    orderDetails?.order?.buyer?.wallet?.ens || "Unknown Ens"
+                  }
                 />
                 <DetailItem
                   label="Customer Email"
-                  value={
-                    orderDetails?.order?.customer?.email || "Unknown Email"
-                  }
+                  value={orderDetails?.order?.buyer?.email || "Unknown Email"}
                 />
                 <DetailItem
                   label="Customer Number"
-                  value={
-                    orderDetails?.order?.customer?.mobileNo || "+8801318470354"
-                  }
+                  value={orderDetails?.order?.buyer?.phone || "Unknown Number"}
                 />
 
                 <DetailItem
                   label="Shipping Address"
                   value={
-                    orderDetails?.order?.customer?.address || "Unknown Address"
+                    orderDetails?.order?.buyer?.address?.line1 ||
+                    "Unknown Address"
                   }
                 />
               </div>
@@ -376,32 +397,31 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
             <div className="max-w-2xl bg-white rounded p-4 shadow-sm">
               <div className="space-y-8">
                 <DetailItem
-                  label="Customer Name"
+                  label="Seller Name"
                   value={
-                    orderDetails?.order?.sellerId?.name || "Unknown Customer"
+                    orderDetails?.order?.seller?.name || "Unknown Customer"
                   }
                 />
                 <DetailItem
                   label="Swop.ID"
-                  value={orderDetails?.order?.sellerId?.ens || "4234545454"}
-                />
-                <DetailItem
-                  label="Customer Email"
                   value={
-                    orderDetails?.order?.sellerId?.email || "Unknown Email"
+                    orderDetails?.order?.seller?.wallet?.ens || "Unknown Ens"
                   }
                 />
                 <DetailItem
-                  label="Customer Number"
-                  value={
-                    orderDetails?.order?.sellerId?.mobileNo || "+8801318470354"
-                  }
+                  label="Seller Email"
+                  value={orderDetails?.order?.seller?.email || "Unknown Email"}
+                />
+                <DetailItem
+                  label="Seller Number"
+                  value={orderDetails?.order?.seller?.phone || "Unknown Number"}
                 />
 
                 <DetailItem
                   label="Shipping Address"
                   value={
-                    orderDetails?.order?.sellerId?.address || "Unknown Address"
+                    orderDetails?.order?.seller?.address?.line1 ||
+                    "Unknown Address"
                   }
                 />
               </div>
@@ -473,6 +493,50 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
                     investigate and resolve the unauthorized charge.
                   </p>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {selected === "stripePaymentMethod" && (
+            <div className="max-w-2xl bg-white rounded p-4 shadow-sm">
+              <div className="space-y-8">
+                <DetailItem
+                  label="Status"
+                  value={
+                    orderDetails?.order?.txResult?.status || "Unknown Status"
+                  }
+                />
+                <DetailItem
+                  label="Token Amount"
+                  value={
+                    orderDetails?.order?.txResult?.tokenAmount ||
+                    "Unknown Token Amount"
+                  }
+                />
+                <DetailItem
+                  label="Transfer Amount
+"
+                  value={
+                    orderDetails?.order?.txResult?.transferAmount ||
+                    "Unknown Transfer Amount"
+                  }
+                />
+                <DetailItem
+                  label="Token Name"
+                  value={
+                    orderDetails?.order?.txResult?.tokenName ||
+                    "Unknown Token Name"
+                  }
+                />
+
+                <DetailItem
+                  label="Token Symbol
+"
+                  value={
+                    orderDetails?.order?.txResult?.tokenSymbol ||
+                    "Unknown Token Symbol"
+                  }
+                />
               </div>
             </div>
           )}

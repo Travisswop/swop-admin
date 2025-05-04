@@ -73,12 +73,12 @@ export type Order = {
   buyerId: string;
   sellerId: string;
   orderId: string;
-  orderType: string;
-  orderDate: string;
   createdAt: string;
   updatedAt: string;
   buyer: buyer;
   customers: buyer;
+  orderDate: Date;
+  orderType: string;
   financial: Financial;
   mintedNfts: MintedNft[];
   phygitalDetails: PhygitalDetails;

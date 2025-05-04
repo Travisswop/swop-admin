@@ -7,7 +7,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
 import Loader from "../ui/Loader";
-import { idShorter } from "../util/idShorter";
+import { formatDate } from "../util/formatData";
 import ExportButton from "./ExportButton";
 
 interface Pagination {
@@ -274,7 +274,7 @@ const OrderListTable = ({ token }: { token: string }) => {
                   </td>
                   <td className="px-6 py-4 break-all text-center">
                     <Link href={`/order/${el?._id}`}>
-                      {idShorter(el?.txResult?.hash)}{" "}
+                      {formatDate(new Date(el?.orderDate))}
                     </Link>
                   </td>
                 </tr>
