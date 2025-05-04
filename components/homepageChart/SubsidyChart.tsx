@@ -65,7 +65,7 @@ const SubsidyWalletChart: React.FC = () => {
         </BarChart>
       </ResponsiveContainer>
       <div className="mt-6">
-        <div className="flex items-center mb-4">
+        {/* <div className="flex items-center mb-4">
           <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
             <Image
               src="https://cryptologos.cc/logos/polygon-matic-logo.png"
@@ -80,7 +80,7 @@ const SubsidyWalletChart: React.FC = () => {
             <p className="text-xs text-gray-500">Polygon</p>
           </div>
           <p className="ml-auto font-semibold text-purple-500">$ 7000.00</p>
-        </div>
+        </div> */}
         <div className="flex items-center">
           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
             <Image
