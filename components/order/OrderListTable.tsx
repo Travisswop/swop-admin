@@ -226,11 +226,15 @@ const OrderListTable = ({ token }: { token: string }) => {
           <thead className="bg-gray-100 text-gray-700 text-sm font-medium border-b">
             <tr>
               {[
-                { label: "ID", key: "id" },
-                { label: "Name", key: "customer.name" },
-                { label: "Email", key: "customer.email" },
-                { label: "Amount", key: "financial.totalCost" },
-                { label: "Transaction Hash", key: "txResult.hash" },
+                { label: "Order No", key: "orderno" },
+                { label: "Date", key: "date" },
+                { label: "Customer", key: "customer.name" },
+                { label: "Type", key: "customer.type" },
+                { label: "Payment", key: "customer.payment" },
+                { label: "Price", key: "customer.price" },
+                { label: "Payment Status", key: "customer.paymentStatus" },
+                { label: "Delivery Status", key: "customer.deliveryStatus" },
+                { label: "Order Status", key: "customer.orderStatus" },
               ].map((header, idx) => (
                 <th
                   key={idx}
@@ -245,7 +249,7 @@ const OrderListTable = ({ token }: { token: string }) => {
           <tbody>
             {orderDataLoading ? (
               <tr>
-                <td colSpan={5} className="text-center w-full h-[400px]">
+                <td colSpan={9} className="text-center w-full h-[400px]">
                   <div className="flex items-center justify-center w-full h-full space-x-2 text-gray-900">
                     <Loader size={"size-7"} color={"fill-primary"} />
                     <span>Loading...</span>
@@ -259,29 +263,103 @@ const OrderListTable = ({ token }: { token: string }) => {
                   className="odd:bg-white even:bg-gray-50 border-b text-gray-800 text-sm"
                 >
                   <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>{el?._id}</Link>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>{el?.buyer?.name}</Link>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>{el?.buyer?.email}</Link>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>
-                      {el?.financial?.totalCost.toFixed(2)}
-                    </Link>
+                    <Link href={`/order/${el?._id}`}>{el?.orderId}</Link>
                   </td>
                   <td className="px-6 py-4 break-all text-center">
                     <Link href={`/order/${el?._id}`}>
                       {formatDate(new Date(el?.orderDate))}
                     </Link>
                   </td>
+                  <td className="px-6 py-4 text-center">
+                    <Link href={`/order/${el?._id}`}>{el?.buyer?.name}</Link>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <Link
+                      href={`/order/${el?._id}`}
+                      className="border rounded-full p-2 text-xs"
+                    >
+                      {el?.orderType}
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <Link href={`/order/${el?._id}`}>{el?.paymentMethod}</Link>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <Link href={`/order/${el?._id}`}>
+                      ${el?.financial?.totalCost.toFixed(2)}
+                    </Link>
+                  </td>
+                  <td className={`px-6 py-4 break-all text-center`}>
+                    <Link
+                      href={`/order/${el?._id}`}
+                      className={`rounded-full px-2 py-1 capitalize ${
+                        el?.status?.payment === "completed"
+                          ? "text-green-400 bg-green-50"
+                          : "text-yellow-400 bg-yellow-50"
+                      }`}
+                    >
+                      {el?.status?.payment}
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 break-all text-center">
+                    <Link
+                      href={`/order/${el?._id}`}
+                      className={`rounded-full px-2 py-1 capitalize ${
+                        el?.orderType !== "non-phygitals"
+                          ? el?.status?.delivery === "Completed"
+                            ? "text-green-400 bg-green-50"
+                            : el?.status?.delivery === "Not Initiated"
+                            ? "text-yellow-400 bg-yellow-50"
+                            : "text-red-400 bg-red-50"
+                          : ""
+                      }`}
+                    >
+                      {el?.orderType === "non-phygitals"
+                        ? "N/A"
+                        : el?.status?.delivery}
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 break-all text-center">
+                    <Link
+                      href={`/order/${el?._id}`}
+                      className={`rounded-full px-2 py-1 capitalize ${
+                        el?.orderType === "non-phygitals"
+                          ? el?.status?.payment === "completed"
+                            ? "text-green-400 bg-green-50"
+                            : "text-white bg-black"
+                          : el?.status?.delivery === "Completed" &&
+                            el?.status?.payment === "completed"
+                          ? "text-green-400 bg-green-50"
+                          : "text-white bg-black"
+                      }`}
+                    >
+                      {/* {el?.orderType === "non-phygitals"
+                        ? el?.status?.payment !== "completed"
+                          ? "Complete"
+                          : "Active"
+                        : !el?.status?.isDead
+                        ? el?.status?.delivery === "Completed" &&
+                          el?.status?.payment === "completed"
+                          ? "Complete"
+                          : "Active"
+                        : el?.status?.payment !== "completed"
+                        ? "Complete"
+                        : "Active"} */}
+                      {el?.orderType === "non-phygitals"
+                        ? el?.status?.payment === "completed"
+                          ? "Completed"
+                          : "Active"
+                        : el?.status?.delivery === "Completed" &&
+                          el?.status?.payment === "completed"
+                        ? "Complete"
+                        : "Active"}
+                    </Link>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center w-full h-[400px]">
+                <td colSpan={9} className="text-center w-full h-[400px]">
                   No orders found.
                 </td>
               </tr>

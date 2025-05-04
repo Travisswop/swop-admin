@@ -48,6 +48,7 @@ export type ProcessingStage = {
 export type Status = {
   delivery: string;
   isDead: boolean;
+  payment: string;
 };
 
 export type SwapTransaction = {
@@ -86,5 +87,6 @@ export type Order = {
   status: Status;
   swapTransaction: SwapTransaction;
   txResult: TxResult;
+  paymentMethod: string;
   __v: number;
 };
