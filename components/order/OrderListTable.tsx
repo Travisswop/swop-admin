@@ -1,6 +1,8 @@
 "use client";
 import { getOrderLists } from "@/action/ordersList";
 import { Order } from "@/types/orders";
+import clsx from "clsx";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
@@ -17,7 +19,16 @@ interface Pagination {
   nextPage: number | null;
 }
 
+const tabItems = [
+  { title: "All Orders", slug: "all-orders", value: 27 },
+  { title: "Unconfirmed Orders", slug: "unconfirmed-orders", value: 16 },
+  { title: "Confirmed Orders", slug: "confirmed-orders", value: 17 },
+  { title: "Disputes", slug: "disputes", value: 10 },
+];
+
 const OrderListTable = ({ token }: { token: string }) => {
+  const [selectedTab, setSelectedTab] = useState("orderHistory");
+
   const [ordersList, setOrderList] = useState<Order[]>([]);
   const [sort, setSort] = useState("orderDate:desc");
 
@@ -179,199 +190,273 @@ const OrderListTable = ({ token }: { token: string }) => {
   console.log("check data", totalPages, ordersList);
 
   return (
-    <div className="w-full overflow-x-auto bg-white rounded-2xl p-9">
-      {/* --- Top Controls --- */}
-
-      <div className="flex justify-between items-center mb-6">
-        {/* Search Input */}
-        <div className="flex items-center gap-6">
-          <div className="w-60 2xl:w-72 relative">
-            <input
-              type="text"
-              className="px-3 py-2 border border-slate-200 rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <FaSearch className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400" />
-          </div>
+    <div className="">
+      <div className="w-full overflow-x-auto bg-white rounded-2xl p-9 flex items-center justify-between space-x-8">
+        {/* Order Revenue */}
+        <div className="flex flex-col justify-center items-center text-center border shadow-lg px-9 py-10 rounded-2xl w-full ">
+          <p className="text-gray-500 text-xl">Order Revenue</p>
+          <h2 className="text-green-500 font-bold text-3xl mt-2">112.23$</h2>
         </div>
-
-        {/* Filters & Export */}
-        <div className="flex items-center space-x-5">
-          <p className="text-gray-800 font-medium capitalize">Filter</p>
-          <th
-            onClick={() => handleSortChange("orderDate")}
-            className="cursor-pointer select-none px-2 py-2 text-base font-medium text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-100 flex items-center justify-center gap-1 w-32 transition"
-          >
-            Sort
-            {sort.startsWith("orderDate") && (
-              <span className="text-xs">
-                {sort === "orderDate:asc" ? (
-                  <FaArrowUpLong className="text-gray-600 rotate-0 size-4" />
-                ) : (
-                  <FaArrowUpLong className="text-gray-600 rotate-180 size-4" />
-                )}
-              </span>
-            )}
-          </th>
-
-          <ExportButton ordersList={ordersList} />
+        {/* In Escrow */}
+        <div className="flex flex-col justify-center items-center text-center border shadow-lg px-9 py-10 rounded-2xl w-full ">
+          <p className="text-gray-500 text-xl">In Escrow</p>
+          <h2 className="text-green-500 font-bold text-3xl mt-2">112.23$</h2>
+        </div>
+        {/* Processed */}
+        <div className="flex flex-col justify-center items-center text-center border shadow-lg px-9 py-10 rounded-2xl w-full ">
+          <p className="text-gray-500 text-xl">Processed</p>
+          <h2 className="text-green-500 font-bold text-3xl mt-2">112.23$</h2>
+        </div>
+        {/* Fees */}
+        <div className="flex flex-col justify-center items-center text-center border shadow-lg px-9 py-10 rounded-2xl w-full ">
+          <p className="text-gray-500 text-xl">Fees</p>
+          <h2 className="text-green-500 font-bold text-3xl mt-2">112.23$</h2>
         </div>
       </div>
 
-      {/* --- Orders Table --- */}
-      <div className="w-full overflow-x-auto">
-        <table className="w-full text-gray-500 border-collapse">
-          <thead className="bg-gray-100 text-gray-700 text-sm font-medium border-b">
-            <tr>
-              {[
-                { label: "Order No", key: "orderno" },
-                { label: "Date", key: "date" },
-                { label: "Customer", key: "customer.name" },
-                { label: "Type", key: "customer.type" },
-                { label: "Payment", key: "customer.payment" },
-                { label: "Price", key: "customer.price" },
-                { label: "Payment Status", key: "customer.paymentStatus" },
-                { label: "Delivery Status", key: "customer.deliveryStatus" },
-                { label: "Order Status", key: "customer.orderStatus" },
-              ].map((header, idx) => (
-                <th
-                  key={idx}
-                  className="px-6 py-3 text-base font-normal text-center cursor-pointer"
-                  onClick={() => handleSortChange(header.key)}
-                >
-                  {header.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {orderDataLoading ? (
+      {/* Tab Section */}
+
+      <div className="w-full overflow-x-auto bg-white rounded-2xl p-9 mt-6">
+        <div className="flex flex-col flex-wrap gap-4 w-full">
+          <div className="relative flex gap-10 border-b border-gray-300 w-full">
+            {tabItems?.map((tab, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedTab(tab?.slug)}
+                className={clsx(
+                  "relative py-2 text-base font-medium transition-colors duration-200 flex items-center space-x-2 ",
+                  selectedTab === tab?.slug ? "text-gray-900" : "text-gray-500"
+                )}
+              >
+                <h2>{tab?.title}</h2>{" "}
+                <p className="border px-3 py-1 rounded-full text-gray-900">
+                  {tab?.value}
+                </p>
+                {/* Animated underline */}
+                {selectedTab === tab?.slug && (
+                  <motion.div
+                    layoutId="underline"
+                    className="absolute -left-3 right-0 -bottom-1 h-[2px] bg-gray-600 "
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* --- Top Controls --- */}
+
+        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={["DatePicker"]}>
+          <DatePicker
+            label="Date"
+            slotProps={{
+              textField: {
+                variant: "outlined",
+                fullWidth: true,
+                sx: {
+                  borderRadius: 2,
+                },
+                InputLabelProps: {
+                  shrink: true,
+                },
+              },
+            }}
+          />
+        </DemoContainer>
+      </LocalizationProvider> */}
+
+        <div className="flex justify-between items-center mb-6 mt-6">
+          {/* Search Input */}
+          <div className="flex items-center gap-6">
+            <div className="w-60 2xl:w-72 relative">
+              <input
+                type="text"
+                className="px-3 py-2 border border-slate-200 rounded-lg text-gray-700 pl-10 focus:outline-none w-full"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <FaSearch className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400" />
+            </div>
+          </div>
+
+          {/* Filters & Export */}
+          <div className="flex items-center space-x-5">
+            <p className="text-gray-800 font-medium capitalize">Filter</p>
+            <th
+              onClick={() => handleSortChange("orderDate")}
+              className="cursor-pointer select-none px-2 py-2 text-base font-medium text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-100 flex items-center justify-center gap-1 w-32 transition"
+            >
+              Sort
+              {sort.startsWith("orderDate") && (
+                <span className="text-xs">
+                  {sort === "orderDate:asc" ? (
+                    <FaArrowUpLong className="text-gray-600 rotate-0 size-4" />
+                  ) : (
+                    <FaArrowUpLong className="text-gray-600 rotate-180 size-4" />
+                  )}
+                </span>
+              )}
+            </th>
+
+            <ExportButton ordersList={ordersList} />
+          </div>
+        </div>
+
+        {/* --- Orders Table --- */}
+
+        {/* <div className="mt-4 w-full">
+          {selectedTab === "orders" && <div className="mt">dfdsf</div>}
+        </div> */}
+
+        <div className="w-full overflow-x-auto mt-6">
+          <table className="w-full text-gray-500 border-collapse">
+            <thead className="bg-gray-100 text-gray-700 text-sm font-medium border-b">
               <tr>
-                <td colSpan={9} className="text-center w-full h-[400px]">
-                  <div className="flex items-center justify-center w-full h-full space-x-2 text-gray-900">
-                    <Loader size={"size-7"} color={"fill-primary"} />
-                    <span>Loading...</span>
-                  </div>
-                </td>
+                {[
+                  { label: "Order No", key: "orderno" },
+                  { label: "Date", key: "date" },
+                  { label: "Order Status", key: "customer.name" },
+                  { label: "Amount", key: "customer.type" },
+                  { label: "Payment Method", key: "customer.price" },
+                  { label: "Pay Seller", key: "customer.paymentStatus" },
+                  { label: "Payment Hash", key: "customer.deliveryStatus" },
+                ].map((header, idx) => (
+                  <th
+                    key={idx}
+                    className="px-6 py-3 text-base font-normal text-center cursor-pointer"
+                    onClick={() => handleSortChange(header.key)}
+                  >
+                    {header.label}
+                  </th>
+                ))}
               </tr>
-            ) : ordersList?.length > 0 ? (
-              ordersList?.map((el, index) => (
-                <tr
-                  key={index}
-                  className="odd:bg-white even:bg-gray-50 border-b text-gray-800 text-sm"
-                >
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>{el?.orderId}</Link>
-                  </td>
-                  <td className="px-6 py-4 break-all text-center">
-                    <Link href={`/order/${el?._id}`}>
-                      {formatDate(new Date(el?.orderDate))}
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>{el?.buyer?.name}</Link>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link
-                      href={`/order/${el?._id}`}
-                      className="border rounded-full p-2 text-xs"
-                    >
-                      {el?.orderType}
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>{el?.paymentMethod}</Link>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/order/${el?._id}`}>
-                      ${el?.financial?.totalCost.toFixed(2)}
-                    </Link>
-                  </td>
-                  <td className={`px-6 py-4 break-all text-center`}>
-                    <Link
-                      href={`/order/${el?._id}`}
-                      className={`rounded-full px-2 py-1 capitalize ${
-                        el?.status?.payment === "completed"
-                          ? "text-green-400 bg-green-50"
-                          : "text-yellow-400 bg-yellow-50"
-                      }`}
-                    >
-                      {el?.status?.payment}
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 break-all text-center">
-                    <Link
-                      href={`/order/${el?._id}`}
-                      className={`rounded-full px-2 py-1 capitalize ${
-                        el?.orderType !== "non-phygitals"
-                          ? el?.status?.delivery === "Completed"
-                            ? "text-green-400 bg-green-50"
-                            : el?.status?.delivery === "Not Initiated"
-                            ? "text-yellow-400 bg-yellow-50"
-                            : "text-red-400 bg-red-50"
-                          : ""
-                      }`}
-                    >
-                      {el?.orderType === "non-phygitals"
-                        ? "N/A"
-                        : el?.status?.delivery}
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 break-all text-center">
-                    <Link
-                      href={`/order/${el?._id}`}
-                      className={`rounded-full px-2 py-1 capitalize ${
-                        el?.orderType === "non-phygitals"
-                          ? el?.status?.payment === "completed"
-                            ? "text-green-400 bg-green-50"
-                            : "text-white bg-black"
-                          : el?.status?.delivery === "Completed" &&
-                            el?.status?.payment === "completed"
-                          ? "text-green-400 bg-green-50"
-                          : "text-white bg-black"
-                      }`}
-                    >
-                      {/* {el?.orderType === "non-phygitals"
-                        ? el?.status?.payment !== "completed"
-                          ? "Complete"
-                          : "Active"
-                        : !el?.status?.isDead
-                        ? el?.status?.delivery === "Completed" &&
-                          el?.status?.payment === "completed"
-                          ? "Complete"
-                          : "Active"
-                        : el?.status?.payment !== "completed"
-                        ? "Complete"
-                        : "Active"} */}
-                      {el?.orderType === "non-phygitals"
-                        ? el?.status?.payment === "completed"
-                          ? "Completed"
-                          : "Active"
-                        : el?.status?.delivery === "Completed" &&
-                          el?.status?.payment === "completed"
-                        ? "Complete"
-                        : "Active"}
-                    </Link>
+            </thead>
+            <tbody>
+              {orderDataLoading ? (
+                <tr>
+                  <td colSpan={9} className="text-center w-full h-[400px]">
+                    <div className="flex items-center justify-center w-full h-full space-x-2 text-gray-900">
+                      <Loader size={"size-7"} color={"fill-primary"} />
+                      <span>Loading...</span>
+                    </div>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={9} className="text-center w-full h-[400px]">
-                  No orders found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              ) : ordersList?.length > 0 ? (
+                ordersList?.map((el, index) => (
+                  <tr
+                    key={index}
+                    className="odd:bg-white even:bg-gray-50 border-b text-gray-800 text-sm"
+                  >
+                    <td className="px-6 py-4 text-center">
+                      <Link href={`/order/${el?._id}`}>{el?.orderId}</Link>
+                    </td>
+                    <td className="px-6 py-4 break-all text-center">
+                      <Link href={`/order/${el?._id}`}>
+                        {formatDate(new Date(el?.orderDate))}
+                      </Link>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <Link
+                        href={`/order/${el?._id}`}
+                        className={`rounded-md px-2.5 py-1.5 capitalize ${
+                          el?.orderType === "non-phygitals"
+                            ? el?.status?.payment === "completed"
+                              ? "text-green-400 border border-green-400"
+                              : "text-yellow-300 border border-yellow-300"
+                            : el?.status?.delivery === "Completed" &&
+                              el?.status?.payment === "completed"
+                            ? "text-green-400 border border-green-400"
+                            : "text-yellow-300 border border-yellow-300"
+                        }`}
+                      >
+                        {el?.orderType === "non-phygitals"
+                          ? el?.status?.payment === "completed"
+                            ? "Completed"
+                            : "Unconfirmed"
+                          : el?.status?.delivery === "Completed" &&
+                            el?.status?.payment === "completed"
+                          ? "Completed"
+                          : "Unconfirmed"}
+                      </Link>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {/* <Link
+                        href={`/order/${el?._id}`}
+                        className="border rounded-full p-2 text-xs"
+                      >
+                        {el?.orderType}
+                      </Link> */}{" "}
+                      <Link href={`/order/${el?._id}`}>
+                        ${el?.financial?.totalCost.toFixed(2)}
+                      </Link>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <Link href={`/order/${el?._id}`}>
+                        {el?.paymentMethod}
+                      </Link>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <Link
+                        href={`/order/${el?._id}`}
+                        className={`rounded-md px-2.5 py-1.5 capitalize ${
+                          el?.status?.payment === "completed"
+                            ? " text-green-300 border border-green-300"
+                            : "text-yellow-300 border border-yellow-300"
+                        }`}
+                      >
+                        {el?.status?.payment === "completed"
+                          ? "Paid"
+                          : "Unpaid"}
+                      </Link>
+                    </td>
+                    {/* <td className={`px-6 py-4 break-all text-center`}>
+                      <Link
+                        href={`/order/${el?._id}`}
+                        className={`rounded-full px-2 py-1 capitalize ${
+                          el?.status?.payment === "completed"
+                            ? "text-green-400 bg-green-50"
+                            : "text-yellow-400 bg-yellow-50"
+                        }`}
+                      >
+                        {el?.status?.payment}
+                      </Link>
+                    </td> */}
+                    <td className="px-6 py-4 break-all text-center">
+                      <Link
+                        href={`/order/${el?._id}`}
+                        className={`rounded-full px-2 py-1 capitalize ${
+                          el?.orderType !== "non-phygitals"
+                            ? el?.status?.delivery === "Completed"
+                              ? "text-green-400 bg-green-50"
+                              : el?.status?.delivery === "Not Initiated"
+                              ? "text-yellow-400 bg-yellow-50"
+                              : "text-red-400 bg-red-50"
+                            : ""
+                        }`}
+                      >
+                        d343j343l34...dfds32
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={9} className="text-center w-full h-[400px]">
+                    No orders found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
 
-        {ordersList?.length > 0 ? (
-          <div className="mr-5"> {renderPagination}</div>
-        ) : (
-          ""
-        )}
+          {ordersList?.length > 0 ? (
+            <div className="mr-5"> {renderPagination}</div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );
