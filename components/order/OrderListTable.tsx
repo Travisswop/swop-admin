@@ -8,8 +8,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
+import { GoDotFill } from "react-icons/go";
 import Loader from "../ui/Loader";
 import { formatDate } from "../util/formatData";
+import { idShorter } from "../util/idShorter";
 import ExportButton from "./ExportButton";
 
 interface Pagination {
@@ -19,15 +21,14 @@ interface Pagination {
   nextPage: number | null;
 }
 
-const tabItems = [
-  { title: "All Orders", slug: "all-orders", value: 27 },
-  { title: "Unconfirmed Orders", slug: "unconfirmed-orders", value: 16 },
-  { title: "Confirmed Orders", slug: "confirmed-orders", value: 17 },
-  { title: "Disputes", slug: "disputes", value: 10 },
-];
-
 const OrderListTable = ({ token }: { token: string }) => {
-  const [selectedTab, setSelectedTab] = useState("orderHistory");
+  const [filteredOrders, setFilteredOrders] = useState<Order[] | null>(null);
+  const [allOrders, setAllOrders] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [unconfirmedCount, setUnconfirmedCount] = useState(0);
+  const [disputs, setDisputs] = useState(0);
+
+  const [selectedTab, setSelectedTab] = useState("all-orders");
 
   const [ordersList, setOrderList] = useState<Order[]>([]);
   const [sort, setSort] = useState("orderDate:desc");
@@ -40,6 +41,17 @@ const OrderListTable = ({ token }: { token: string }) => {
   const [limit] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState<Pagination | null>(null);
+
+  const tabItems = [
+    { title: "All Orders", slug: "all-orders", value: allOrders },
+    {
+      title: "Unconfirmed Orders",
+      slug: "unconfirmed",
+      value: unconfirmedCount,
+    },
+    { title: "Confirmed Orders", slug: "confirmed", value: completedCount },
+    { title: "Disputes", slug: "disputes", value: disputs },
+  ];
 
   // Fetch Orders Data
 
@@ -84,6 +96,57 @@ const OrderListTable = ({ token }: { token: string }) => {
       isMounted = false;
     };
   }, [searchTerm, page, limit, token, currentPage, sort]);
+
+  useEffect(() => {
+    const getOrderStatus = (
+      el: Order
+    ): "Completed" | "Unconfirmed" | "Dispute" => {
+      if (el?.status?.isDispute) return "Dispute";
+
+      if (el?.orderType === "non-phygitals") {
+        return el?.status?.payment === "completed"
+          ? "Completed"
+          : "Unconfirmed";
+      } else {
+        return el?.status?.delivery === "Completed" &&
+          el?.status?.payment === "completed"
+          ? "Completed"
+          : "Unconfirmed";
+      }
+    };
+
+    let filtered: Order[] | null = null;
+
+    if (selectedTab === "all-orders") {
+      filtered = ordersList;
+    } else if (selectedTab === "confirmed") {
+      filtered = ordersList?.filter((el) => getOrderStatus(el) === "Completed");
+    } else if (selectedTab === "unconfirmed") {
+      filtered = ordersList?.filter(
+        (el) => getOrderStatus(el) === "Unconfirmed"
+      );
+    } else if (selectedTab === "disputs") {
+      const disputes = ordersList?.filter(
+        (el) => getOrderStatus(el) === "Dispute"
+      );
+      filtered = disputes.length > 0 ? disputes : null;
+    }
+
+    const completed: number =
+      ordersList?.filter((el) => getOrderStatus(el) === "Completed").length ||
+      0;
+    const unconfirmed: number =
+      ordersList?.filter((el) => getOrderStatus(el) === "Unconfirmed").length ||
+      0;
+    const disputesCount: number =
+      ordersList?.filter((el) => getOrderStatus(el) === "Dispute").length || 0;
+
+    setAllOrders(ordersList?.length || 0);
+    setFilteredOrders(filtered || []);
+    setCompletedCount(completed);
+    setUnconfirmedCount(unconfirmed);
+    setDisputs(disputesCount);
+  }, [selectedTab, ordersList]);
 
   const handleSortChange = (column: string) => {
     setSort((prevSort) => {
@@ -188,6 +251,51 @@ const OrderListTable = ({ token }: { token: string }) => {
   }, [pagination, currentPage, handlePaginationClick]);
 
   console.log("check data", totalPages, ordersList);
+
+  // useEffect(() => {
+  //   ordersList?.map((el) => {
+  //     if (selectedTab === "all-orders") {
+  //       return ordersList;
+  //     } else if (selectedTab === "unconfirmed") {
+  //       // el?.orderType === "non-phygitals"
+  //       //   ? el?.status?.payment === "completed"
+  //       //     ? "Completed"
+  //       //     : "Unconfirmed"
+  //       //   : el?.status?.delivery === "Completed" &&
+  //       //     el?.status?.payment === "completed"
+  //       //   ? "Completed"
+  //       //   : "Unconfirmed";
+  //       if (el?.status?.payment !== "completed") {
+  //         return ordersList;
+  //       }
+  //     } else if (selectedTab === "confirmed") {
+  //       if (
+  //         el?.orderType !== "non-phygitals" &&
+  //         el?.status?.delivery === "Completed" &&
+  //         el?.status?.payment === "completed"
+  //       ) {
+  //         return ordersList;
+  //       }
+  //       // el?.orderType === "non-phygitals"
+  //       //   ? el?.status?.payment === "completed"
+  //       //     ? "Completed"
+  //       //     : "Unconfirmed"
+  //       //   : el?.status?.delivery === "Completed" &&
+  //       //     el?.status?.payment === "completed"
+  //       //   ? "Completed"
+  //       //   : "Unconfirmed";
+  //     } else {
+  //       return [];
+  //     }
+  //   });
+  // }, [selectedTab, ordersList]);
+
+  console.log(
+    "log check data value",
+    unconfirmedCount,
+    completedCount,
+    filteredOrders
+  );
 
   return (
     <div className="">
@@ -343,8 +451,8 @@ const OrderListTable = ({ token }: { token: string }) => {
                     </div>
                   </td>
                 </tr>
-              ) : ordersList?.length > 0 ? (
-                ordersList?.map((el, index) => (
+              ) : allOrders > 0 ? (
+                filteredOrders?.map((el, index) => (
                   <tr
                     key={index}
                     className="odd:bg-white even:bg-gray-50 border-b text-gray-800 text-sm"
@@ -357,10 +465,10 @@ const OrderListTable = ({ token }: { token: string }) => {
                         {formatDate(new Date(el?.orderDate))}
                       </Link>
                     </td>
-                    <td className="px-6 py-4 text-center">
+                    <td className="px-6 py-4 text-center flex items-center justify-center">
                       <Link
                         href={`/order/${el?._id}`}
-                        className={`rounded-md px-2.5 py-1.5 capitalize ${
+                        className={`rounded-md px-2.5 py-1.5 capitalize flex items-center space-x-1 w-[120px] ${
                           el?.orderType === "non-phygitals"
                             ? el?.status?.payment === "completed"
                               ? "text-green-400 border border-green-400"
@@ -371,14 +479,19 @@ const OrderListTable = ({ token }: { token: string }) => {
                             : "text-yellow-300 border border-yellow-300"
                         }`}
                       >
-                        {el?.orderType === "non-phygitals"
-                          ? el?.status?.payment === "completed"
+                        <div className="w-4 h-4">
+                          <GoDotFill className="size-4" />
+                        </div>
+                        <p>
+                          {el?.orderType === "non-phygitals"
+                            ? el?.status?.payment === "completed"
+                              ? "Completed"
+                              : "Unconfirmed"
+                            : el?.status?.delivery === "Completed" &&
+                              el?.status?.payment === "completed"
                             ? "Completed"
-                            : "Unconfirmed"
-                          : el?.status?.delivery === "Completed" &&
-                            el?.status?.payment === "completed"
-                          ? "Completed"
-                          : "Unconfirmed"}
+                            : "Unconfirmed"}
+                        </p>
                       </Link>
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -397,18 +510,23 @@ const OrderListTable = ({ token }: { token: string }) => {
                         {el?.paymentMethod}
                       </Link>
                     </td>
-                    <td className="px-6 py-4 text-center">
+                    <td className="px-6 py-4 text-center flex items-center justify-center">
                       <Link
                         href={`/order/${el?._id}`}
-                        className={`rounded-md px-2.5 py-1.5 capitalize ${
+                        className={`rounded-md px-2.5 py-1.5 capitalize flex items-center space-x-1 w-[90px] ${
                           el?.status?.payment === "completed"
                             ? " text-green-300 border border-green-300"
                             : "text-yellow-300 border border-yellow-300"
                         }`}
                       >
-                        {el?.status?.payment === "completed"
-                          ? "Paid"
-                          : "Unpaid"}
+                        <div className="w-4 h-4">
+                          <GoDotFill className="size-4" />
+                        </div>
+                        <p>
+                          {el?.status?.payment === "completed"
+                            ? "Paid"
+                            : "Unpaid"}
+                        </p>
                       </Link>
                     </td>
                     {/* <td className={`px-6 py-4 break-all text-center`}>
@@ -426,17 +544,9 @@ const OrderListTable = ({ token }: { token: string }) => {
                     <td className="px-6 py-4 break-all text-center">
                       <Link
                         href={`/order/${el?._id}`}
-                        className={`rounded-full px-2 py-1 capitalize ${
-                          el?.orderType !== "non-phygitals"
-                            ? el?.status?.delivery === "Completed"
-                              ? "text-green-400 bg-green-50"
-                              : el?.status?.delivery === "Not Initiated"
-                              ? "text-yellow-400 bg-yellow-50"
-                              : "text-red-400 bg-red-50"
-                            : ""
-                        }`}
+                        className={`rounded-full px-2 py-1 capitalize`}
                       >
-                        d343j343l34...dfds32
+                        {idShorter(el?.txResult?.hash) || "N/N"}
                       </Link>
                     </td>
                   </tr>
@@ -451,7 +561,7 @@ const OrderListTable = ({ token }: { token: string }) => {
             </tbody>
           </table>
 
-          {ordersList?.length > 0 ? (
+          {selectedTab === "all-orders" && ordersList?.length > 0 ? (
             <div className="mr-5"> {renderPagination}</div>
           ) : (
             ""

@@ -79,12 +79,17 @@ export type Order = {
   buyer: buyer;
   customers: buyer;
   orderDate: Date;
-  orderType: string;
+  orderType?: string;
+  status?: {
+    payment?: string;
+    delivery?: string;
+    isDispute?: boolean;
+  };
   financial: Financial;
   mintedNfts: MintedNft[];
   phygitalDetails: PhygitalDetails;
   processingStages: ProcessingStage[];
-  status: Status;
+  // status: Status;
   swapTransaction: SwapTransaction;
   txResult: TxResult;
   paymentMethod: string;
