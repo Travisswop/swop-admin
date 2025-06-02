@@ -1,5 +1,6 @@
 "use client";
 
+import { DisputeDetailsResponse } from "@/types/dispute";
 import Image from "next/image";
 import { IoDocumentTextOutline, IoImageOutline } from "react-icons/io5";
 
@@ -37,61 +38,147 @@ const resolutionHistory = [
   },
 ];
 
-const DisputeDetials = () => {
+const DisputeDetials = ({
+  disputDetails,
+}: {
+  disputDetails: DisputeDetailsResponse;
+}) => {
+  console.log("check details page data ", disputDetails);
+
   return (
     <div className=" bg-white p-9">
       <div className="w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Dispute Details */}
         <div className="">
-          <h2 className="text-lg font-semibold mb-4">Dispute Details</h2>
+          <div className="">
+            <h2 className="text-lg font-semibold mb-4">Dispute Details</h2>
 
-          <div className="bg-white border p-6 rounded shadow">
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">Services/Item Details</p>
-              <p className="font-medium">Handcrafted Solid Wood</p>
+            <div className="bg-white border p-6 rounded shadow">
+              <div className="mb-4">
+                <p className="text-sm text-gray-500">Services/Item Details</p>
+                <p className="font-medium capitalize">
+                  {disputDetails?.dispute?.category}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-500">Order ID</p>
+                <p className="font-medium text-blue-600 underline cursor-pointer">
+                  {disputDetails?.order?.orderId}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-500">Buyer</p>
+                <p className="font-medium">
+                  {disputDetails?.parties?.buyer?.name}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-500">Address</p>
+                <p className="font-medium">
+                  {disputDetails?.parties?.buyer?.address?.line1}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-500">Dispute Reason</p>
+                <p className="font-medium">{disputDetails?.dispute?.reason}</p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-500">Type of Dispute</p>
+                <p className="font-medium capitalize">
+                  {disputDetails?.dispute?.category}
+                </p>
+              </div>
+
+              <div className="mb-4">
+                <p className="text-sm text-gray-500">Request Details</p>
+                <p className="text-sm text-gray-700 mt-1">
+                  {disputDetails?.dispute?.description}
+                </p>
+              </div>
+              <div className="mt-6 flex gap-3">
+                {disputDetails?.dispute?.documents?.map((el, index) => (
+                  <div
+                    key={index}
+                    className="text-sm px-4 py-2 border border-gray-300 rounded bg-gray-100 hover:bg-gray-200 flex items-center space-x-2 cursor-pointer"
+                    onClick={() => {
+                      const link = document.createElement("a");
+                      link.href = el.downloadUrl;
+                      link.download =
+                        el?.fileName || `file_${index}.${el.fileType || "pdf"}`; // Forces download with a filename
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                  >
+                    {el.fileType === "jpeg" ? (
+                      <>
+                        <IoImageOutline className="size-5 text-gray-600" />
+                        <span>{el?.fileName || "JPEG Image"}</span>
+                      </>
+                    ) : (
+                      <>
+                        <IoDocumentTextOutline className="size-5 text-gray-600" />
+                        <span>{el?.fileName || "Document"}</span>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
+          {/* Additional Dispute Details Section */}
+          <div className="mt-5">
+            <h2 className="text-lg font-semibold mb-4">Product Details</h2>
 
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">Order ID</p>
-              <p className="font-medium text-blue-600 underline cursor-pointer">
-                Order Tracking Info
-              </p>
-            </div>
-
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">Buyer</p>
-              <p className="font-medium">Sadit Ahsa</p>
-            </div>
-
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">Dispute Reason</p>
-              <p className="font-medium">Item not as described</p>
-            </div>
-
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">Type of Dispute</p>
-              <p className="font-medium">Chargeback</p>
-            </div>
-
-            <div className="mb-4">
-              <p className="text-sm text-gray-500">Request Details</p>
-              <p className="text-sm text-gray-700 mt-1">
-                You notice a transaction on your account that you did not
-                authorize or recognize. This could be a case of fraudulent
-                activity, such as a purchase made without your consent or a
-                subscription you didn’t sign up for...
-              </p>
-            </div>
-
-            <div className="mt-6 flex gap-3">
-              <button className="text-sm px-4 py-2 border border-gray-300 rounded bg-gray-100 hover:bg-gray-200 flex items-center space-x-2">
-                <IoDocumentTextOutline className="size-5 text-gray-600" />
-                <span>document.doc</span>
-              </button>
-              <button className="text-sm px-4 py-2 border border-gray-300 rounded bg-gray-100 hover:bg-gray-200 flex items-center space-x-2">
-                <IoImageOutline className="size-5 text-gray-600" />
-                <span> image.png </span>
-              </button>
+            <div className="bg-white border rounded shadow">
+              {/* Order Items Table */}
+              <div className="mb-4 overflow-x-auto max-w-6xl">
+                <table className="w-full text-left border border-red-800 rounded-lg overflow-hidden">
+                  <thead className="text-base font-medium text-gray-700 bg-gray-50">
+                    <tr>
+                      {["Product Name", "Quantity", "Price"].map(
+                        (header, idx) => (
+                          <th key={idx} className="px-6 py-3 border-gray-200">
+                            {header}
+                          </th>
+                        )
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {disputDetails?.order?.mintedNfts &&
+                    disputDetails?.order?.mintedNfts.length > 0 ? (
+                      disputDetails?.order?.mintedNfts?.map(
+                        (product, index) => (
+                          <tr
+                            key={index}
+                            className="odd:bg-white even:bg-gray-50 border-b border-gray-400 text-base text-gray-800  hover:bg-gray-100 transition-colors"
+                          >
+                            <td className="py-4 capitalize pl-5">
+                              {product?.template?.name}
+                            </td>
+                            <td className="py-4 pl-10">{product?.quantity}</td>
+                            <td className="py-4 pl-6">
+                              <div className="font-medium">
+                                $ {product?.template?.price}
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      )
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={4}
+                          className="py-4 text-center text-gray-500"
+                        >
+                          No products found.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -117,6 +204,7 @@ const DisputeDetials = () => {
                 </span>
               </div>
             </div>
+
             <div className="flex justify-between flex-wrap space-x-6 mt-16">
               <div className="mb-4 flex-1">
                 <p className="text-sm text-gray-500">Resolution Reached</p>

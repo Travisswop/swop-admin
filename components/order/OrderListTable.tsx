@@ -26,7 +26,7 @@ const OrderListTable = ({ token }: { token: string }) => {
   const [allOrders, setAllOrders] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [unconfirmedCount, setUnconfirmedCount] = useState(0);
-  const [disputs, setDisputs] = useState(0);
+
 
   const [selectedTab, setSelectedTab] = useState("all-orders");
 
@@ -50,7 +50,7 @@ const OrderListTable = ({ token }: { token: string }) => {
       value: unconfirmedCount,
     },
     { title: "Confirmed Orders", slug: "confirmed", value: completedCount },
-    { title: "Disputes", slug: "disputes", value: disputs },
+    // { title: "Disputes", slug: "disputes", value: disputs },
   ];
 
   // Fetch Orders Data
@@ -138,14 +138,11 @@ const OrderListTable = ({ token }: { token: string }) => {
     const unconfirmed: number =
       ordersList?.filter((el) => getOrderStatus(el) === "Unconfirmed").length ||
       0;
-    const disputesCount: number =
-      ordersList?.filter((el) => getOrderStatus(el) === "Dispute").length || 0;
 
     setAllOrders(ordersList?.length || 0);
     setFilteredOrders(filtered || []);
     setCompletedCount(completed);
     setUnconfirmedCount(unconfirmed);
-    setDisputs(disputesCount);
   }, [selectedTab, ordersList]);
 
   const handleSortChange = (column: string) => {

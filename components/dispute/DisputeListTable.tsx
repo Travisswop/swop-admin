@@ -1,6 +1,4 @@
 "use client";
-import { getOrderLists } from "@/action/ordersList";
-import { Order } from "@/types/orders";
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
@@ -8,9 +6,11 @@ import { FaSearch } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { GoDash, GoDotFill } from "react-icons/go";
 
+import { getDisputesList } from "@/action/dispute";
+import { DisputeDetailsResponse } from "@/types/dispute";
 import ExportButton from "../order/ExportButton";
 import Loader from "../ui/Loader";
-import { idShorter } from "../util/idShorter";
+import { formatDate } from "../util/formatData";
 import TopTabSection from "./TopTabSection";
 
 interface Pagination {
@@ -21,7 +21,9 @@ interface Pagination {
 }
 
 const DisputeListTable = ({ token }: { token: string }) => {
-  const [ordersList, setOrderList] = useState<Order[]>([]);
+  const [disputesList, setDisputesList] = useState<DisputeDetailsResponse[]>(
+    []
+  );
   const [sort, setSort] = useState("orderDate:desc");
 
   const [orderDataLoading, setOrderDataLoading] = useState(false);
@@ -41,19 +43,19 @@ const DisputeListTable = ({ token }: { token: string }) => {
 
     const fetchData = async () => {
       try {
-        const result = await getOrderLists(
-          token,
-          currentPage,
-          limit,
-          searchTerm,
-          sort
-        );
+        const result = await getDisputesList(token);
+
+        // currentPage,
+        // limit,
+        // itemsPerPage,
 
         if (isMounted) {
           if (result.success) {
-            setOrderList(result?.data);
-            setTotalPages(result.pagination.totalPages);
-            setPagination(result?.pagination);
+            setDisputesList(result.data.data.disputes);
+            if (result?.data?.data?.pagination) {
+              setTotalPages(result?.data?.data?.pagination.totalPages);
+              setPagination(result?.data?.data?.pagination);
+            }
             setPage(1);
           } else {
             console.error(result.message);
@@ -156,7 +158,7 @@ const DisputeListTable = ({ token }: { token: string }) => {
 
             {/* Ellipsis after page numbers */}
             {pagination?.currentPage &&
-              pagination.currentPage + 1 < (pagination.totalPages ?? 0) && (
+              pagination.currentPage + 1 < (pagination?.totalPages ?? 0) && (
                 <li className="h-[42px] w-[45px] border text-gray-600 flex items-center justify-center hover:bg-gray-100">
                   <BsThreeDots />
                 </li>
@@ -224,7 +226,7 @@ const DisputeListTable = ({ token }: { token: string }) => {
             )}
           </th>
 
-          <ExportButton ordersList={ordersList} />
+          <ExportButton ordersList={[]} />
         </div>
       </div>
 
@@ -235,11 +237,10 @@ const DisputeListTable = ({ token }: { token: string }) => {
             <tr>
               {[
                 { label: "Order ID", key: "id" },
-                { label: "Name", key: "customer.name" },
-                { label: "Category", key: "category" },
+                { label: "Category", key: "customer.name" },
+                { label: "Name", key: "category" },
                 { label: "Buyer", key: "buyer" },
-                { label: "Order Status", key: "orderStatus" },
-                { label: "Amount($)", key: "amount" },
+                // { label: "Order Status", key: "orderStatus" },
                 { label: "Date Initiated", key: "dateInitiated" },
                 { label: "Dispute Status", key: "disputeStatus" },
               ].map((header, idx) => (
@@ -263,52 +264,68 @@ const DisputeListTable = ({ token }: { token: string }) => {
                   </div>
                 </td>
               </tr>
-            ) : ordersList?.length > 0 ? (
-              ordersList?.map((el, index) => (
+            ) : disputesList?.length > 0 ? (
+              disputesList?.map((el, index) => (
                 <tr
                   key={index}
                   className="odd:bg-white even:bg-gray-50 border-b text-gray-800 text-sm"
                 >
                   <td className="px-6 py-4 text-center">
-                    <Link href={`/dispute/${el?._id}`}>{el?._id}</Link>
+                    <Link href={`/dispute/${el?.id}`}>{el?.orderId}</Link>
                   </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/dispute/${el?._id}`}>
-                      {el?.buyer?.name}
-                    </Link>
+                  <td className="px-6 py-4 text-center capitalize">
+                    <Link href={`/dispute/${el?.id}`}>{el?.category}</Link>
                   </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/dispute/${el?._id}`}>
+                  <td className="px-6 py-4 text-center ">
+                    <Link
+                      href={`/dispute/${el?.id}`}
+                      className="flex justify-center"
+                    >
                       <GoDash className="text-gray-500 size-5" />
                     </Link>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <Link href={`/dispute/${el?._id}`}>
+                    <Link
+                      href={`/dispute/${el?.id}`}
+                      className=" flex justify-center"
+                    >
                       <GoDash className="text-gray-500 size-5" />
                     </Link>
                   </td>
-                  <td className="px-6 py-4 text-center">
-                    <Link href={`/dispute/${el?._id}`}>
+                  {/* <td className="px-6 py-4 text-center">
+                    <Link href={`/dispute/${el?.orderId}`}>
                       <button className="cursor-pointer select-none px-2 py-1.5 text-base font-normal text-gray-700 bg-white border border-yellow-400 rounded-md shadow-sm hover:bg-gray-100 flex items-center justify-center gap-1 transition">
-                        <GoDotFill className="text-yellow-400 size-4" />
-                        <span>Pending</span>
+                        <GoDotFill
+                          className={`size-4 ${
+                            el?.status === "pending"
+                              ? "text-yellow-400 "
+                              : "text-green-400 "
+                          }`}
+                        />
+                        <span>{el?.status}</span>
                       </button>
                     </Link>
-                  </td>
+                  </td> */}
                   <td className="px-6 py-4 text-center">
-                    <Link href={`/dispute/${el?._id}`}>
-                      {el?.financial?.totalCost.toFixed(2)}
+                    <Link href={`/dispute/${el?.id}`}>
+                      {formatDate(el?.createdAt)}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 break-all text-center">
-                    <Link href={`/dispute/${el?._id}`}>
-                      {idShorter(el?.txResult?.hash)}{" "}
+
+                  <td className="py-4 break-all text-center flex items-center justify-center space-x-1">
+                    <Link href={`/dispute/${el?.id}`}>
+                      <button className="cursor-pointer select-none px-2 py-1.5 text-base font-normal text-gray-700 bg-white border border-yellow-400 rounded-md shadow-sm hover:bg-gray-100 flex items-center justify-center gap-1 transition">
+                        <GoDotFill
+                          className={`size-4 ${
+                            el?.status === "pending"
+                              ? "text-yellow-400 "
+                              : "text-green-400 "
+                          }`}
+                        />
+                        <span>{el?.status}</span>
+                      </button>
                     </Link>
-                  </td>
-                  <td className="px-6 py-4 break-all text-center flex items-center justify-center space-x-3">
-                    <button className="cursor-pointer select-none px-2 py-1.5 text-base font-normal text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-100 flex items-center justify-center gap-1 w-32 transition">
-                      Action required
-                    </button>
+
                     <BsThreeDotsVertical className="text-gray-500 size-4 cursor-pointer" />
                   </td>
                 </tr>
@@ -323,7 +340,7 @@ const DisputeListTable = ({ token }: { token: string }) => {
           </tbody>
         </table>
 
-        {ordersList?.length > 0 ? (
+        {disputesList?.length > 0 ? (
           <div className="mr-5"> {renderPagination}</div>
         ) : (
           ""
