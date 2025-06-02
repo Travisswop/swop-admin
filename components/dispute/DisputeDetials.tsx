@@ -56,43 +56,45 @@ const DisputeDetials = ({
 
             <div className="bg-white border p-6 rounded shadow">
               <div className="mb-4">
-                <p className="text-sm text-gray-500">Services/Item Details</p>
+                <p className="text-sm text-gray-800">Services/Item Details</p>
                 <p className="font-medium capitalize">
                   {disputDetails?.dispute?.category}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-500">Order ID</p>
+                <p className="text-sm text-gray-800">Order ID</p>
                 <p className="font-medium text-blue-600 underline cursor-pointer">
                   {disputDetails?.order?.orderId}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-500">Buyer</p>
-                <p className="font-medium">
+                <p className="text-sm text-gray-800">Buyer</p>
+                <p className="font-medium text-gray-800">
                   {disputDetails?.parties?.buyer?.name}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-500">Address</p>
-                <p className="font-medium">
+                <p className="text-sm text-gray-800">Address</p>
+                <p className="font-medium text-gray-800">
                   {disputDetails?.parties?.buyer?.address?.line1}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-500">Dispute Reason</p>
-                <p className="font-medium">{disputDetails?.dispute?.reason}</p>
+                <p className="text-sm text-gray-800">Dispute Reason</p>
+                <p className="font-medium text-gray-800">
+                  {disputDetails?.dispute?.reason}
+                </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-500">Type of Dispute</p>
-                <p className="font-medium capitalize">
+                <p className="text-sm text-gray-800">Type of Dispute</p>
+                <p className="font-medium capitalize text-gray-800">
                   {disputDetails?.dispute?.category}
                 </p>
               </div>
 
               <div className="mb-4">
-                <p className="text-sm text-gray-500">Request Details</p>
-                <p className="text-sm text-gray-700 mt-1">
+                <p className="text-sm text-gray-800">Request Details</p>
+                <p className="text-sm text-gray-800 mt-1">
                   {disputDetails?.dispute?.description}
                 </p>
               </div>
@@ -206,39 +208,41 @@ const DisputeDetials = ({
           <div className="bg-white p-6 border rounded shadow">
             <div className="flex justify-between flex-wrap space-x-6">
               <div className="flex-1">
-                <p className="text-sm text-gray-500">Disputes</p>
-                <p className="font-medium">WGYkjdsh-231</p>
+                <p className="text-sm text-gray-800">Disputes</p>
+                <p className="font-medium text-gray-800">WGYkjdsh-231</p>
               </div>
               <div className="flex-1">
-                <p className="text-sm text-gray-500">Expired on</p>
-                <p className="font-medium">October, 23, 2025</p>
+                <p className="text-sm text-gray-800">Expired on</p>
+                <p className="font-medium text-gray-800">October, 23, 2025</p>
               </div>
               <div className="flex-1">
-                <p className="text-sm text-gray-500">Resolution Status</p>
-                <span className="inline-block px-3 py-1 text-sm  border border-green-700 rounded mt-1">
-                  Resolved
+                <p className="text-sm text-gray-800">Resolution Status</p>
+                <span className="inline-block px-3 py-1 text-sm  border border-green-700 rounded mt-1 capitalize">
+                  {disputDetails?.dispute?.status}
                 </span>
               </div>
             </div>
 
             <div className="flex justify-between flex-wrap space-x-6 mt-16">
               <div className="mb-4 flex-1">
-                <p className="text-sm text-gray-500">Resolution Reached</p>
-                <p className="font-medium">Awarded to Customer</p>
+                <p className="text-sm text-gray-800">Resolution Reached</p>
+                <p className="font-medium text-gray-800">Awarded to Customer</p>
               </div>
               <div className="mb-6 flex-1">
-                <p className="text-sm text-gray-500">Amount Refunded</p>
-                <p className="font-medium text-green-600">$ 125.216</p>
+                <p className="text-sm text-gray-800">Amount Refunded</p>
+                <p className="font-medium text-green-600">$ 0</p>
               </div>
               <div className="mb-6 flex-1"></div>
             </div>
 
-            <div className="border-b bg-gray-500 w-full my-4" />
+            <div className="border-b text-gray-800 w-full my-4 " />
 
             <div className="mb-6 flex justify-between items-center">
               <div className="">
-                <h3 className="text-md font-medium">Resolution History</h3>
-                <p className="text-sm text-gray-500">
+                <h3 className="text-md font-medium text-gray-800">
+                  Resolution History
+                </h3>
+                <p className="text-sm text-gray-800">
                   Please see below for dispute
                 </p>
               </div>
