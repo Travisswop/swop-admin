@@ -126,7 +126,8 @@ const DisputeDetials = ({
               </div>
             </div>
           </div>
-          {/* Additional Dispute Details Section */}
+
+          {/* Payment Dispute Details Section */}
           <div className="mt-5">
             <h2 className="text-lg font-semibold mb-4">Product Details</h2>
 
@@ -181,6 +182,47 @@ const DisputeDetials = ({
               </div>
             </div>
           </div>
+          {disputDetails?.order?.paymentMethod === "stripe" ? (
+            <div className="mt-5">
+              <h2 className="text-lg font-semibold mb-4">Payment Details</h2>
+
+              <div className="bg-white border rounded shadow">
+                {/* Order Items Table */}
+                <div className="mb-4 overflow-x-auto max-w-6xl">
+                  <table className="w-full text-left border border-red-800 rounded-lg overflow-hidden">
+                    <thead className="text-base font-medium text-gray-700 bg-gray-50">
+                      <tr>
+                        {["Payment Id", "Status", "Amount"].map(
+                          (header, idx) => (
+                            <th key={idx} className="px-6 py-3 border-gray-200">
+                              {header}
+                            </th>
+                          )
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="odd:bg-white even:bg-gray-50 border-b border-gray-400 text-base text-gray-800  hover:bg-gray-100 transition-colors">
+                        <td className="py-4 capitalize pl-5">
+                          {disputDetails?.stripePayment?.paymentIntentId}
+                        </td>
+                        <td className="py-4 pl-2 capitalize">
+                          {disputDetails?.stripePayment?.status}
+                        </td>
+                        <td className="py-4 pl-6">
+                          <div className="font-medium">
+                            $ {disputDetails?.stripePayment?.amount}
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
 
         {/* Resolution */}
