@@ -56,7 +56,7 @@ interface Status {
   isDead: boolean;
 }
 
-interface Financial {
+export interface Financial {
   subtotal: number;
   totalCost: number;
   discountRate: number;
@@ -123,7 +123,7 @@ interface Party {
   address: Address;
 }
 
-interface StripePayment {
+export interface StripePayment {
   paymentIntentId: string;
   amount: number;
   currency: string;
