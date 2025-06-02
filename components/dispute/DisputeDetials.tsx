@@ -52,12 +52,14 @@ const DisputeDetials = ({
         {/* Dispute Details */}
         <div className="">
           <div className="">
-            <h2 className="text-lg font-semibold mb-4">Dispute Details</h2>
+            <h2 className="text-lg font-semibold mb-4 text-gray-800">
+              Dispute Details
+            </h2>
 
             <div className="bg-white border p-6 rounded shadow">
               <div className="mb-4">
                 <p className="text-sm text-gray-800">Services/Item Details</p>
-                <p className="font-medium capitalize">
+                <p className="font-medium capitalize text-gray-800">
                   {disputDetails?.dispute?.category}
                 </p>
               </div>
@@ -68,17 +70,49 @@ const DisputeDetials = ({
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-800">Buyer</p>
+                <p className="text-sm text-gray-800">Buyer Name</p>
                 <p className="font-medium text-gray-800">
                   {disputDetails?.parties?.buyer?.name}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-800">Address</p>
+                <p className="text-sm text-gray-800">Buyer Email</p>
+                <p className="font-medium text-gray-800">
+                  {disputDetails?.parties?.buyer?.email}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-800">Buyer Email</p>
+                <p className="font-medium text-gray-800">
+                  {disputDetails?.parties?.buyer?.phone}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-800">Buyer Address</p>
                 <p className="font-medium text-gray-800">
                   {disputDetails?.parties?.buyer?.address?.line1}
                 </p>
               </div>
+
+              <div className="mb-4">
+                <p className="text-sm text-gray-800">Seller Name</p>
+                <p className="font-medium text-gray-800">
+                  {disputDetails?.parties?.seller?.name}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-800">Seller Email</p>
+                <p className="font-medium text-gray-800">
+                  {disputDetails?.parties?.seller?.email}
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="text-sm text-gray-800">Seller Email</p>
+                <p className="font-medium text-gray-800">
+                  {disputDetails?.parties?.seller?.phone}
+                </p>
+              </div>
+
               <div className="mb-4">
                 <p className="text-sm text-gray-800">Dispute Reason</p>
                 <p className="font-medium text-gray-800">
@@ -102,7 +136,7 @@ const DisputeDetials = ({
                 {disputDetails?.dispute?.documents?.map((el, index) => (
                   <div
                     key={index}
-                    className="text-sm px-4 py-2 border border-gray-300 rounded bg-gray-100 hover:bg-gray-200 flex items-center space-x-2 cursor-pointer"
+                    className="text-sm px-4 py-2 border border-gray-300 rounded bg-gray-100 hover:bg-gray-200 flex items-center space-x-2 cursor-pointer text-gray-800"
                     onClick={() => {
                       const link = document.createElement("a");
                       link.href = el.downloadUrl;
@@ -115,12 +149,12 @@ const DisputeDetials = ({
                   >
                     {el.fileType === "jpeg" ? (
                       <>
-                        <IoImageOutline className="size-5 text-gray-600" />
+                        <IoImageOutline className="size-5 text-gray-900" />
                         <span>{el?.fileName || "JPEG Image"}</span>
                       </>
                     ) : (
                       <>
-                        <IoDocumentTextOutline className="size-5 text-gray-600" />
+                        <IoDocumentTextOutline className="size-5 text-gray-900" />
                         <span>{el?.fileName || "Document"}</span>
                       </>
                     )}
@@ -132,7 +166,9 @@ const DisputeDetials = ({
 
           {/* Payment Dispute Details Section */}
           <div className="mt-5">
-            <h2 className="text-lg font-semibold mb-4">Product Details</h2>
+            <h2 className="text-lg font-semibold mb-4 text-gray-800">
+              Product Details
+            </h2>
 
             <div className="bg-white border rounded shadow">
               {/* Order Items Table */}
@@ -187,7 +223,7 @@ const DisputeDetials = ({
           </div>
           {disputDetails?.order?.paymentMethod === "stripe" ? (
             <div className="mt-5">
-              <h2 className="text-lg font-semibold mb-4">
+              <h2 className="text-lg font-semibold mb-4 text-gray-800">
                 Payment Information
               </h2>
 
@@ -203,7 +239,9 @@ const DisputeDetials = ({
 
         {/* Resolution */}
         <div className="">
-          <h2 className="text-lg font-semibold mb-4">Resolution</h2>
+          <h2 className="text-lg font-semibold mb-4 text-gray-800">
+            Resolution
+          </h2>
 
           <div className="bg-white p-6 border rounded shadow">
             <div className="flex justify-between flex-wrap space-x-6">
@@ -217,7 +255,7 @@ const DisputeDetials = ({
               </div>
               <div className="flex-1">
                 <p className="text-sm text-gray-800">Resolution Status</p>
-                <span className="inline-block px-3 py-1 text-sm  border border-green-700 rounded mt-1 capitalize">
+                <span className="text-gra inline-block px-3 py-1 text-sm  border border-green-700 rounded mt-1 capitalize text-gray-800">
                   {disputDetails?.dispute?.status}
                 </span>
               </div>
@@ -237,7 +275,7 @@ const DisputeDetials = ({
 
             <div className="border-b text-gray-800 w-full my-4 " />
 
-            <div className="mb-6 flex justify-between items-center">
+            <div className="mb-6 flex justify-between items-center ">
               <div className="">
                 <h3 className="text-md font-medium text-gray-800">
                   Resolution History
@@ -246,7 +284,7 @@ const DisputeDetials = ({
                   Please see below for dispute
                 </p>
               </div>
-              <button className="text-sm px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-100">
+              <button className="text-sm px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-100 text-gray-800">
                 Archive
               </button>
             </div>
