@@ -8,58 +8,58 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
+import { Link } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 import { LuEye } from "react-icons/lu";
 import { MdOutlineFileDownload } from "react-icons/md";
 
 const demoTableData = [
-  {
-    id: 1,
-    name: "Hamida Hasan",
-    username: "Hamida.Swopple.ID",
-    address: "0xB4Fh3466...67Xd",
-    code: "8hg4xcvv",
-    image:
-      "https://img.freepik.com/free-photo/portrait-elegant-professional-businesswoman_23-2150917246.jpg?t=st=1741512909~exp=1741516509~hmac=234907dc23cab8311b9c0bdf724cebec486b814bda168cf2f988a97577d5faf9&w=740",
-  },
-  {
-    id: 2,
-    name: "John Doe",
-    username: "John.Swopple.ID",
-    address: "0xA3Gh6572...88Yt",
-    code: "7as3sdvf",
-    image:
-      "https://img.freepik.com/free-photo/handsome-young-businessman-suit_23-2148197598.jpg?w=740",
-  },
-  {
-    id: 3,
-    name: "Sarah Adams",
-    username: "Sarah.Swopple.ID",
-    address: "0xF9Jk1234...77Wx",
-    code: "5xy7tuvw",
-    image:
-      "https://img.freepik.com/free-photo/confident-young-businesswoman-glasses_23-2148197620.jpg?w=740",
-  },
-  {
-    id: 4,
-    name: "Michael Brown",
-    username: "Michael.Swopple.ID",
-    address: "0xM1Nk5678...99Zx",
-    code: "4pq9lmno",
-    image:
-      "https://img.freepik.com/free-photo/young-smiling-businessman-sitting-office_23-2148197599.jpg?w=740",
-  },
-  {
-    id: 5,
-    name: "Emily Wilson",
-    username: "Emily.Swopple.ID",
-    address: "0xXyZk9876...55Qr",
-    code: "3mn8abcs",
-    image:
-      "https://img.freepik.com/free-photo/successful-businesswoman-smiling-office_23-2148197630.jpg?w=740",
-  },
+  // {
+  //   id: 1,
+  //   name: "Hamida Hasan",
+  //   username: "Hamida.Swopple.ID",
+  //   address: "0xB4Fh3466...67Xd",
+  //   code: "8hg4xcvv",
+  //   image:
+  //     "https://img.freepik.com/free-photo/portrait-elegant-professional-businesswoman_23-2150917246.jpg?t=st=1741512909~exp=1741516509~hmac=234907dc23cab8311b9c0bdf724cebec486b814bda168cf2f988a97577d5faf9&w=740",
+  // },
+  // {
+  //   id: 2,
+  //   name: "John Doe",
+  //   username: "John.Swopple.ID",
+  //   address: "0xA3Gh6572...88Yt",
+  //   code: "7as3sdvf",
+  //   image:
+  //     "https://img.freepik.com/free-photo/handsome-young-businessman-suit_23-2148197598.jpg?w=740",
+  // },
+  // {
+  //   id: 3,
+  //   name: "Sarah Adams",
+  //   username: "Sarah.Swopple.ID",
+  //   address: "0xF9Jk1234...77Wx",
+  //   code: "5xy7tuvw",
+  //   image:
+  //     "https://img.freepik.com/free-photo/confident-young-businesswoman-glasses_23-2148197620.jpg?w=740",
+  // },
+  // {
+  //   id: 4,
+  //   name: "Michael Brown",
+  //   username: "Michael.Swopple.ID",
+  //   address: "0xM1Nk5678...99Zx",
+  //   code: "4pq9lmno",
+  //   image:
+  //     "https://img.freepik.com/free-photo/young-smiling-businessman-sitting-office_23-2148197599.jpg?w=740",
+  // },
+  // {
+  //   id: 5,
+  //   name: "Emily Wilson",
+  //   username: "Emily.Swopple.ID",
+  //   address: "0xXyZk9876...55Qr",
+  //   code: "3mn8abcs",
+  //   image:
+  //     "https://img.freepik.com/free-photo/successful-businesswoman-smiling-office_23-2148197630.jpg?w=740",
+  // },
 ];
 
 const CustomTable = () => {
@@ -120,6 +120,13 @@ const CustomTable = () => {
           </tr>
         </thead>
         <tbody>
+          {demoTableData.length === 0 && (
+            <tr className="text-center text-gray-500">
+              <td colSpan={4} className="px-6 py-4 mt-10">
+                No data available
+              </td>
+            </tr>
+          )}
           {demoTableData.map((el) => (
             <tr
               key={el.id}

@@ -69,6 +69,9 @@ const DisputeDetials = ({
                   {disputDetails?.order?.orderId}
                 </p>
               </div>
+
+              <hr className="my-3 border-gray-200" />
+
               <div className="mb-4">
                 <p className="text-sm text-gray-800">Buyer Name</p>
                 <p className="font-medium text-gray-800">
@@ -82,7 +85,7 @@ const DisputeDetials = ({
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-800">Buyer Email</p>
+                <p className="text-sm text-gray-800">Buyer Phone</p>
                 <p className="font-medium text-gray-800">
                   {disputDetails?.parties?.buyer?.phone}
                 </p>
@@ -94,6 +97,8 @@ const DisputeDetials = ({
                 </p>
               </div>
 
+              <hr className="my-3 border-gray-200" />
+
               <div className="mb-4">
                 <p className="text-sm text-gray-800">Seller Name</p>
                 <p className="font-medium text-gray-800">
@@ -102,16 +107,19 @@ const DisputeDetials = ({
               </div>
               <div className="mb-4">
                 <p className="text-sm text-gray-800">Seller Email</p>
+
                 <p className="font-medium text-gray-800">
                   {disputDetails?.parties?.seller?.email}
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm text-gray-800">Seller Email</p>
+                <p className="text-sm text-gray-800">Seller Phone</p>
                 <p className="font-medium text-gray-800">
                   {disputDetails?.parties?.seller?.phone}
                 </p>
               </div>
+
+              <hr className="my-3 border-gray-200" />
 
               <div className="mb-4">
                 <p className="text-sm text-gray-800">Dispute Reason</p>
@@ -264,7 +272,9 @@ const DisputeDetials = ({
             <div className="flex justify-between flex-wrap space-x-6 mt-16">
               <div className="mb-4 flex-1">
                 <p className="text-sm text-gray-800">Resolution Reached</p>
-                <p className="font-medium text-gray-800">Awarded to Customer</p>
+                <p className="font-medium text-gray-800">
+                  {disputDetails?.parties?.seller?.name}
+                </p>
               </div>
               <div className="mb-6 flex-1">
                 <p className="text-sm text-gray-800">Amount Refunded</p>
