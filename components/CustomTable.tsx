@@ -14,7 +14,14 @@ import { useState } from "react";
 import { LuEye } from "react-icons/lu";
 import { MdOutlineFileDownload } from "react-icons/md";
 
-const demoTableData = [
+const demoTableData: {
+  id: number;
+  name: string;
+  image: string;
+  username: string;
+  address: string;
+  code: string;
+}[] = [
   // {
   //   id: 1,
   //   name: "Hamida Hasan",
