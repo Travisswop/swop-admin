@@ -5,7 +5,8 @@ export async function getOrderLists(
   currentPage: number,
   limit: number,
   search: string = "",
-  sort: string
+  sort: string,
+  filterType: string = "all"
 ) {
   try {
     console.log("Fetching order lists with params:", sort);
@@ -15,6 +16,7 @@ export async function getOrderLists(
       limit: limit.toString(),
       ...(search && { search }),
       ...(sort && { sort }),
+      ...(filterType && { filterType }),
     });
 
     const response = await fetch(

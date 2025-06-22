@@ -22,13 +22,10 @@ interface Pagination {
 }
 
 const OrderListTable = ({ token }: { token: string }) => {
-  const [filteredOrders, setFilteredOrders] = useState<Order[] | null>(null);
   const [allOrders, setAllOrders] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [unconfirmedCount, setUnconfirmedCount] = useState(0);
-
-
-  const [selectedTab, setSelectedTab] = useState("all-orders");
+  const [filterType, setFilterType] = useState<string>("all");
 
   const [ordersList, setOrderList] = useState<Order[]>([]);
   const [sort, setSort] = useState("orderDate:desc");
@@ -43,13 +40,13 @@ const OrderListTable = ({ token }: { token: string }) => {
   const [pagination, setPagination] = useState<Pagination | null>(null);
 
   const tabItems = [
-    { title: "All Orders", slug: "all-orders", value: allOrders },
+    { title: "All Orders", slug: "all", value: allOrders },
     {
       title: "Unconfirmed Orders",
       slug: "unconfirmed",
       value: unconfirmedCount,
     },
-    { title: "Confirmed Orders", slug: "confirmed", value: completedCount },
+    { title: "Confirmed Orders", slug: "completed", value: completedCount },
     // { title: "Disputes", slug: "disputes", value: disputs },
   ];
 
@@ -66,17 +63,21 @@ const OrderListTable = ({ token }: { token: string }) => {
           currentPage,
           limit,
           searchTerm,
-          sort
+          sort,
+          filterType
         );
 
         if (isMounted) {
           if (result.success) {
+            setAllOrders(result?.counts?.total || 0);
+            setUnconfirmedCount(result?.counts?.unconfirmed || 0);
+            setCompletedCount(result?.counts?.completed || 0);
             setOrderList(result?.data);
             setTotalPages(result.pagination.totalPages);
             setPagination(result?.pagination);
             setPage(1);
           } else {
-            console.error(result.message);
+            console.error(result?.message);
           }
         }
       } catch (error) {
@@ -95,55 +96,7 @@ const OrderListTable = ({ token }: { token: string }) => {
     return () => {
       isMounted = false;
     };
-  }, [searchTerm, page, limit, token, currentPage, sort]);
-
-  useEffect(() => {
-    const getOrderStatus = (
-      el: Order
-    ): "Completed" | "Unconfirmed" | "Dispute" => {
-      if (el?.status?.isDispute) return "Dispute";
-
-      if (el?.orderType === "non-phygitals") {
-        return el?.status?.payment === "completed"
-          ? "Completed"
-          : "Unconfirmed";
-      } else {
-        return el?.status?.delivery === "Completed" &&
-          el?.status?.payment === "completed"
-          ? "Completed"
-          : "Unconfirmed";
-      }
-    };
-
-    let filtered: Order[] | null = null;
-
-    if (selectedTab === "all-orders") {
-      filtered = ordersList;
-    } else if (selectedTab === "confirmed") {
-      filtered = ordersList?.filter((el) => getOrderStatus(el) === "Completed");
-    } else if (selectedTab === "unconfirmed") {
-      filtered = ordersList?.filter(
-        (el) => getOrderStatus(el) === "Unconfirmed"
-      );
-    } else if (selectedTab === "disputs") {
-      const disputes = ordersList?.filter(
-        (el) => getOrderStatus(el) === "Dispute"
-      );
-      filtered = disputes.length > 0 ? disputes : null;
-    }
-
-    const completed: number =
-      ordersList?.filter((el) => getOrderStatus(el) === "Completed").length ||
-      0;
-    const unconfirmed: number =
-      ordersList?.filter((el) => getOrderStatus(el) === "Unconfirmed").length ||
-      0;
-
-    setAllOrders(ordersList?.length || 0);
-    setFilteredOrders(filtered || []);
-    setCompletedCount(completed);
-    setUnconfirmedCount(unconfirmed);
-  }, [selectedTab, ordersList]);
+  }, [searchTerm, page, limit, token, currentPage, sort, filterType]);
 
   const handleSortChange = (column: string) => {
     setSort((prevSort) => {
@@ -249,51 +202,6 @@ const OrderListTable = ({ token }: { token: string }) => {
 
   console.log("check data", totalPages, ordersList);
 
-  // useEffect(() => {
-  //   ordersList?.map((el) => {
-  //     if (selectedTab === "all-orders") {
-  //       return ordersList;
-  //     } else if (selectedTab === "unconfirmed") {
-  //       // el?.orderType === "non-phygitals"
-  //       //   ? el?.status?.payment === "completed"
-  //       //     ? "Completed"
-  //       //     : "Unconfirmed"
-  //       //   : el?.status?.delivery === "Completed" &&
-  //       //     el?.status?.payment === "completed"
-  //       //   ? "Completed"
-  //       //   : "Unconfirmed";
-  //       if (el?.status?.payment !== "completed") {
-  //         return ordersList;
-  //       }
-  //     } else if (selectedTab === "confirmed") {
-  //       if (
-  //         el?.orderType !== "non-phygitals" &&
-  //         el?.status?.delivery === "Completed" &&
-  //         el?.status?.payment === "completed"
-  //       ) {
-  //         return ordersList;
-  //       }
-  //       // el?.orderType === "non-phygitals"
-  //       //   ? el?.status?.payment === "completed"
-  //       //     ? "Completed"
-  //       //     : "Unconfirmed"
-  //       //   : el?.status?.delivery === "Completed" &&
-  //       //     el?.status?.payment === "completed"
-  //       //   ? "Completed"
-  //       //   : "Unconfirmed";
-  //     } else {
-  //       return [];
-  //     }
-  //   });
-  // }, [selectedTab, ordersList]);
-
-  console.log(
-    "log check data value",
-    unconfirmedCount,
-    completedCount,
-    filteredOrders
-  );
-
   return (
     <div className="">
       <div className="w-full overflow-x-auto bg-white rounded-2xl p-9 flex items-center justify-between space-x-8">
@@ -327,10 +235,10 @@ const OrderListTable = ({ token }: { token: string }) => {
             {tabItems?.map((tab, index) => (
               <button
                 key={index}
-                onClick={() => setSelectedTab(tab?.slug)}
+                onClick={() => setFilterType(tab?.slug)}
                 className={clsx(
                   "relative py-2 text-base font-medium transition-colors duration-200 flex items-center space-x-2 ",
-                  selectedTab === tab?.slug ? "text-gray-900" : "text-gray-500"
+                  filterType === tab?.slug ? "text-gray-900" : "text-gray-500"
                 )}
               >
                 <h2>{tab?.title}</h2>{" "}
@@ -338,7 +246,7 @@ const OrderListTable = ({ token }: { token: string }) => {
                   {tab?.value}
                 </p>
                 {/* Animated underline */}
-                {selectedTab === tab?.slug && (
+                {filterType === tab?.slug && (
                   <motion.div
                     layoutId="underline"
                     className="absolute -left-3 right-0 -bottom-1 h-[2px] bg-gray-600 "
@@ -350,26 +258,6 @@ const OrderListTable = ({ token }: { token: string }) => {
         </div>
 
         {/* --- Top Controls --- */}
-
-        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={["DatePicker"]}>
-          <DatePicker
-            label="Date"
-            slotProps={{
-              textField: {
-                variant: "outlined",
-                fullWidth: true,
-                sx: {
-                  borderRadius: 2,
-                },
-                InputLabelProps: {
-                  shrink: true,
-                },
-              },
-            }}
-          />
-        </DemoContainer>
-      </LocalizationProvider> */}
 
         <div className="flex justify-between items-center mb-6 mt-6">
           {/* Search Input */}
@@ -411,10 +299,6 @@ const OrderListTable = ({ token }: { token: string }) => {
 
         {/* --- Orders Table --- */}
 
-        {/* <div className="mt-4 w-full">
-          {selectedTab === "orders" && <div className="mt">dfdsf</div>}
-        </div> */}
-
         <div className="w-full overflow-x-auto mt-6">
           <table className="w-full text-gray-500 border-collapse">
             <thead className="bg-gray-100 text-gray-700 text-sm font-medium border-b">
@@ -448,8 +332,8 @@ const OrderListTable = ({ token }: { token: string }) => {
                     </div>
                   </td>
                 </tr>
-              ) : allOrders > 0 ? (
-                filteredOrders?.map((el, index) => (
+              ) : ordersList?.length > 0 ? (
+                ordersList?.map((el, index) => (
                   <tr
                     key={index}
                     className="odd:bg-white even:bg-gray-50 border-b text-gray-800 text-sm"
@@ -558,7 +442,7 @@ const OrderListTable = ({ token }: { token: string }) => {
             </tbody>
           </table>
 
-          {selectedTab === "all-orders" && ordersList?.length > 0 ? (
+          {ordersList?.length > 0 ? (
             <div className="mr-5"> {renderPagination}</div>
           ) : (
             ""
