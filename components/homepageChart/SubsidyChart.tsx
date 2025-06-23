@@ -84,13 +84,16 @@ const SubsidyWalletChart: React.FC = () => {
           <div className="mt-6">
             <div className="p-4 space-y-4 h-[200px] overflow-y-auto">
               {data?.map((token, index) => {
+                if (index === 2) return null;
+
                 const icon = token?.marketData?.iconUrl || "";
                 const price = parseFloat(token?.marketData?.price || "0");
-                const balance = token?.balance;
 
-                const formattedBalance = balance / 10 ** token?.decimals;
+                const rawBalance = token?.balance ?? "0";
+                const balance = parseFloat(rawBalance.toString());
+                const usdValue = balance * price;
 
-                const usdValue = formattedBalance * price;
+                if (isNaN(balance) || isNaN(price)) return null;
 
                 return (
                   <div
@@ -102,7 +105,7 @@ const SubsidyWalletChart: React.FC = () => {
                         width={24}
                         height={24}
                         src={icon}
-                        alt={token.symbol}
+                        alt={token.symbol || "token"}
                         className="w-6 h-6"
                       />
                     )}
@@ -111,12 +114,12 @@ const SubsidyWalletChart: React.FC = () => {
                         {token.name} ({token.symbol})
                       </div>
                       <div className="text-xs text-gray-500">
-                        Balance: {formattedBalance.toFixed(8)} | Price: $
+                        Balance: {balance.toFixed(4)} | Price: $
                         {price.toFixed(4)}
                       </div>
                     </div>
                     <div className="font-medium text-base text-gray-800">
-                      {Number(usdValue).toFixed(8)}
+                      ${usdValue.toFixed(4)}
                     </div>
                   </div>
                 );
