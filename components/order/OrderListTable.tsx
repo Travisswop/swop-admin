@@ -238,7 +238,9 @@ const OrderListTable = ({ token }: { token: string }) => {
                 onClick={() => setFilterType(tab?.slug)}
                 className={clsx(
                   "relative py-2 text-base font-medium transition-colors duration-200 flex items-center space-x-2 ",
-                  filterType === tab?.slug ? "text-gray-900" : "text-gray-500"
+                  filterType === tab?.slug
+                    ? "text-gray-900"
+                    : "text-gray-500"
                 )}
               >
                 <h2>{tab?.title}</h2>{" "}

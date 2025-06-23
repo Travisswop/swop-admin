@@ -23,13 +23,13 @@ const SubsidyWalletChart: React.FC = () => {
   // if (loading) return <p>Loading wallet data...</p>;
   // if (error) return <p>{error}</p>;
 
-  const balance = data?.[0]?.balance ?? 0;
-  const formattedBalance = new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(balance);
+  // const balance = data?.[0]?.balance ?? 0;
+  // const formattedBalance = new Intl.NumberFormat("en-US", {
+  //   minimumFractionDigits: 2,
+  //   maximumFractionDigits: 2,
+  // }).format(balance);
 
-  console.log("check data info", loading, error);
+  console.log("check wallet data info", data, loading, error);
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm flex-[2] xl:flex-[1.5] 2xl:flex-1">
@@ -65,6 +65,44 @@ const SubsidyWalletChart: React.FC = () => {
         </BarChart>
       </ResponsiveContainer>
       <div className="mt-6">
+        <div className="p-4 space-y-4 h-[200px] overflow-y-auto">
+          {data?.map((token, index) => {
+            const icon = token?.marketData?.iconUrl || "";
+            const price = parseFloat(token?.marketData?.price || "0");
+            const balance = token?.balance;
+            const formattedBalance = balance / 10 ** token?.decimals;
+            const usdValue = formattedBalance * price;
+
+            return (
+              <div
+                key={index}
+                className="flex items-center gap-4 border-b pb-2"
+              >
+                {icon && (
+                  <Image
+                    width={24}
+                    height={24}
+                    src={icon}
+                    alt={token.symbol}
+                    className="w-6 h-6"
+                  />
+                )}
+                <div className="flex-1">
+                  <div className="font-semibold text-sm">
+                    {token.name} ({token.symbol})
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Balance: {formattedBalance.toFixed(4)} | Price: $
+                    {price.toFixed(4)}
+                  </div>
+                </div>
+                <div className="font-medium text-base text-gray-800">
+                  ${usdValue.toFixed(4)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
         {/* <div className="flex items-center mb-4">
           <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
             <Image
@@ -81,7 +119,7 @@ const SubsidyWalletChart: React.FC = () => {
           </div>
           <p className="ml-auto font-semibold text-purple-500">$ 7000.00</p>
         </div> */}
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
             <Image
               src="/images/swop-logo.png"
@@ -96,7 +134,7 @@ const SubsidyWalletChart: React.FC = () => {
             <p className="text-xs text-gray-500">Swopple</p>
           </div>
           <p className="ml-auto font-semibold">$ {formattedBalance}</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
