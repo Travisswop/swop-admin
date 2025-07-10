@@ -26,12 +26,41 @@ interface ApiErrorResponse extends BaseApiResponse {
 
 // ==================== DISPUTE TYPES ====================
 export interface Document {
-  id: string;
+  id?: string;
   fileName: string;
   fileSize: number;
   fileType: string;
-  uploadedAt: string;
-  downloadUrl: string;
+  uploadedAt?: string;
+  downloadUrl?: string;
+  cloudinaryUrl?: string;
+  fieldName?: string;
+}
+
+export interface SellerChallenge {
+  response: string;
+  category: string;
+  evidenceDescription: string;
+  requestedAction: string;
+  additionalNotes: string | null;
+  status: string;
+  submittedAt: string;
+  documents: Document[];
+}
+
+interface Resolution {
+  refundTransaction: {
+    status: string;
+  };
+  payoutTransaction: {
+    status: string;
+    processedAt?: string;
+  };
+  winner: 'seller' | 'buyer';
+  resolutionType: 'seller_payout' | 'buyer_refund';
+  refundAmount: number;
+  payoutAmount: number;
+  resolvedAt: string;
+  resolvedBy: string;
 }
 
 export interface Dispute {
@@ -39,20 +68,26 @@ export interface Dispute {
   reason: string;
   category: string;
   description: string;
-  status: "pending" | "resolved" | "rejected" | "in_review"; // enum if possible
-  priority: "low" | "medium" | "high";
+  status:
+    | 'pending'
+    | 'resolved'
+    | 'rejected'
+    | 'in_review'
+    | 'challenged';
+  priority: 'low' | 'medium' | 'high';
   createdAt: string;
   updatedAt: string;
   response: string | null;
   responseDate: string | null;
   documents: Document[];
-  sellerChallenge: unknown | null;
+  sellerChallenge: SellerChallenge | null;
+  resolution?: Resolution;
 }
 
 // ==================== ORDER RELATED TYPES ====================
 interface Status {
   delivery: string;
-  payment: "completed" | "pending" | "failed";
+  payment: 'completed' | 'pending' | 'failed';
   isDead: boolean;
 }
 
@@ -67,6 +102,66 @@ interface ProcessingStage {
   stage: string;
   timestamp: string;
   status: string;
+  details?: {
+    error?: string;
+    trackingNumber?: string;
+    shippingProvider?: string;
+    estimatedDeliveryDate?: string;
+    additionalNotes?: string;
+    updatedBy?: string;
+    autoCompleted?: boolean;
+    reason?: string;
+  };
+}
+
+interface TxResult {
+  hash: string;
+  status: string;
+  tokenName: string;
+  tokenSymbol: string;
+  tokenIcon: string;
+  tokenAddress: string;
+  transferAmount: number;
+  tokenAmount: string;
+  tokenDecimals: number;
+  error: string | null;
+}
+
+interface SwapTransaction {
+  txHash: string | null;
+  status: string;
+  fromToken: string | null;
+  toToken: string | null;
+  inputAmount: number;
+  outputAmount: number;
+  error: string | null;
+}
+
+interface UsdcTransfer {
+  txHash: string | null;
+  status: string;
+  amount: number;
+  recipientAddress: string;
+  error: string | null;
+}
+
+interface EscrowTransfer {
+  txHash: string;
+  status: string;
+  amount: number;
+  recipientAddress: string;
+  error: string | null;
+}
+
+interface PhygitalDetails {
+  releaseConditions: {
+    shippingConfirmed: boolean;
+    customerReceiptConfirmed: boolean;
+  };
+  fundReleased: {
+    timestamp: string;
+  };
+  disputesProcessingStages: unknown[];
 }
 
 interface NFTTemplate {
@@ -78,10 +173,18 @@ interface NFTTemplate {
   collectionMintAddress: string;
 }
 
+interface MintResult {
+  txHash: string;
+  mintAddress: string;
+  status: string;
+  error: string | null;
+}
+
 interface MintedNFT {
   nftTemplateId: string;
   collectionId: string;
   quantity: number;
+  mintResult: MintResult;
   template: NFTTemplate;
 }
 
@@ -95,8 +198,15 @@ export interface Order {
   orderDate: string;
   ageInDays: number;
   isProcessing: boolean;
+  lastProcessingError: Record<string, unknown>;
+  txResult: TxResult;
+  swapTransaction: SwapTransaction;
+  usdcTransfer: UsdcTransfer;
+  escrowTransfer: EscrowTransfer;
   processingStages: ProcessingStage[];
+  phygitalDetails: PhygitalDetails;
   mintedNfts: MintedNFT[];
+  guest: Record<string, unknown>;
 }
 
 // ==================== PAYMENT & PARTY TYPES ====================
@@ -120,7 +230,7 @@ interface Party {
   email: string;
   phone: string;
   wallet: Wallet;
-  address: Address;
+  address?: Address;
 }
 
 export interface StripePayment {
@@ -134,25 +244,24 @@ export interface StripePayment {
 }
 
 // ==================== RESPONSE TYPES ====================
-export interface DisputeListItem
-  extends Pick<
-    Dispute,
-    "id" | "reason" | "category" | "status" | "priority" | "createdAt"
-  > {}
+export interface DisputeListItem extends Dispute {
+  disputeDetails: {
+    category: string;
+    reason: string;
+    description: string;
+    status: string;
+    priority: string;
+  };
+  order: Order;
+  dates: { createdAt: string };
+}
 
 export interface DisputeListResponse {
-  data: DisputeListItem[];
+  disputes: DisputeListItem[];
   pagination: Pagination;
 }
 
 export interface DisputeDetailsResponse {
-  id: string;
-  orderId: string;
-  createdAt: string;
-  category: string;
-  reason: string;
-  description: string;
-  status: string;
   dispute: Dispute;
   order: Order;
   parties: {
@@ -160,7 +269,7 @@ export interface DisputeDetailsResponse {
     seller: Party;
     guestEmail: string | null;
   };
-  stripePayment: StripePayment;
+  stripePayment: StripePayment | null;
 }
 
 // ==================== API RESPONSE TYPES ====================
