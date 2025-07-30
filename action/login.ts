@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
 
 // export const maxDuration = 60;
 
@@ -18,26 +18,26 @@ export async function login(payload: ILoginPayload) {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/login`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
       }
     );
     const data = await response.json();
     if (data.success) {
-      cookieStore.set("authToken", data.token, {
+      cookieStore.set('authToken', data.token, {
         secure: true,
         httpOnly: true,
       });
-      cookieStore.set("userInfo", JSON.stringify(data.user), {
+      cookieStore.set('userInfo', JSON.stringify(data.user), {
         secure: true,
       });
     }
     return data;
   } catch (error) {
-    console.error("Error from action:", error);
+    console.error('Error from action:', error);
   }
 }
 

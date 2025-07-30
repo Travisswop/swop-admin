@@ -35,7 +35,7 @@ const TopTabSection = () => {
               {selected === tab?.slug && (
                 <motion.div
                   layoutId="underline"
-                  className="absolute left-0 right-0 -bottom-1 h-[2px] bg-gray-600"
+                  className="absolute -left-3  right-0 -bottom-1 h-[2px] bg-gray-600"
                 />
               )}
             </button>

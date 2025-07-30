@@ -1,26 +1,9 @@
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import * as React from "react";
+import { cn } from "@/lib/utils";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-
-// const slug = [
-//   {
-//     slug: "/subscribers",
-//     name: "Subscribers",
-//   },
-//   {
-//     slug: "/enterprise-leads",
-//     name: "Enterprise leads",
-//   },
-//   {
-//     slug: "/subscribers/demos",
-//     name: "Demos",
-//   },
-// ];
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 const Path = () => {
   const path = usePathname();
@@ -36,7 +19,7 @@ const Path = () => {
   };
 
   return (
-    <section className=" max-w-[350px] h-20 mr-auto ">
+    <section className=" max-w-[350px] mr-auto mb-5">
       <div className=" flex justify-start items-center gap-5 w-fit z-20">
         <Link
           href={"/subscribers"}

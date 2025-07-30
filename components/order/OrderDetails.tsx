@@ -21,6 +21,21 @@ type StageKey =
 type StatusKey = "pending" | "in_progress" | "completed" | "failed";
 interface OrderDetailsProps {
   orderDetails: {
+    dispute: {
+      orderId: string;
+      id: string;
+      reason: string;
+      category: string;
+      description: string;
+      status: "pending" | "resolved" | "rejected" | "in_review"; // enum if possible
+      priority: "low" | "medium" | "high";
+      createdAt: string;
+      updatedAt: string;
+      response: string | null;
+      responseDate: string | null;
+      documents: Document[];
+      sellerChallenge: unknown | null;
+    } | null;
     collections: {
       image: string;
       name: string;
@@ -106,7 +121,7 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
   //   return dateFormatter.format(new Date(dateString));
   // };
 
-  console.log("Processing Stages:", orderDetails);
+  console.log("Processing Stages:");
 
   const DetailItem = ({ label, value }: { label: string; value: string }) => (
     <div className="border-l-2 border-gray-300 pl-4">
@@ -329,11 +344,16 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
                 tab.slug === "stripePaymentMethod" &&
                 orderDetails?.order?.stripePaymentMethod !== "stripe"
               ) {
-                return false;
+                return false; // Don't show the tab
               }
-              return true;
+
+              if (tab.slug === "dispute" && orderDetails?.dispute === null) {
+                return false; // Don't show the tab
+              }
+
+              return true; // Show all other tabs
             })
-            ?.map((tab, index) => (
+            .map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setSelected(tab?.slug)}
@@ -343,7 +363,6 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
                 )}
               >
                 {tab.title}
-                {/* Animated underline */}
                 {selected === tab?.slug && (
                   <motion.div
                     layoutId="underline"
@@ -432,20 +451,32 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
               {/* Top Row */}
               <div className="flex flex-wrap justify-between gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Dispute ID</p>
-                  <p className="text-black font-medium">WGYHSCF7RH-191</p>
+                  <p className="text-sm text-gray-500">Order ID</p>
+                  <p className="text-black font-medium">
+                    {orderDetails?.dispute?.orderId}
+                  </p>
                 </div>
 
                 <div>
                   <p className="text-sm text-gray-500">Expired on</p>
-                  <p className="text-black font-medium">October 30, 2023</p>
+                  <p className="text-black font-medium">October 30, 2025</p>
                 </div>
 
                 <div>
                   <p className="text-sm text-gray-500">Resolution Status</p>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-500 text-green-600 text-sm font-medium">
+                  <div
+                    className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border  text-sm font-medium ${
+                      orderDetails?.dispute?.status === "pending"
+                        ? "border-yellow-400 text-yellow-400"
+                        : "border-green-600 text-green-600"
+                    }`}
+                  >
                     <svg
-                      className="w-4 h-4 text-green-500"
+                      className={`w-4 h-4 text-green-500 ${
+                        orderDetails?.dispute?.status === "pending"
+                          ? " text-yellow-400"
+                          : " text-green-600"
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -457,7 +488,7 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
-                    Resolved
+                    {orderDetails?.dispute?.status}
                   </div>
                 </div>
               </div>
@@ -465,7 +496,7 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
               {/* Amount Refunded */}
               <div>
                 <p className="text-sm text-gray-500">Amount Refunded</p>
-                <p className="text-lg font-semibold text-black">₦80,000.00</p>
+                <p className="text-lg font-semibold text-black">$0</p>
               </div>
 
               {/* Dispute Details */}
@@ -473,24 +504,21 @@ const OrderDetails = ({ orderDetails }: OrderDetailsProps) => {
                 <div>
                   <p className="text-sm text-gray-500">Dispute Reason</p>
                   <p className="text-black font-medium">
-                    Item not as described
+                    {orderDetails?.dispute?.reason}
                   </p>
                 </div>
 
                 <div>
                   <p className="text-sm text-gray-500">Type of Dispute</p>
-                  <p className="text-black font-medium">Chargeback</p>
+                  <p className="text-black font-medium capitalize">
+                    {orderDetails?.dispute?.category}
+                  </p>
                 </div>
 
                 <div>
                   <p className="text-sm text-gray-500">Request detail</p>
                   <p className="text-gray-800 text-sm leading-relaxed">
-                    You notice a transaction on your account that you did not
-                    authorize or recognize. This could be a case of fraudulent
-                    activity, such as a purchase made without your consent or a
-                    subscription you didn’t sign up for. In such situations,
-                    you’d want to dispute the transaction to seek a refund or to
-                    investigate and resolve the unauthorized charge.
+                    {orderDetails?.dispute?.description}
                   </p>
                 </div>
               </div>
