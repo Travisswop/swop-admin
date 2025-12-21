@@ -37,7 +37,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.469.0",
     "mongoose": "^8.12.1",
-    "next": "15.1.2",
+    "next": "15.1.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-google-maps-api": "^1.0.8",
