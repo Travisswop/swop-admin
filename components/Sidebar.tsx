@@ -10,7 +10,7 @@ import { HiOutlineLogout } from "react-icons/hi";
 import { LuLayoutGrid, LuMapPinned } from "react-icons/lu";
 
 import { logout } from "@/action/logout";
-import { FaUsers } from "react-icons/fa";
+import { FaUsers, FaWallet } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { GoChecklist } from "react-icons/go";
 import { IoBagHandleOutline } from "react-icons/io5";
@@ -32,6 +32,7 @@ const navItems = [
   { href: "/announcements", label: "Announcements", icon: <GrAnnounce /> },
   { href: "/order", label: "Order", icon: <GoChecklist /> },
   { href: "/dispute", label: "Dispute", icon: <MdCancelPresentation /> },
+  { href: "/wallet-balance", label: "Wallet Balance", icon: <FaWallet /> },
 ];
 
 export default function Sidebar() {
