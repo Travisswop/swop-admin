@@ -17,7 +17,7 @@ import {
   MdOutlinePlayArrow,
   MdQueryStats,
 } from "react-icons/md";
-import { TbBroom } from "react-icons/tb";
+import { TbEraser } from "react-icons/tb";
 import { toast } from "react-toastify";
 import BalanceChart from "./BalanceChart";
 import WalletsTable from "./WalletsTable";
@@ -454,7 +454,7 @@ export default function WalletBalanceDashboard({ token }: { token: string }) {
               withAction("clean", () => cleanWalletBalanceQueue(token))
             }
           >
-            <TbBroom className="text-base" />
+            <TbEraser className="text-base" />
             {actionLoading === "clean" ? "Cleaning…" : "Clean Queue"}
           </ActionBtn>
 
