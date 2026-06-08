@@ -1,6 +1,7 @@
 "use client";
 import {
   cleanWalletBalanceQueue,
+  debugUserWalletBalance,
   emptyWalletBalanceQueue,
   getWalletBalanceDashboard,
   getWalletBalanceHealth,
@@ -172,6 +173,156 @@ function ActionBtn({
     >
       {children}
     </button>
+  );
+}
+
+// ─── Debug Panel ─────────────────────────────────────────────────────────────
+
+function DebugPanel({ token }: { token: string }) {
+  const [userId, setUserId] = useState("");
+  const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [result, setResult] = useState<any>(null);
+
+  const run = async () => {
+    if (!userId.trim()) return;
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await debugUserWalletBalance(token, userId.trim());
+      setResult(res);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+      <h2 className="text-lg font-semibold text-gray-800 mb-1">
+        Debug: Force Update Single User
+      </h2>
+      <p className="text-sm text-gray-400 mb-4">
+        Runs the balance update synchronously for one user and returns a full
+        trace — before state, blockchain fetch result, and what was saved.
+      </p>
+
+      <div className="flex gap-3 mb-5">
+        <input
+          type="text"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+          placeholder="Enter User ObjectId…"
+          className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none flex-1 font-mono"
+        />
+        <button
+          onClick={run}
+          disabled={loading || !userId.trim()}
+          className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 disabled:opacity-50 transition-colors"
+        >
+          {loading ? "Running…" : "Run Debug"}
+        </button>
+      </div>
+
+      {result && (
+        <div className="space-y-4 text-sm">
+          {/* Status banner */}
+          <div
+            className={`rounded-lg px-4 py-2 font-medium ${
+              result.success && result.data?.updateResult?.success
+                ? "bg-green-50 text-green-700"
+                : "bg-red-50 text-red-700"
+            }`}
+          >
+            {result.success
+              ? result.data?.updateResult?.success
+                ? `Update succeeded in ${result.data.durationMs}ms`
+                : `Fetch ran but returned an error: ${result.data?.updateResult?.error}`
+              : `Request failed: ${result.message ?? "unknown error"}`}
+          </div>
+
+          {result.data && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Before */}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
+                  Before
+                </p>
+                <Row label="ETH address" value={result.data.before.ethAddress ?? "—"} mono />
+                <Row label="SOL address" value={result.data.before.solAddress ?? "—"} mono />
+                <Row label="Stored balance" value={`$${result.data.before.currentBalance?.amount?.toFixed(4) ?? "0"}`} />
+                <Row label="Last updated" value={result.data.before.lastUpdateAt ? new Date(result.data.before.lastUpdateAt).toLocaleString() : "—"} />
+                <Row label="Activity" value={result.data.before.activityLevel ?? "—"} />
+                <Row label="Frequency" value={result.data.before.updateFrequency ?? "—"} />
+                <Row label="Failed updates" value={String(result.data.before.stats?.failedUpdates ?? 0)} />
+                {result.data.before.stats?.lastError && (
+                  <Row label="Last error" value={result.data.before.stats.lastError} error />
+                )}
+              </div>
+
+              {/* Fetch result */}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
+                  Fetch Result
+                </p>
+                <Row label="Success" value={result.data.updateResult.success ? "Yes" : "No"} />
+                {result.data.updateResult.error && (
+                  <Row label="Error" value={result.data.updateResult.error} error />
+                )}
+                <Row label="Total balance" value={result.data.updateResult.totalBalance != null ? `$${Number(result.data.updateResult.totalBalance).toFixed(4)}` : "—"} />
+                <Row label="EVM" value={result.data.updateResult.breakdown?.evm != null ? `$${Number(result.data.updateResult.breakdown.evm).toFixed(4)}` : "—"} />
+                <Row label="Solana" value={result.data.updateResult.breakdown?.solana != null ? `$${Number(result.data.updateResult.breakdown.solana).toFixed(4)}` : "—"} />
+                <Row label="Snapshot saved" value={result.data.snapshotSaved ? "Yes" : "No"} />
+                {result.data.snapshotError && (
+                  <Row label="Snapshot error" value={result.data.snapshotError} error />
+                )}
+                <Row label="Duration" value={`${result.data.durationMs}ms`} />
+              </div>
+
+              {/* After */}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
+                  After (saved)
+                </p>
+                <Row label="Stored balance" value={`$${result.data.after.currentBalance?.amount?.toFixed(4) ?? "0"}`} />
+                <Row label="EVM" value={`$${result.data.after.currentBalance?.breakdown?.evm?.toFixed(4) ?? "0"}`} />
+                <Row label="Solana" value={`$${result.data.after.currentBalance?.breakdown?.solana?.toFixed(4) ?? "0"}`} />
+                <Row label="Last updated" value={result.data.after.lastUpdateAt ? new Date(result.data.after.lastUpdateAt).toLocaleString() : "—"} />
+                <Row label="Total updates" value={String(result.data.after.stats?.totalUpdates ?? 0)} />
+                <Row label="Failed updates" value={String(result.data.after.stats?.failedUpdates ?? 0)} />
+                {result.data.after.stats?.lastError && (
+                  <Row label="Last error" value={result.data.after.stats.lastError} error />
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Row({
+  label,
+  value,
+  mono,
+  error,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+  error?: boolean;
+}) {
+  return (
+    <div className="flex justify-between gap-2 py-1 border-b border-gray-100 last:border-0">
+      <span className="text-gray-400 text-xs shrink-0">{label}</span>
+      <span
+        className={`text-xs text-right break-all ${
+          error ? "text-red-500" : mono ? "font-mono text-gray-500" : "text-gray-700 font-medium"
+        }`}
+      >
+        {value}
+      </span>
+    </div>
   );
 }
 
@@ -672,6 +823,9 @@ export default function WalletBalanceDashboard({ token }: { token: string }) {
           </div>
         </div>
       )}
+
+      {/* ── Debug panel ── */}
+      <DebugPanel token={token} />
 
       {/* ── Balance chart ── */}
       <BalanceChart token={token} />

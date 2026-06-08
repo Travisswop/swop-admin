@@ -136,3 +136,12 @@ export async function runSnapshotAggregation(token: string) {
     return { success: false };
   }
 }
+
+export async function debugUserWalletBalance(token: string, userId: string) {
+  try {
+    return await apiFetch(token, `/debug/${userId}`, { method: "POST" });
+  } catch (e) {
+    console.error("debugUserWalletBalance:", e);
+    return { success: false };
+  }
+}
